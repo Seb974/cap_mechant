@@ -1,17 +1,46 @@
 # codac-pff
 
-this is the project readme
-# First time installation guide
+[TOC]
+---
+# Titles and internal titles
+Ap'Hero is a websitre project written in symfony.
+---
+# Introduction - the project's aim
+Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using cyllius.
+---
+# Technologies
+PHP
+---
+# Launch
+---
+## Download
 ```shell
 git clone https://github.com/YenByNigao/codac-pff.git
+```
+## Installation
+```shell
 cd codac-pff
 cd ap_hero
 composer install
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
+```
+## Running the project
+```shell
 php server:run
 ```
 
+---
+# Illustrations
+---
+# Scope of functionalities
+---
+# Examples of use
+---
+# Project status
+---
+# Sources
+---
 # Contributing
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -21,17 +50,9 @@ Contributions are what make the open source community such an amazing place to b
 - Push to the Branch (git push origin feature/AmazingFeature)
 - Open a Pull Request
 
-Titles and internal titles
-Introduction - the project's aim
-Technologies
-Launch
-Table of contents
-Illustrations
-Scope of functionalities 
-Examples of use
-Project status 
-Sources
-Other information
+
+
+
 
 # Dillinger
 
@@ -85,26 +106,6 @@ Dillinger uses a number of open source projects to work properly:
 And of course Dillinger itself is open source with a [public repository][dill]
  on GitHub.
 
-### Installation
-
-Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-$ cd dillinger
-$ npm install -d
-$ node app
-```
-
-For production environments...
-
-```sh
-$ npm install --production
-$ NODE_ENV=production node app
-```
-
-### Plugins
 
 Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
 
@@ -118,29 +119,6 @@ Dillinger is currently extended with the following plugins. Instructions on how 
 | Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
 
 
-### Development
-
-Want to contribute? Great!
-
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantanously see your updates!
-
-Open your favorite Terminal and run these commands.
-
-First Tab:
-```sh
-$ node app
-```
-
-Second Tab:
-```sh
-$ gulp watch
-```
-
-(optional) Third:
-```sh
-$ karma test
-```
 #### Building for source
 For production release:
 ```sh
@@ -232,28 +210,7 @@ MIT
 ![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
 
 
-**Table of Contents**
 
-[TOCM]
-
-[TOC]
-
-#H1 header
-##H2 header
-###H3 header
-####H4 header
-#####H5 header
-######H6 header
-#Heading 1 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-##Heading 2 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-###Heading 3 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-####Heading 4 link [Heading link](https://github.com/pandao/editor.md "Heading link") Heading link [Heading link](https://github.com/pandao/editor.md "Heading link")
-#####Heading 5 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-######Heading 6 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-
-##Headers (Underline)
-
-H1 Header (Underline)
 =============
 
 H2 Header (Underline)
