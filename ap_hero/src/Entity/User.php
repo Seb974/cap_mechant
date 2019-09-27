@@ -35,6 +35,21 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isBanned;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Pics", cascade={"persist", "remove"})
+     */
+    private $avatar;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,5 +126,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getIsBanned(): ?bool
+    {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(?bool $isBanned): self
+    {
+        $this->isBanned = $isBanned;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?Pics
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Pics $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 }
