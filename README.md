@@ -1,18 +1,19 @@
 # codac-pff
 
 [TOC]
----
+
 # Titles and internal titles
 Ap'Hero is a websitre project written in symfony.
----
+
 # Introduction - the project's aim
+
 Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using cyllius.
----
+
 # Technologies
 PHP
----
+
 # Launch
----
+
 ## Download
 ```shell
 git clone https://github.com/YenByNigao/codac-pff.git
@@ -30,17 +31,17 @@ php bin/console doctrine:migrations:migrate
 php server:run
 ```
 
----
+
 # Illustrations
----
+
 # Scope of functionalities
----
+
 # Examples of use
----
+
 # Project status
----
+
 # Sources
----
+
 # Contributing
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -110,7 +111,7 @@ And of course Dillinger itself is open source with a [public repository][dill]
 Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
 
 | Plugin | README |
-| ------ | ------ |
+|  |  |
 | Dropbox | [plugins/dropbox/README.md][PlDb] |
 | GitHub | [plugins/github/README.md][PlGh] |
 | Google Drive | [plugins/googledrive/README.md][PlGd] |
@@ -162,7 +163,7 @@ See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETE
  - Add Night Mode
 
 License
-----
+-
 
 MIT
 
@@ -214,11 +215,11 @@ MIT
 =============
 
 H2 Header (Underline)
--------------
+-
 
 ###Characters
                 
-----
+-
 
 ~~Strikethrough~~ <s>Strikethrough (when enable html tag decode.)</s>
 *Italic*      _Italic_
@@ -270,7 +271,7 @@ Indented 4 spaces, like `<pre>` (Preformatted Text).
 Code Blocks (Preformatted text):
 
     | First Header  | Second Header |
-    | ------------- | ------------- |
+    | - | - |
     | Content Cell  | Content Cell  |
     | Content Cell  | Content Cell  |
 
@@ -348,7 +349,7 @@ Image:
 
 > 图为：李健首张专辑《似水流年》封面
                 
-----
+-
 
 ###Lists
 
@@ -382,38 +383,38 @@ Image:
 2. Item B
 3. Item C
                 
-----
+-
                     
 ###Tables
                     
 First Header  | Second Header
-------------- | -------------
+- | -
 Content Cell  | Content Cell
 Content Cell  | Content Cell 
 
 | First Header  | Second Header |
-| ------------- | ------------- |
+| - | - |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 
 | Function name | Description                    |
-| ------------- | ------------------------------ |
+| - |  |
 | `help()`      | Display the help window.       |
 | `destroy()`   | **Destroy your computer!**     |
 
 | Item      | Value |
-| --------- | -----:|
+|  | --:|
 | Computer  | $1600 |
 | Phone     |   $12 |
 | Pipe      |    $1 |
 
 | Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
+| : |::| --:|
 | col 3 is      | some wordy text | $1600 |
 | col 2 is      | centered        |   $12 |
 | zebra stripes | are neat        |    $1 |
                 
-----
+-
 
 ####HTML entities
 
