@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,11 +39,6 @@ class Product
     private $nutritionals;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Allergen", cascade={"persist", "remove"})
-     */
-    private $allergens;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
      */
     private $category;
@@ -50,6 +47,16 @@ class Product
      * @ORM\ManyToOne(targetEntity="App\Entity\Tva")
      */
     private $tva;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Allergen", inversedBy="products")
+     */
+    private $allergens;
+
+    public function __construct()
+    {
+        $this->allergens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,18 +111,6 @@ class Product
         return $this;
     }
 
-    public function getAllergens(): ?Allergen
-    {
-        return $this->allergens;
-    }
-
-    public function setAllergens(?Allergen $allergens): self
-    {
-        $this->allergens = $allergens;
-
-        return $this;
-    }
-
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -136,6 +131,32 @@ class Product
     public function setTva(?Tva $tva): self
     {
         $this->tva = $tva;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Allergen[]
+     */
+    public function getAllergens(): Collection
+    {
+        return $this->allergens;
+    }
+
+    public function addAllergen(Allergen $allergen): self
+    {
+        if (!$this->allergens->contains($allergen)) {
+            $this->allergens[] = $allergen;
+        }
+
+        return $this;
+    }
+
+    public function removeAllergen(Allergen $allergen): self
+    {
+        if ($this->allergens->contains($allergen)) {
+            $this->allergens->removeElement($allergen);
+        }
 
         return $this;
     }
