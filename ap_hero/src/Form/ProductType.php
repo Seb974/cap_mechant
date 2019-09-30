@@ -35,7 +35,6 @@ class ProductType extends AbstractType
                 'multiple' => true,
                 'required' => false,
             ])
-            //->add('nutritionals')
             ->add('proteins', NumberType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -60,6 +59,7 @@ class ProductType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
+            ->add('price', NumberType::class)
             ->add('tva', EntityType::class, [
                 'class' => Tva::class,
                 'choice_label' => function ($tva) {
