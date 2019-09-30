@@ -1,6 +1,7 @@
-# codac-pff
+# CODAC-EndTrainingProject
 
 [TOC]
+[TOCM]
 
 # Titles and internal titles
 Ap'Hero is a websitre project written in symfony.
@@ -15,6 +16,7 @@ Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using cyllius.
 # Launch
 
 ## Download
+First of all download or clone the project's files.
 ```shell
 git clone https://github.com/YenByNigao/codac-pff.git
 ```
@@ -64,7 +66,7 @@ Contributions are what make the open source community such an amazing place to b
 
 
 
-###GFM task list
+#After Project ToDoList
 
 - [x] GFM task list 1
 - [x] GFM task list 2
@@ -75,27 +77,3 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] GFM task list 4
     - [ ] GFM task list 4-1
     - [ ] GFM task list 4-2
-
-
-
-```flow
-st=>start: Login
-op=>operation: Login operation
-cond=>condition: Successful Yes or No?
-e=>end: To admin
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
-```
-
-###Sequence Diagram
-                    
-```seq
-Andrew->China: Says Hello 
-Note right of China: China thinks\nabout it 
-China-->Andrew: How are you? 
-Andrew->>China: I am good thanks!
-```
-
-###End
