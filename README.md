@@ -16,7 +16,6 @@ Start by downloading or cloning the project files on GitHub
 ```shell
 git clone https://github.com/YenByNigao/codac-pff.git
 ```
-- ## First launch
 Before you can start the servers, it is essential to install the dependencies and the database
 - ## Dependencies
 ```shell
@@ -56,6 +55,7 @@ You will have an output like this on your terminal
 
 # Project status
 Work in progress.
+
 ---
 
 # Sources
@@ -72,7 +72,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ---
 
-#After Project ToDoList
+# After Project ToDoList
 
 - [ ] GFM task list 1
 - [ ] GFM task list 2
