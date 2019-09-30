@@ -53,6 +53,11 @@ class Product
      */
     private $allergens;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->allergens = new ArrayCollection();
@@ -157,6 +162,18 @@ class Product
         if ($this->allergens->contains($allergen)) {
             $this->allergens->removeElement($allergen);
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

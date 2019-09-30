@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Nutritionals;
 use App\Entity\Product;
 use App\Entity\Pics;
 use App\Form\ProductType;
@@ -44,13 +45,13 @@ class ProductController extends AbstractController
                 $picture->setB64($newFilename);
                 $product->setPicture($picture);
             }
+            $nutritionals = $this->hydrateNutritionals($form);
+            $product->setNutritionals($nutritionals);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
-
             return $this->redirectToRoute('product_index');
         }
-
         return $this->render('product/new.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
@@ -76,8 +77,16 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $product->setPicture($picture);
+            }
+            $nutritionals = $this->hydrateNutritionals($form);
+            $product->setNutritionals($nutritionals);
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('product_index');
         }
 
@@ -117,6 +126,28 @@ class ProductController extends AbstractController
         }
 
         return $newFilename;
+    }
+
+    private function hydrateNutritionals($form)
+    {
+        $nutritionals = new Nutritionals();
+        $prots = $form->get('proteins')->getData();
+        $carbs = $form->get('carbohydrates')->getData();
+        $sugar = $form->get('sugar')->getData();
+        $fat = $form->get('fat')->getData();
+        $saturated = $form->get('saturated')->getData();
+        $sodium = $form->get('sodium')->getData();
+        if ($prots && $carbs && $fat && $sugar && $saturated && $sodium) {
+            $nutritionals->setProtein($prots);
+            $nutritionals->setCarbohydrates($carbs);
+            $nutritionals->setFat($fat);
+            $nutritionals->setSugar($sugar);
+            $nutritionals->setTransAG($saturated);
+            $nutritionals->setSalt($sodium);
+            $nutritionals->setKCal(($prots + $carbs) * 4 + $fat * 9);
+            $nutritionals->setKJ($nutritionals->getKCal() * 4,184);
+        }
+        return $nutritionals;
     }
 }
 
