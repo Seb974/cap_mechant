@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Pics;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,6 +36,14 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $product->setPicture($picture);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
@@ -91,4 +100,23 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('product_index');
     }
+
+    private function savePicture($pictureFile)
+    {
+        $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+
+        try {
+            $pictureFile->move(
+                $this->getParameter('pics_directory'),
+                $newFilename
+            );
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
+
+        return $newFilename;
+    }
 }
+

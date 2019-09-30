@@ -4,6 +4,9 @@
 
 {% block body %}
     <h1>Product</h1>
+    {% if product.picture is not null %}
+        <img src="{{ asset('uploads/pictures/' ~ product.picture.b64) }}" height="300" width="400"/>
+    {% endif %}
 
     <table class="table">
         <tbody>

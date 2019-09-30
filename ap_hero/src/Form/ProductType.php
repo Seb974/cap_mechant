@@ -12,19 +12,20 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => function ($category) {
                     return $category->getName();
                 }
             ])
+            ->add('name')
             ->add('description')
             ->add('allergens', EntityType::class, [
                 'class' => Allergen::class,
@@ -34,7 +35,31 @@ class ProductType extends AbstractType
                 'multiple' => true,
                 'required' => false,
             ])
-            ->add('nutritionals')
+            //->add('nutritionals')
+            ->add('proteins', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('carbohydrates', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('sugar', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('fat', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('saturated', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('sodium', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
             ->add('tva', EntityType::class, [
                 'class' => Tva::class,
                 'choice_label' => function ($tva) {
@@ -44,6 +69,7 @@ class ProductType extends AbstractType
             ->add('picture', FileType::class, [
                 'label' => 'Illustration',
                 'required' => false,
+                'mapped' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '5242880',
