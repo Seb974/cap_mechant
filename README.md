@@ -1,10 +1,10 @@
 # CODAC-EndTrainingProject
-
+![GitHub language count](https://img.shields.io/github/languages/count/YenByNigao/codac-pff) ![GitHub top language](https://img.shields.io/github/languages/top/YenByNigao/codac-pff) ![GitHub repo size](https://img.shields.io/github/repo-size/YenByNigao/codac-pff) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/YenByNigao/codac-pff) ![Website](https://img.shields.io/website?url=https%3A%2F%2Fwww.clikeat.re) ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/YenByNigao/codac-pff) ![GitHub last commit](https://img.shields.io/github/last-commit/YenByNigao/codac-pff) ![GitHub contributors](https://img.shields.io/github/contributors/YenByNigao/codac-pff)
 [TOC]
 [TOCM]
 
 # Titles and internal titles
-Ap'Hero is a websitre project written in symfony.
+Ap'Hero is a project written in symfony.
 
 # Introduction - the project's aim
 
@@ -16,15 +16,23 @@ Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using cyllius.
 # Launch
 
 ## Download
-First of all download or clone the project's files.
+Start by downloading or cloning the project files on GitHub
 ```shell
 git clone https://github.com/YenByNigao/codac-pff.git
 ```
-## Installation
+## First Start
+Before you can start the servers, it is essential to install the dependencies and the database
+### Dependencies
 ```shell
 cd codac-pff
 cd ap_hero
 composer install
+```
+### Database
+Please, update `ap_hero\.env` file with your MariaDB credientials in order to initiate database.
+```shell
+cd codac-pff
+cd ap_hero
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
@@ -68,8 +76,8 @@ Contributions are what make the open source community such an amazing place to b
 
 #After Project ToDoList
 
-- [x] GFM task list 1
-- [x] GFM task list 2
+- [ ] GFM task list 1
+- [ ] GFM task list 2
 - [ ] GFM task list 3
     - [ ] GFM task list 3-1
     - [ ] GFM task list 3-2
