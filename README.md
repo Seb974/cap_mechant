@@ -1,7 +1,6 @@
 # CODAC-EndTrainingProject
- <a href="https://img.shields.io/github/languages/count/YenByNigao/codac-pff" alt='toto' />  <a href="https://img.shields.io/github/languages/top/YenByNigao/codac-pff">  <a href="https://img.shields.io/github/repo-size/YenByNigao/codac-pff"> <a href="https://img.shields.io/github/v/tag/YenByNigao/codac-pff"> <a href="https://img.shields.io/website?url=https%3A%2F%2Fwww.clikeat.re"> <a href="https://img.shields.io/github/commit-activity/w/YenByNigao/codac-pff">  <a href="https://img.shields.io/github/last-commit/YenByNigao/codac-pff">  <a href="https://img.shields.io/github/contributors/YenByNigao/codac-pff">
+ <img src="https://img.shields.io/github/languages/count/YenByNigao/codac-pff" /> <img src="https://img.shields.io/github/languages/top/YenByNigao/codac-pff" /> <img src="https://img.shields.io/github/repo-size/YenByNigao/codac-pff" /> <img src="https://img.shields.io/github/v/tag/YenByNigao/codac-pff" /> <img src="https://img.shields.io/website?url=https%3A%2F%2Fwww.clikeat.re" /> <img src="https://img.shields.io/github/commit-activity/w/YenByNigao/codac-pff" />  <img src="https://img.shields.io/github/last-commit/YenByNigao/codac-pff" /> <img src="https://img.shields.io/github/contributors/YenByNigao/codac-pff" />
 
-[TOC]
 
 # Titles and internal titles
 Ap'Hero is a project written in symfony.
