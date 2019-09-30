@@ -18,7 +18,7 @@
         {% endif %}
     </header>
     {% if( is_granted('ROLE_ADMIN')) %}
-        <h1>Hello Ô grand Admin {{ app.user.email }}! ✅</h1>
+        <h1>Hello Admin {{ app.user.email }}! ✅</h1>
     {% elseif( is_granted('ROLE_USER')) %}
         <h1>Hello {{ app.user.email }}! ✅</h1>
     {% else %}

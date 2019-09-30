@@ -58,6 +58,11 @@ class Product
      */
     private $price;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Stock", mappedBy="product", cascade={"persist", "remove"})
+     */
+    private $stock;
+
     public function __construct()
     {
         $this->allergens = new ArrayCollection();
@@ -174,6 +179,23 @@ class Product
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getStock(): ?Stock
+    {
+        return $this->stock;
+    }
+
+    public function setStock(Stock $stock): self
+    {
+        $this->stock = $stock;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $stock->getProduct()) {
+            $stock->setProduct($this);
+        }
 
         return $this;
     }

@@ -10,6 +10,16 @@
 
     <table class="table">
         <tbody>
+            
+            <tr>
+                <th>Stock</th>
+                {% if product.stock is not null %}
+                    <td>{{ product.stock.quantity }} U </td>
+                {% else %}
+                    <td>En rupture de stock !</td>
+                {% endif %}
+            </tr>
+            
             <tr>
                 <th>Category</th>
                 <td>{{ product.Category.name }}</td>
