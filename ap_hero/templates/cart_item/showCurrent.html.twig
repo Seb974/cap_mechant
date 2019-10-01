@@ -11,11 +11,12 @@
                 <th>Id</th>
                 <th>Product</th>
                 <th>Quantity</th>
+                <th>actions</th>
                 <th>Username</th>
             </tr>
         </thead>
         <tbody>
-        {% for cart_item in cart_items %}
+        {% for cart_item in currentCart %}
             <tr>
                 <td>{{ cart_item.id }}</td>
                 <td>{{ cart_item.product.name }}</td>

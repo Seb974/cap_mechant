@@ -67,6 +67,18 @@ class CartItemController extends AbstractController
     }
 
     /**
+     * @Route("/current", name="get_cart_item", methods={"GET"})
+     */
+    public function getCurrentCart()
+    {
+        $currentUser = $this->getUser();
+        // return $currentUser->getCart();
+        return $this->render('cart_item/showCurrent.html.twig', [
+            'currentCart' => $currentUser->getCart(),
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="cart_item_show", methods={"GET"})
      */
     public function show(CartItem $cartItem): Response
@@ -109,4 +121,5 @@ class CartItemController extends AbstractController
 
         return $this->redirectToRoute('cart_item_index');
     }
+
 }
