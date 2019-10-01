@@ -109,6 +109,19 @@ class CartItemController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/editcart", name="cart_item_editcart", methods={"GET","POST"})
+     */
+    public function editCart(Request $request, CartItem $cartItem): Response
+    {
+        $newQty = (int) $request->request->get($cartItem->getId());
+        $cartItem->setQuantity($newQty);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($cartItem);
+        $entityManager->flush();
+        return $this->redirectToRoute('get_cart_item');
+    }
+
+    /**
      * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
      */
     public function delete(Request $request, CartItem $cartItem): Response
@@ -119,7 +132,7 @@ class CartItemController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('cart_item_index');
+        return $this->redirectToRoute('get_cart_item');
     }
 
 }
