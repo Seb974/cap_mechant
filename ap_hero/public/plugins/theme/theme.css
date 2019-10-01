@@ -1,7 +1,5 @@
-/* Inspired from Gameforest 4.1.2 theme */
-
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   font-weight: 300;
   font-size: 15px;
   line-height: 1.5;
@@ -28,7 +26,7 @@ h4,
 h5,
 h6 {
   color: #4f4f4f;
-  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   font-weight: 500;
   margin: 0 0 10px 0;
 }
@@ -201,7 +199,7 @@ img {
 #header {
   width: 100%;
   height: 62px;
-  background: #242629;
+  background: #b5067f;
   position: relative;
   z-index: 999;
 }
@@ -660,7 +658,7 @@ img {
 }
 
 #footer {
-  background-color: #242629;
+  background-color: #ffd710;
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.4);
   padding: 65px 0 20px 0;
@@ -5151,7 +5149,7 @@ input[type="file"] {
 
 .popover-body {
   padding: 18px;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Source Sans Pro",sans-serif;
   font-size: 14px;
   line-height: 1.45;
   color: #616161;
@@ -5162,7 +5160,7 @@ input[type="file"] {
 }
 
 .tooltip {
-  font-family: "Roboto", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .tooltip.show {
@@ -7561,7 +7559,7 @@ figure {
   padding: 20px;
   color: #676767;
   font-size: 16px;
-  font-family: Arial;
+  font-family: "Source Sans Pro";
 }
 
 .note-editor .card-header {
@@ -7925,7 +7923,7 @@ figure {
   border-radius: 4px;
   outline: 0;
   font-size: 0.875rem;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   padding: 6px 10px;
   color: #666;
 }
