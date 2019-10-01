@@ -1,0 +1,27 @@
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+  bottom: .5em;
+}
+
+.comment-wrapper {
+    max-height:650px;
+    overflow:auto;
+    border-top: #E74B3D 1px solid;
+}
+
+.yen_red {
+    color:#E74B3D;
+}
+
+.yen_blog_badge {
+    position: absolute;
+    right: 0px;
+}
