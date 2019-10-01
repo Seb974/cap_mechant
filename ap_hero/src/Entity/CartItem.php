@@ -27,6 +27,12 @@ class CartItem
      */
     private $quantity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="datetime")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +58,18 @@ class CartItem
     public function setQuantity(float $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
