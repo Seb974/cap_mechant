@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Entity\CartItem;
 use App\Form\CartItemType;
 use App\Repository\CartItemRepository;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/cart/item")
+ * @Route("/cartitem")
  */
 class CartItemController extends AbstractController
 {
@@ -23,6 +24,22 @@ class CartItemController extends AbstractController
         return $this->render('cart_item/index.html.twig', [
             'cart_items' => $cartItemRepository->findAll(),
         ]);
+    }
+
+    /**
+     * @Route("/add", name="cart_item_add", methods={"GET","POST"})
+     */
+    public function add(Request $request): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Product::class);
+        $cartItem = new CartItem();
+        $product = $repository->find($request->query->get('id'));
+        $cartItem->setProduct($product);
+        $cartItem->setQuantity($request->request->get($request->query->get('id')));
+        $entityManager->persist($cartItem);
+        $entityManager->flush();
+        return $this->redirectToRoute('product_index');
     }
 
     /**
