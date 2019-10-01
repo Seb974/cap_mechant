@@ -11,7 +11,8 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>actions</th>
+                <th>Stock</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,18 @@
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
+                {% if product.stock is not null %}
+                    {% if product.stock.quantity > 0 %}
+                        <td>{{ product.stock.quantity }} U </td>
+                    {% else %}
+                        <td>En rupture de stock !</td>
+                    {% endif %}
+                {% else %}
+                    <td>En rupture de stock !</td>
+                {% endif %}
+                <td>
+                    <a href="{{ path('cart_item_new', {'id': product.id, 'quantity': 1}) }}">Add to Cart</a>
+                </td>
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
                     <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>

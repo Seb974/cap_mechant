@@ -14,7 +14,11 @@
             <tr>
                 <th>Stock</th>
                 {% if product.stock is not null %}
-                    <td>{{ product.stock.quantity }} U </td>
+                    {% if product.stock.quantity > 0 %}
+                        <td>{{ product.stock.quantity }} U </td>
+                    {% else %}
+                        <td>En rupture de stock !</td>
+                    {% endif %}
                 {% else %}
                     <td>En rupture de stock !</td>
                 {% endif %}
