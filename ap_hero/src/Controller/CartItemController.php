@@ -37,6 +37,7 @@ class CartItemController extends AbstractController
         $product = $repository->find($request->query->get('id'));
         $cartItem->setProduct($product);
         $cartItem->setQuantity($request->request->get($request->query->get('id')));
+        $cartItem->setUser($this->getUser());
         $entityManager->persist($cartItem);
         $entityManager->flush();
         return $this->redirectToRoute('product_index');

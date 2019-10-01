@@ -176,26 +176,26 @@ class User implements UserInterface
      */
     public function getCart(): Collection
     {
-        return $this->datetime;
+        return $this->cart;
     }
 
     public function addToCart(CartItem $cartItem): self
     {
         if (!$this->cart->contains($cartItem)) {
             $this->cart[] = $cartItem;
-            $cart->setUser($this);
+            $cartItem->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeDatetime(CartItem $datetime): self
+    public function removeCartItem(CartItem $cartItem): self
     {
-        if ($this->datetime->contains($datetime)) {
-            $this->datetime->removeElement($datetime);
+        if ($this->cart->contains($cartItem)) {
+            $this->cart->removeElement($cartItem);
             // set the owning side to null (unless already changed)
-            if ($datetime->getUser() === $this) {
-                $datetime->setUser(null);
+            if ($cartItem->getUser() === $this) {
+                $cartItem->setUser(null);
             }
         }
 
