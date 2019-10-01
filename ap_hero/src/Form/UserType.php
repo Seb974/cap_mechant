@@ -6,6 +6,10 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
 {
@@ -13,11 +17,27 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
-            ->add('password')
+            // ->add('roles')
+            ->add('password', PasswordType::class)
             ->add('username')
             ->add('isBanned')
-            ->add('avatar')
+            ->add('picture', FileType::class, [
+                'label' => 'Illustration',
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5242880',
+                        'mimeTypes' => [
+                            "image/png",
+                            "image/jpeg",
+                            "image/jpg",
+                            "image/gif",
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid picture',
+                    ])
+                ],
+            ])
         ;
     }
 
