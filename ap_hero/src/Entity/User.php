@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,6 +51,16 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity="App\Entity\Pics", cascade={"persist", "remove"})
      */
     private $avatar;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="user", orphanRemoval=true)
+     */
+    private $cart;
+
+    public function __construct()
+    {
+        $this->datetime = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -155,6 +167,37 @@ class User implements UserInterface
     public function setAvatar(?Pics $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CartItem[]
+     */
+    public function getCart(): Collection
+    {
+        return $this->datetime;
+    }
+
+    public function addToCart(CartItem $cartItem): self
+    {
+        if (!$this->cart->contains($cartItem)) {
+            $this->cart[] = $cartItem;
+            $cart->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDatetime(CartItem $datetime): self
+    {
+        if ($this->datetime->contains($datetime)) {
+            $this->datetime->removeElement($datetime);
+            // set the owning side to null (unless already changed)
+            if ($datetime->getUser() === $this) {
+                $datetime->setUser(null);
+            }
+        }
 
         return $this;
     }
