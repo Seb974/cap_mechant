@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Product;
 use App\Entity\CartItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CartItemType extends AbstractType
@@ -13,7 +15,14 @@ class CartItemType extends AbstractType
     {
         $builder
             ->add('quantity')
-            ->add('product')
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
+                'choice_label' => function ($product) {
+                    return $product->getName();
+                },
+                'required' => true,
+                'mapped' => true,
+            ])
         ;
     }
 
