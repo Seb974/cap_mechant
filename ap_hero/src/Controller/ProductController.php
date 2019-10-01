@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\CartItem;
 use App\Entity\Nutritionals;
 use App\Entity\Product;
 use App\Entity\Pics;
 use App\Form\ProductType;
+use App\Form\CartItemType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,4 +152,3 @@ class ProductController extends AbstractController
         return $nutritionals;
     }
 }
-
