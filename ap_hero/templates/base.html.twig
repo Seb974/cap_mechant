@@ -23,10 +23,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/theme/custom.css') }}">
 
     <!-- Custom CSS -->
-    {% if block("css") is defined %}
-    {% block css %}
-    {% endblock %}
-    {% endif %}
+        {% if block("css") is defined %}
+            {% block css %}{% endblock %}
+        {% endif %}
     {% endblock %}
 </head>
 
@@ -53,10 +52,9 @@
     <script src="{{ asset('plugins/theme/theme.js') }}"></script>
 
     <!-- Custom JS -->
-    {% if block("js") is defined %}
-    {% block js %}
-    {% endblock %}
-    {% endif %}
+        {% if block("js") is defined %}
+            {% block js %}{% endblock %}
+        {% endif %}
     {% endblock %}
 
 </body>
