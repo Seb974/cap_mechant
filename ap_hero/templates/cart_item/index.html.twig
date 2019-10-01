@@ -18,6 +18,7 @@
             <tr>
                 <td>{{ cart_item.id }}</td>
                 <td>{{ cart_item.quantity }}</td>
+                <td>{{ cart_item.user.username }}</td>
                 <td>
                     <a href="{{ path('cart_item_show', {'id': cart_item.id}) }}">show</a>
                     <a href="{{ path('cart_item_edit', {'id': cart_item.id}) }}">edit</a>
