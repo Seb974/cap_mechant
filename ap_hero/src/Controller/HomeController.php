@@ -11,14 +11,8 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        if ($this->getUser()->getRoles()[0] !== "ROLE_ADMIN") {
-            return $this->render('home/index.html.twig', [
-                'controller_name' => 'HomeController',
-            ]);
-        } else {
-            return $this->render('admin/index.html.twig', [
-                'controller_name' => 'HomeController',
-            ]);
-        }
+        return $this->render('home/index.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
     }
 }
