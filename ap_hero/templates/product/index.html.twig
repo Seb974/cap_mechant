@@ -8,19 +8,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Prix unitaire</th>
                 <th>Stock</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for product in products %}
             <tr>
-                <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
                 {% if product.stock is not null %}
                     {% if product.stock.quantity > 0 %}
                         <td>{{ product.stock.quantity }} U </td>
@@ -36,10 +35,12 @@
                 {% else %}
                     <td>En rupture de stock !</td>
                 {% endif %}
+                {% if is_granted("ROLE_ADMIN") %}
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
                     <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>

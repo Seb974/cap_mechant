@@ -4,21 +4,15 @@
             <div class="navbar">
                 <div class="navbar-left">
                     <a class="navbar-toggle"><i class="fas fa-bars"></i></a>
-                    <a href="# class="logo"><img src="uploads/logos/clikEat.png"
+                    <a href="#" class="logo"><img src="{{ asset('uploads/logos/clikEat.png') }}"
                             alt="Clik Eat Logo"></a>
                     <nav class="nav">
                         <ul>
                             <li>
-                                <a href="">Actualités <i class="fas fa-chevron-down"></i></a>
-                                <ul>
-                                    {# {{ render( controller( 'App\\Controller\\CategoryController:navbar_list_categories' ) ) }} #}
-                                </ul>
+                                <a href="{{ path('product_index') }}">Produits </a>
                             </li>
-                            <li class="mega-menu mega-games">
-                                <a href="#"><i class="fab fa-youtube"></i> Notre sélection tutos</a>
-                                <ul>
-                                    {# {{ render( controller( 'App\\Controller\\VideoController:navbar', { 'max': 3 } ) ) }} #}
-                                </ul>
+                            <li>
+                                <a href="{{ path('get_cart_item') }}"><i class="fas fa-shopping-cart"></i> Panier</a>
                             </li>
                         </ul>
                     </nav>
@@ -29,20 +23,11 @@
                             <a href="login.html" data-toggle="dropdown"><img src="" alt="">
                                 <span>{{ app.user.username }} <i class="fas fa-chevron-down"></i></span></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href=""><i class="fas fa-user"></i>Mon
-                                    profil</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Mon profil</a>
                                 <div class="dropdown-divider"></div>
-                                {% if is_granted('ROLE_WRITER') %}
-                                <a class="dropdown-item" href="">
-                                    <i class="fas fa-feather-alt"></i>Rédiger un article</a>
-                                <div class="dropdown-divider"></div>
-                                {% endif %}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <a class="dropdown-item" href=""><i
-                                        class="fas fa-list-alt"></i>Gérer les catégories</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href=""><i
-                                        class="fas fa-users-cog"></i>Gérer les utilisateurs</a>
+                                    <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Admin Panel</a>
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
                                 <a class="dropdown-item" href=""><i
