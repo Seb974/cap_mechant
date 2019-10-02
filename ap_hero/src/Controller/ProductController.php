@@ -87,7 +87,9 @@ class ProductController extends AbstractController
                 $product->setPicture($picture);
             }
             $nutritionals = $this->hydrateNutritionals($form);
-            $product->setNutritionals($nutritionals);
+            if ($nutritionals) {
+                $product->setNutritionals($nutritionals);
+            }
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('product_index');
         }
@@ -148,7 +150,8 @@ class ProductController extends AbstractController
             $nutritionals->setSalt($sodium);
             $nutritionals->setKCal(($prots + $carbs) * 4 + $fat * 9);
             $nutritionals->setKJ($nutritionals->getKCal() * 4,184);
+            return $nutritionals;
         }
-        return $nutritionals;
+        return null;
     }
 }

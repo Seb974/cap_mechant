@@ -31,11 +31,11 @@ table.dataTable thead .sorting_desc_disabled:before {
     width: 200px;
     position: fixed;
     z-index: 1;
-    top: 50px;
+    top: 0px;
     left: 0;
     background-color: #111;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top: 70px;
   }
 
 .sidenav a {
@@ -51,7 +51,7 @@ table.dataTable thead .sorting_desc_disabled:before {
   }
 
 #main {
-  margin-left: 240px !important;
+  margin-left: 200px !important;
   }
 
 @media screen and (max-height: 450px) {

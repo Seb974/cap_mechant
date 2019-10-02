@@ -662,12 +662,18 @@ img {
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.4);
   padding: 65px 0 20px 0;
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  position: absolute;
   width: 100%;
-  color: white;
-  text-align: center;
+  /* height: 2.5rem; */
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
 }
 
 #footer .footer-title {
