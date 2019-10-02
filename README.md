@@ -83,3 +83,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] GFM task list 4
     - [ ] GFM task list 4-1
     - [ ] GFM task list 4-2
+
+
+PATH=/opt/plesk/php/7.3/bin/:$PATH
+echo $PATH
