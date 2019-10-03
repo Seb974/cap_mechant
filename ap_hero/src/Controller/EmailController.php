@@ -8,10 +8,10 @@ use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class EmailController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/email", name="email")
      */
     public function index()
     {
@@ -34,8 +34,8 @@ class HomeController extends AbstractController
         // Send the message
         $result = $mailer->send($message);
 
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('email/index.html.twig', [
+            'controller_name' => 'EmailController',
         ]);
     }
 }
