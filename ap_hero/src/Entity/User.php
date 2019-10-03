@@ -57,6 +57,11 @@ class User implements UserInterface
      */
     private $cart;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Metadata", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $metadata;
+
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
@@ -197,6 +202,23 @@ class User implements UserInterface
             if ($cartItem->getUser() === $this) {
                 $cartItem->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getMetadata(): ?Metadata
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(Metadata $metadata): self
+    {
+        $this->metadata = $metadata;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $metadata->getUser()) {
+            $metadata->setUser($this);
         }
 
         return $this;
