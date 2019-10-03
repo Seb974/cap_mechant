@@ -40,14 +40,15 @@
         <div id="page-container">
           <div id="content-wrap">
             {% block body %}{% endblock %}
-        </div>
+           </div>
 
     {% if is_granted("ROLE_ADMIN") %}
     </div>
     {% endif %}
 
-    {% include 'layout/footer.twig.html' %}
         </div>
+    {% include 'layout/footer.twig.html' %}
+
     {% block javascripts %}
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.4.1.js"
