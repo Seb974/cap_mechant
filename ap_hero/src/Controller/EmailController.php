@@ -15,24 +15,29 @@ class EmailController extends AbstractController
      */
     public function index()
     {
+
+        $to      = [ "yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", "anne-marion.vitry@coding-academy.fr" ];
+        $subject = "Clikeat New Command";
+        $body    = "A new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
+
         // Create the Transport
-        $transport = (new Swift_SmtpTransport('clikeat.re', 25))
-        ->setUsername('webmaster@clikeat.re')
-        ->setPassword('Admin-Password-974')
+        $transport = (new Swift_SmtpTransport( $_ENV['MAILER_SMTP'], 25 ) )
+            ->setUsername( $_ENV['MAILER_USERNAME'] )
+            ->setPassword( $_ENV['MAILER_PASSWORD'] )
         ;
 
         // Create the Mailer using your created Transport
-        $mailer = new Swift_Mailer($transport);
+        $mailer = new Swift_Mailer( $transport );
 
         // Create a message
-        $message = (new Swift_Message('Une commande a été passée sur le site'))
-        ->setFrom(['webmaster@clikeat.re' => 'Clik Eat'])
-        ->setTo(['yen.linkwang@nigao.re' => 'Yen'])
-        ->setBody('x30 burger')
+        $message = ( new Swift_Message( $subject ) )
+            ->setFrom( [ $_ENV['MAILER_USERNAME'] => 'ClikEat' ] )
+            ->setTo( $to )
+            ->setBody( $body )
         ;
 
         // Send the message
-        $result = $mailer->send($message);
+        $result = $mailer->send( $message );
 
         return $this->render('email/index.html.twig', [
             'controller_name' => 'EmailController',
