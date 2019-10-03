@@ -3,12 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Metadata;
+
 use App\Form\UserType;
+use App\Form\UserType_user;
 use App\Repository\UserRepository;
+// use App\Repository\MetadataRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/user")
@@ -16,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_ADMIN")
+     *
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index(UserRepository $userRepository): Response
@@ -35,6 +43,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $metadata = $this->hydrateMetadata($form);
+            $user->setMetadata($metadata);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -63,7 +73,12 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        if ($user->getRoles()[0] === "ROLE_USER") {
+            $form = $this->createForm(UserType::class, $user);
+        } else {
+            $form = $this->createForm(UserType_user::class, $user);
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -90,5 +105,22 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    private function hydrateMetadata($form)
+    {
+        $metadata = new Metadata();
+        $facturation = $form->get('facturation_address')->getData();
+        $delivery = $form->get('delivery_address')->getData();
+        $phone = $form->get('phone_number')->getData();
+        $city = $form->get('city')->getData();
+        if ($facturation && $delivery && $phone) {
+            $metadata->setFacturationAddress($facturation);
+            $metadata->setDeliveryAddress($delivery);
+            $metadata->setPhoneNumber($phone);
+            $metadata->setCity($city);
+            return $metadata;
+        }
+        return null;
     }
 }

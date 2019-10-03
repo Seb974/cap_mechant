@@ -13,6 +13,9 @@
                 <th>Roles</th>
                 <th>Password</th>
                 <th>Username</th>
+                <th>Adresse de Facturation</th>
+                <th>Adresse de Livraison</th>
+                <th>Téléphone</th>
                 <th>IsBanned</th>
                 <th>actions</th>
             </tr>
@@ -25,6 +28,9 @@
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>凸(¬◡¬)凸</td>
                 <td>{{ user.username }}</td>
+                {# <td>{{ user.metadata.facturation_address ? user.metadata.facturation_address : 'None' }}</td>
+                <td>{{ metadata.delivery_address ? metadata.delivery_address : 'None' }}</td>
+                <td>{{ metadata.phone_number ? metadata.phone_number : 'None' }}</td> #}
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
