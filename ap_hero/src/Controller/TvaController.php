@@ -9,8 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
+ * Will throw a normal AccessDeniedException:
+ *
+ * @IsGranted("ROLE_ADMIN", message="No access! Get out!")
+ * 
  * @Route("/tva")
  */
 class TvaController extends AbstractController
