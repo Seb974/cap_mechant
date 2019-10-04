@@ -12,7 +12,13 @@ class CityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('zipCode')
+            ->add('zipCode', EntityType::class, [
+                'class' => City::class,
+                'mapped' => false,
+                'choice_label' => function ($city) {
+                    return $city->getZipcode();
+                }
+            ])
             ->add('name')
         ;
     }

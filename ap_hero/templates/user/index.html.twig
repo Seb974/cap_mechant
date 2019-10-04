@@ -29,9 +29,10 @@
                 <td>凸(¬◡¬)凸</td>
                 <td>{{ user.username }}</td>
                 {# <td>{{ user.metadata.facturation_address ? user.metadata.facturation_address : 'None' }}</td>
-                <td>{{ metadata.delivery_address ? metadata.delivery_address : 'None' }}</td>
-                <td>{{ metadata.phone_number ? metadata.phone_number : 'None' }}</td> #}
-                <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
+                <td>{{ metadata.delivery_address ? metadata.delivery_address : 'None' }}</td> #}
+                {# {% for user.id  %}
+                <td>{{ metadata.phone_number ? metadata.phone_number : 'None' }}</td> 
+                <td>{{ user.isBanned ? 'Yes' : 'No' }}</td> #}
                 <td>
                     <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
