@@ -28,8 +28,6 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepository, MetadataRepository $metadataRepository): Response
     {
-        dump($metadataRepository->findAll());
-        dump($userRepository->findAll());
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
             'metadata' => $metadataRepository->findAll(),

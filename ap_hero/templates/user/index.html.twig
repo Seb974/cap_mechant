@@ -28,13 +28,17 @@
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>凸(¬◡¬)凸</td>
                 <td>{{ user.username }}</td>
-                {# <td>{{ user.metadata.facturation_address ? user.metadata.facturation_address : 'None' }}</td>
-                <td>{{ metadata.delivery_address ? metadata.delivery_address : 'None' }}</td> #}
+                
+                {% if user.metadata is not null %}
 
+                    <td>{{ user.metadata.facturationAddress ? user.metadata.facturationAddress : 'None' }}</td>             
+                    <td>{{ user.metadata.deliveryAddress ? user.metadata.deliveryAddress : 'None' }}</td>
+
+                {% endif %}
                 {% if user.metadata == null %}
                 <td>{{ 'None' }}</td>
                 {% else %}
-                <td>{{ user.metadata.phone_number ? user.metadata.phone_number : 'None' }}</td> 
+                <td>{{ user.metadata.phoneNumber ? user.metadata.phoneNumber : 'None' }}</td> 
                 {% endif %}
 
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
