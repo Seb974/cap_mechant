@@ -43,14 +43,31 @@ You will have an output like this on your terminal
 > [OK] Server listening on http://127.0.0.1:8000
 > // Quit the server with CONTROL-C.
 - ## Autorun Script
-An autorun script is available at repository root.
+An autoinstall script is available at repository root.
 ```shell
 #!/bin/bash
+
+# change directory to symfony project
 cd ap_hero
+
+# force to install dependencies if some is missing
 composer install
-php bin/console doctrine:schema:update --force
-php bin/console doctrine:fixtures:load
+
+# force drop database
+php bin/console doctrine:database:drop --force
+php bin/console doctrine:database:create
+
+# prepare database schema
+yes | php bin/console doctrine:migrations:migrate
+
+# load data samples
+yes | php bin/console doctrine:fixtures:load
+
+# launch http server
+php bin/console server:stop
 php bin/console server:start
+
+#launch a debugger server; in your controller use ```dump( $var );``` to obtain a var_dump
 php bin/console server:dump
 ```
 ---
