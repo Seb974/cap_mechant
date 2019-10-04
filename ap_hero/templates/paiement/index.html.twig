@@ -11,10 +11,6 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/yen/Dropbox (NIGAO)/CoDaC/Repo/github/codac-pff/ap_hero/src/Controller/PaiementController.php'|file_link(0) }}">src/Controller/PaiementController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/yen/Dropbox (NIGAO)/CoDaC/Repo/github/codac-pff/ap_hero/templates/paiement/index.html.twig'|file_link(0) }}">templates/paiement/index.html.twig</a></code></li>
-    </ul>
+    Redirect user to <br /><a href="{{ payment_url }}" target="_blank">{{ payment_url }}</a> in order to proceed payment
 </div>
 {% endblock %}
