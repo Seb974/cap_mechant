@@ -83,6 +83,24 @@ class StockController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/{id}/editstock", name="stock_update", methods={"GET","POST"})
+     */
+    public function editStock(Request $request, Stock $stock): Response
+    {
+        $newQty = (int) $request->request->get($stock->getId());
+        $stock->setQuantity($newQty);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($stock);
+        $entityManager->flush();
+        return $this->redirectToRoute('stock_index');
+    }
+
+
+
+
+
     /**
      * @Route("/{id}", name="stock_delete", methods={"DELETE"})
      */

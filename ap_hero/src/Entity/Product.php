@@ -53,19 +53,25 @@ class Product
      */
     private $allergens;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
+    /*
+     * // @ORM\Column(type="float", nullable=true)
      */
-    private $price;
+    //private $price;
+
+    /*
+     * // @ORM\OneToOne(targetEntity="App\Entity\Stock", mappedBy="product", cascade={"persist", "remove"})
+     */
+    //private $stock;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Stock", mappedBy="product", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Variant", mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $stock;
+    private $variants;
 
     public function __construct()
     {
         $this->allergens = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,30 +177,34 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?float
+   
+
+    /**
+     * @return Collection|Variant[]
+     */
+    public function getVariants(): Collection
     {
-        return $this->price;
+        return $this->variants;
     }
 
-    public function setPrice(?float $price): self
+    public function addVariant(Variant $variant): self
     {
-        $this->price = $price;
+        if (!$this->variants->contains($variant)) {
+            $this->variants[] = $variant;
+            $variant->setProduct($this);
+        }
 
         return $this;
     }
 
-    public function getStock(): ?Stock
+    public function removeVariant(Variant $variant): self
     {
-        return $this->stock;
-    }
-
-    public function setStock(Stock $stock): self
-    {
-        $this->stock = $stock;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $stock->getProduct()) {
-            $stock->setProduct($this);
+        if ($this->variants->contains($variant)) {
+            $this->variants->removeElement($variant);
+            // set the owning side to null (unless already changed)
+            if ($variant->getProduct() === $this) {
+                $variant->setProduct(null);
+            }
         }
 
         return $this;

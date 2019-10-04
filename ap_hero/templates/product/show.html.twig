@@ -11,7 +11,7 @@
     <table class="table">
         <tbody>
             
-            <tr>
+            {# <!--<tr>
                 <th>Stock</th>
                 {% if product.stock is not null %}
                     {% if product.stock.quantity > 0 %}
@@ -22,7 +22,7 @@
                 {% else %}
                     <td>En rupture de stock !</td>
                 {% endif %}
-            </tr>
+            </tr> -->#}
             
             <tr>
                 <th>Category</th>
@@ -32,7 +32,7 @@
                 <th>Name</th>
                 <td>{{ product.name }}</td>
             </tr>
-            <tr>
+            {# <!-- <tr>
                 <th>Price</th>
                 <td>{{ product.price }} €</td>
             </tr>
@@ -43,7 +43,7 @@
             <tr>
                 <th>Description</th>
                 <td>{{ product.description }}</td>
-            </tr>
+            </tr>  -->#}
             <tr>
                 <th>Allergens</th>
                 <td>
@@ -76,6 +76,15 @@
                     <td>{{ product.nutritionals.salt }}</td>
                 </td>
             </tr>
+            {% endif %}
+            {% if product.variants is not null %}
+                <th>Variants</th>
+                <td>
+                    {% for variant in product.variants %}
+                        <th>{{ variant.name }}</th>
+                        <td>{{ variant.price }} €</td>
+                    {% endfor %}
+                </td>
             {% endif %}
         </tbody>
     </table>
