@@ -23,7 +23,7 @@
                             <a href="login.html" data-toggle="dropdown"><img src="" alt="">
                                 <span>{{ app.user.username }} <i class="fas fa-chevron-down"></i></span></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Mon profil</a>
+                                <a class="dropdown-item" href="{{ path('user_self_show') }}"><i class="fas fa-user"></i>Mon profil</a>
                                 <div class="dropdown-divider"></div>
                                 {% if is_granted('ROLE_ADMIN') %}
                                 <div class="dropdown-divider"></div>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Metadata;
 use App\Form\EditSelfType;
 use App\Controller\UserController;
 use App\Form\RegistrationFormType;
@@ -110,10 +111,10 @@ class SecurityController extends AbstractController
             }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('user_self_show');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/edit_self.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -144,4 +145,13 @@ class SecurityController extends AbstractController
         return null;
     }
 
+    /**
+     * @Route("/self", name="user_self_show", methods={"GET"})
+     */
+    public function show(): Response
+    {
+        return $this->render('user/show_self.html.twig', [
+            'user' => $this->getUser(),
+        ]);
+    }
 }
