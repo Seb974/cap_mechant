@@ -30,9 +30,7 @@ class AllergeneFixtures extends Fixture
 
 		foreach ( $allergens as $key => $value ) {
 			$allergen = new Allergen();
-
 			$allergen->setName( $value['name'] );
-
 			$manager->persist( $allergen );
 		}
 
