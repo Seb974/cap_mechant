@@ -21,7 +21,7 @@ class PaiementController extends AbstractController
 		$last_name  = 'Watson'                 ;
 
 		$payment = \Payplug\Payment::create(array(
-			'amount'         => 1550,
+			'amount'         => 3680,
 			'currency'       => 'EUR',
 			'billing'          => array(
 				'title'        => 'mr',
