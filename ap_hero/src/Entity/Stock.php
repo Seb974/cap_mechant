@@ -22,7 +22,7 @@ class Stock
     private $quantity;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Product", inversedBy="stock", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Variant", inversedBy="stock", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -44,12 +44,12 @@ class Stock
         return $this;
     }
 
-    public function getProduct(): ?Product
+    public function getProduct(): ?Variant
     {
         return $this->product;
     }
 
-    public function setProduct(Product $product): self
+    public function setProduct(Variant $product): self
     {
         $this->product = $product;
 

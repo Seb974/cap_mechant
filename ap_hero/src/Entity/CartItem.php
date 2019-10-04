@@ -17,7 +17,7 @@ class CartItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Variant")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -38,12 +38,12 @@ class CartItem
         return $this->id;
     }
 
-    public function getProduct(): ?Product
+    public function getProduct(): ?Variant
     {
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(?Variant $product): self
     {
         $this->product = $product;
 
