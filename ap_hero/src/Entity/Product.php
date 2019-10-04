@@ -53,20 +53,15 @@ class Product
      */
     private $allergens;
 
-    /*
-     * // @ORM\Column(type="float", nullable=true)
-     */
-    //private $price;
-
-    /*
-     * // @ORM\OneToOne(targetEntity="App\Entity\Stock", mappedBy="product", cascade={"persist", "remove"})
-     */
-    //private $stock;
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Variant", mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
     private $variants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
+     */
+    private $supplier;
 
     public function __construct()
     {
@@ -206,6 +201,18 @@ class Product
                 $variant->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSupplier(): ?User
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?User $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

@@ -62,9 +62,15 @@ class User implements UserInterface
      */
     private $metadata;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="supplier")
+     */
+    private $products;
+
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,6 +225,37 @@ class User implements UserInterface
         // set the owning side of the relation if necessary
         if ($this !== $metadata->getUser()) {
             $metadata->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setSupplier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getSupplier() === $this) {
+                $product->setSupplier(null);
+            }
         }
 
         return $this;
