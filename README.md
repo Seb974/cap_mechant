@@ -42,6 +42,17 @@ php bin/console server:run
 You will have an output like this on your terminal
 > [OK] Server listening on http://127.0.0.1:8000
 > // Quit the server with CONTROL-C.
+- ## Autorun Script
+An autorun script is available at repository root.
+```shell
+#!/bin/bash
+cd ap_hero
+composer install
+php bin/console doctrine:schema:update --force
+php bin/console doctrine:fixtures:load
+php bin/console server:start
+php bin/console server:dump
+```
 ---
 
 # Illustrations
