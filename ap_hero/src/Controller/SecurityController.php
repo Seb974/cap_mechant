@@ -154,4 +154,4 @@ class SecurityController extends AbstractController
             'user' => $this->getUser(),
         ]);
     }
-}
+ }
