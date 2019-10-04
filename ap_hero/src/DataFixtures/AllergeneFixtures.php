@@ -11,7 +11,7 @@ class CityFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
-		$zipcodes = array(
+		$allergens = array(
 			array('name' => 'gluten'),
 			array('name' => 'crustacés'),
 			array('name' => 'oeufs'),
@@ -28,7 +28,7 @@ class CityFixtures extends Fixture
 			array('name' => 'Mollusques'),
 		  );
 
-		foreach ( $Allergens as $key => $value ) {
+		foreach ( $allergens as $key => $value ) {
 			$allergen = new Allergen();
 
 			$allergen->setName( $value['name'] );
