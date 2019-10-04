@@ -25,7 +25,12 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                {# <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
+                <td>
+                    {% for role in user.roles %}
+                        {{ role }} 
+                    {% endfor %}
+                </td>
                 <td>凸(¬◡¬)凸</td>
                 <td>{{ user.username }}</td>
                 
