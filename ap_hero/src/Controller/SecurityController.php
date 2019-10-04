@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditSelfType;
+use App\Controller\UserController;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +26,7 @@ class SecurityController extends AbstractController
         //    $this->redirectToRoute('target_path');
         // }
 
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
@@ -46,7 +46,7 @@ class SecurityController extends AbstractController
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
             $user->setRoles(['ROLE_USER']);
@@ -76,4 +76,72 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @Route("/account/edit", name="self_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $user = $this->getUser();
+        $metadata = $user->getMetadata();
+        $form = $this->createForm(EditSelfType::class, $user);
+        if ($metadata) {
+            $form->get('phone_number')->setData($metadata->getPhoneNumber());
+            $form->get('facturation_address')->setData($metadata->getFacturationAddress());
+            $form->get('delivery_address')->setData($metadata->getDeliveryAddress());
+            $form->get('city')->setData($metadata->getCity());
+        }
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->updateMetadata($form, $user);
+            if (strlen($form->get('password')->getData()) > 0) {
+                $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
+            }
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    private function updateMetadata($form, $user)
+    {
+        if ($user->getMetadata() === null ) {
+            $metadata = new Metadata();
+            $user->setMetadata($metadata);
+        } else {
+            $metadata = $user->getMetadata();
+        }
+
+        $facturation = $form->get('facturation_address')->getData();
+        $delivery = $form->get('delivery_address')->getData();
+        $phone = $form->get('phone_number')->getData();
+        $city = $form->get('city')->getData();
+        
+        if ($facturation && $delivery && $phone) {
+            //$entityManager = $this->getDoctrine()->getManager();
+            $metadata->setFacturationAddress($facturation);
+            $metadata->setDeliveryAddress($delivery);
+            $metadata->setPhoneNumber($phone);
+            $metadata->setCity($city);
+            return $metadata;
+        }
+        return null;
+    }
+
 }
