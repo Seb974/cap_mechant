@@ -4,7 +4,7 @@
             <div class="navbar">
                 <div class="navbar-left">
                     <a class="navbar-toggle"><i class="fas fa-bars"></i></a>
-                    <a href="#" class="logo"><img src="{{ asset('uploads/logos/clikEat.png') }}"
+                    <a href="{{ path('index') }}" class="logo"><img src="{{ asset('uploads/logos/clikEat.png') }}"
                             alt="Clik Eat Logo"></a>
                     <nav class="nav">
                         <ul>
@@ -30,7 +30,7 @@
                                     <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Admin Panel</a>
                                 <div class="dropdown-divider"></div>
                                 {% endif %}
-                                <a class="dropdown-item" href=""><i
+                                <a class="dropdown-item" href="{{ path('logout') }}"><i
                                         class="fas fa-sign-out-alt"></i>Se
                                     déconnecter</a>
                             </div>
