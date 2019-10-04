@@ -55,7 +55,7 @@ class ProductFixtures extends Fixture
 
             $product->setName        ( $name                                                          );
             $product->setDescription ( $faker->sentence( $nbWords = 4, $variableNbWords = true )      );
-            $product->setPrice       ( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
+            // $product->setPrice       ( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
             $manager->persist        ( $product                                                       );
 
             $cycle++;
