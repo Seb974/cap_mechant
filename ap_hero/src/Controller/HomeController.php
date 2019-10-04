@@ -18,10 +18,11 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        $faker   = Factory::create();
-        $product = new Product();
+        $faker = Factory::create();
+        $faker->addProvider( new \FakerRestaurant\Provider\fr_FR\Restaurant( $faker ) );
 
-        $product->setName       ( $faker->company                                                );
+        $product = new Product();
+        $product->setName       ( $faker->foodName() );
         $product->setDescription( $faker->sentence( $nbWords = 4, $variableNbWords = true )      );
         $product->setPrice      ( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
 

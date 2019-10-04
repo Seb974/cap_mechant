@@ -14,15 +14,56 @@ class ProductFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $faker   = Factory::create();
-        $product = new Product();
+        $faker = Factory::create();
+        $faker->addProvider( new \FakerRestaurant\Provider\fr_FR\Restaurant( $faker ) );
 
-        $product->setName($faker->name);
-        $product->setDescription($faker->sentence($nbWords = 6, $variableNbWords = true));
-        dump($product);
-        
-        // $manager->persist($product);
+        $cycle = 0;
+        $name  = "";
 
-        // $manager->flush();
+        for ( $i = 0; $i < 100; $i++ ) {
+            switch ( $cycle ) {
+                case 0:
+                    $name = $faker->foodname();
+                    break;
+
+                case 1:
+                    $name = $faker->beverageName();
+                    break;
+
+                case 2:
+                    $name = $faker->dairyName();
+                    break;
+
+                case 3:
+                    $name = $faker->vegetableName();
+                    break;
+
+                case 4:
+                    $name = $faker->fruitName();
+                    break;
+
+                case 5:
+                    $name = $faker->meatName();
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+
+            $product = new Product();
+
+            $product->setName        ( $name                                                          );
+            $product->setDescription ( $faker->sentence( $nbWords = 4, $variableNbWords = true )      );
+            $product->setPrice       ( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
+            $manager->persist        ( $product                                                       );
+
+            $cycle++;
+            if ( 5 == $cycle ) {
+                $cycle = 0;
+            }
+        }
+
+        $manager->flush();
     }
 }
