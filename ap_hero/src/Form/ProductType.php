@@ -6,9 +6,11 @@ use App\Entity\Tva;
 use App\Entity\Allergen;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Form\VariantType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -59,7 +61,7 @@ class ProductType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('price', NumberType::class)
+            //->add('price', NumberType::class)
             ->add('tva', EntityType::class, [
                 'class' => Tva::class,
                 'choice_label' => function ($tva) {
@@ -83,6 +85,14 @@ class ProductType extends AbstractType
                     ])
                 ],
             ])
+            ->add('variants', CollectionType::class, array(
+                'entry_type'   => VariantType::class,
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'mapped' => true,
+              ))
+        
         ;
     }
 

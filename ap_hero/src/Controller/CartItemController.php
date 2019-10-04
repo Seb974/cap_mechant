@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Variant;
 use App\Entity\CartItem;
 use App\Form\CartItemType;
 use App\Repository\CartItemRepository;
@@ -32,10 +33,10 @@ class CartItemController extends AbstractController
     public function add(Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $repository = $entityManager->getRepository(Product::class);
+        $repository = $entityManager->getRepository(Variant::class);
         $cartItem = new CartItem();
-        $product = $repository->find($request->query->get('id'));
-        $cartItem->setProduct($product);
+        $variant = $repository->find($request->query->get('id'));
+        $cartItem->setProduct($variant);
         $cartItem->setQuantity($request->request->get($request->query->get('id')));
         $cartItem->setUser($this->getUser());
         $entityManager->persist($cartItem);
