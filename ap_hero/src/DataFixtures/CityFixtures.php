@@ -10,7 +10,6 @@ class CityFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-
 		$zipcodes = array(
 			array('zip_code' => '97440','name' => 'ST ANDRE'),
 			array('zip_code' => '97429','name' => 'PETITE ILE'),
@@ -55,12 +54,11 @@ class CityFixtures extends Fixture
 			$city = new City();
 
 			$city->setZipCode( intval( $value['zip_code'] ) );
-			$city->setName   ( $value['name'    ] );
+			$city->setName( $value['name'] );
 			$city->setIsDeliverable( true );
 
 			$manager->persist($city);
 		}
-
         $manager->flush();
     }
 }

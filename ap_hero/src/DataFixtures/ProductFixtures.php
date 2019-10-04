@@ -53,17 +53,16 @@ class ProductFixtures extends Fixture
 
             $product = new Product();
 
-            $product->setName        ( $name                                                          );
-            $product->setDescription ( $faker->sentence( $nbWords = 4, $variableNbWords = true )      );
-            // $product->setPrice       ( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
-            $manager->persist        ( $product                                                       );
+            $product->setName( $name );
+            $product->setDescription( $faker->sentence( $nbWords = 4, $variableNbWords = true ) );
+            // $product->setPrice( $faker->randomFloat( $nbMaxDecimals = 2, $min = 5, $max = 15 ) );
+            $manager->persist( $product );
 
             $cycle++;
             if ( 5 == $cycle ) {
                 $cycle = 0;
             }
         }
-
         $manager->flush();
     }
 }
