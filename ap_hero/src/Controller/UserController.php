@@ -17,13 +17,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
+ * @IsGranted("ROLE_ADMIN")
+ *
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
     /**
-     * @IsGranted("ROLE_ADMIN")
-     *
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index(UserRepository $userRepository, MetadataRepository $metadataRepository): Response
