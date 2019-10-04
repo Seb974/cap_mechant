@@ -3,12 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Metadata;
+
 use App\Form\UserType;
+// use App\Form\UserType_user;
 use App\Repository\UserRepository;
+use App\Repository\MetadataRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/user")
@@ -16,25 +23,38 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_ADMIN")
+     *
      * @Route("/", name="user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, MetadataRepository $metadataRepository): Response
     {
+        dump($metadataRepository->findAll());
+        dump($userRepository->findAll());
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
+            // 'metadata' => $metadataRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+            $metadata = $this->updateMetadata($form, $user);
+            // $user->setMetadata($metadata);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -61,12 +81,22 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $metadata = $this->updateMetadata($form, $user);
+            // $entityManager->persist($metadata);
+            // $user->setMetadata($metadata);
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_index');
@@ -90,5 +120,33 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    private function updateMetadata($form, $user)
+    {
+        if ($user->getMetadata() === null ) {
+            $metadata = new Metadata();
+            $user->setMetadata($metadata);
+        } else {
+            $metadata = $user->getMetadata();
+        }
+
+        $facturation = $form->get('facturation_address')->getData();
+        $delivery = $form->get('delivery_address')->getData();
+        $phone = $form->get('phone_number')->getData();
+        $city = $form->get('city')->getData();
+        
+        if ($facturation && $delivery && $phone) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $metadata->setFacturationAddress($facturation);
+            $metadata->setDeliveryAddress($delivery);
+            $metadata->setPhoneNumber($phone);
+            $metadata->setCity($city);
+            // $user->setMetadata($metadata);
+            // $entityManager->persist($metadata);
+            // $entityManager->flush();
+            return $metadata;
+        }
+        return null;
     }
 }

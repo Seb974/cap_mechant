@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\City;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -10,6 +12,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UserType extends AbstractType
 {
@@ -20,6 +25,25 @@ class UserType extends AbstractType
             // ->add('roles')
             ->add('password', PasswordType::class)
             ->add('username')
+            ->add('phone_number', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('facturation_address', TextareaType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('delivery_address', TextareaType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'mapped' => false,
+                'choice_label' => function ($city) {
+                    return $city->getName();
+                }
+            ])
             ->add('isBanned')
             ->add('picture', FileType::class, [
                 'label' => 'Illustration',
