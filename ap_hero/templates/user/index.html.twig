@@ -31,14 +31,16 @@
                 
                 {% if user.metadata is not null %}
 
-                    <td>{{ user.metadata.facturationAddress ? user.metadata.facturationAddress : 'None' }}</td>             
-                    <td>{{ user.metadata.deliveryAddress ? user.metadata.deliveryAddress : 'None' }}</td>
+                    <td>{{ user.metadata.facturationAddress }}</td>
+                    <td>{{ user.metadata.deliveryAddress }}</td>
+                    <td>{{ user.metadata.phoneNumber }}</td> 
 
-                {% endif %}
-                {% if user.metadata == null %}
-                <td>{{ 'None' }}</td>
                 {% else %}
-                <td>{{ user.metadata.phoneNumber ? user.metadata.phoneNumber : 'None' }}</td> 
+
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+
                 {% endif %}
 
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
