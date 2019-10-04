@@ -6,7 +6,7 @@ use App\Entity\Allergen;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class CityFixtures extends Fixture
+class AllergeneFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
