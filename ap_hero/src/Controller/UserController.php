@@ -33,7 +33,7 @@ class UserController extends AbstractController
         dump($userRepository->findAll());
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
-            // 'metadata' => $metadataRepository->findAll(),
+            'metadata' => $metadataRepository->findAll(),
         ]);
     }
 

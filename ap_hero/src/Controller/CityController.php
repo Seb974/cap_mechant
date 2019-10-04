@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\City;
 use App\Form\CityType;
+use App\Form\CityTypeAdmin;
 use App\Repository\CityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/city")
@@ -16,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class CityController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_ADMIN")
+     *
      * @Route("/", name="city_index", methods={"GET"})
      */
     public function index(CityRepository $cityRepository): Response
@@ -26,12 +30,15 @@ class CityController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
+     *
      * @Route("/new", name="city_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $city = new City();
-        $form = $this->createForm(CityType::class, $city);
+
+        $form = $this->createForm(CityTypeAdmin::class, $city);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
