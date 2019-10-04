@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class CityTypeAdmin extends AbstractType
 {
@@ -15,7 +16,10 @@ class CityTypeAdmin extends AbstractType
         $builder
             ->add('zipCode')
             ->add('name')
-        ;
+            ->add('isDeliverable', CheckboxType::class, [
+                'label'    => 'Deliverable',
+                'required' => false,
+                'mapped'   => true,]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
