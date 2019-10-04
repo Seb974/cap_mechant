@@ -14,7 +14,7 @@ class PaiementController extends AbstractController
      */
     public function index()
     {
-		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_SANDBOX_KEY'] );
+		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 
 		$email      = 'john.watson@example.net';
 		$first_name = 'John'                   ;
