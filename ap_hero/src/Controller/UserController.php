@@ -113,25 +113,23 @@ class UserController extends AbstractController
 
     private function updateMetadata($form, $user)
     {
-        if ($user->getMetadata() === null ) {
-            $metadata = new Metadata();
-            $user->setMetadata($metadata);
-        } else {
-            $metadata = $user->getMetadata();
-        }
         $facturation = $form->get('facturation_address')->getData();
         $delivery = $form->get('delivery_address')->getData();
         $phone = $form->get('phone_number')->getData();
         $city = $form->get('city')->getData();
         
-        if ($facturation !== null && $delivery !== null && $phone !== null && $city !== null) {
+        if ($facturation && $delivery && $phone && $city) {
+            if ($user->getMetadata() === null ) {
+                $metadata = new Metadata();
+                $user->setMetadata($metadata);
+            } else {
+                $metadata = $user->getMetadata();
+            }
             $metadata->setFacturationAddress($facturation);
             $metadata->setDeliveryAddress($delivery);
             $metadata->setPhoneNumber($phone);
             $metadata->setCity($city);
-            return $metadata;
         }
-        return null;
     }
 
     private function convertRoleToField($user)
