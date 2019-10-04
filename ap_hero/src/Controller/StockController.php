@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_SUPPLIER')")
+ * @IsGranted("ROLE_SUPPLIER", message="No access! Get out!")
  * 
  * @Route("/stock")
  */
