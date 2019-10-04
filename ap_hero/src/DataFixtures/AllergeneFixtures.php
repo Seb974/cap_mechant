@@ -31,9 +31,9 @@ class CityFixtures extends Fixture
 		foreach ( $Allergens as $key => $value ) {
 			$allergen = new Allergen();
 
-			$allergen->setName( $value['name'    ] );
+			$allergen->setName( $value['name'] );
 
-			$manager->persist($allergen);
+			$manager->persist( $allergen );
 		}
 
         $manager->flush();
