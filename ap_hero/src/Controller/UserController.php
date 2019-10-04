@@ -4,9 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Metadata;
-
-use App\Form\UserType;
-// use App\Form\UserType_user;
+use App\Form\CreateUserType;
+use App\Form\UpdateUserType;
 use App\Repository\UserRepository;
 use App\Repository\MetadataRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +42,7 @@ class UserController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(CreateUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,22 +82,20 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        //$form = $this->createForm(UserType::class, $user);
+        $metadata = $user->getMetadata();
+        $form = $this->createForm(UpdateUserType::class, $user);
+        if ($metadata) {
+            $form->get('phone_number')->setData($metadata->getPhoneNumber());
+            $form->get('facturation_address')->setData($metadata->getFacturationAddress());
+            $form->get('delivery_address')->setData($metadata->getDeliveryAddress());
+            $form->get('city')->setData($metadata->getCity());
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $metadata = $this->updateMetadata($form, $user);
-            // $entityManager->persist($metadata);
-            // $user->setMetadata($metadata);
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
+            $this->updateMetadata($form, $user);
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('user_index');
         }
 
