@@ -12,6 +12,11 @@ class ProductFixtures extends Fixture
 {
     protected $faker;
 
+    public function getDependencies()
+    {
+        return array(CategoryFixtures::class);
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
