@@ -10,8 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
+ * @IsGranted("ROLE_SUPPLIER", message="No access! Get out!")
+ * 
  * @Route("/stock")
  */
 class StockController extends AbstractController
@@ -78,6 +82,24 @@ class StockController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/{id}/editstock", name="stock_update", methods={"GET","POST"})
+     */
+    public function editStock(Request $request, Stock $stock): Response
+    {
+        $newQty = (int) $request->request->get($stock->getId());
+        $stock->setQuantity($newQty);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($stock);
+        $entityManager->flush();
+        return $this->redirectToRoute('stock_index');
+    }
+
+
+
+
 
     /**
      * @Route("/{id}", name="stock_delete", methods={"DELETE"})

@@ -54,18 +54,19 @@ class Product
     private $allergens;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Variant", mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $price;
+    private $variants;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Stock", mappedBy="product", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
      */
-    private $stock;
+    private $supplier;
 
     public function __construct()
     {
         $this->allergens = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,31 +172,47 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?float
+   
+
+    /**
+     * @return Collection|Variant[]
+     */
+    public function getVariants(): Collection
     {
-        return $this->price;
+        return $this->variants;
     }
 
-    public function setPrice(?float $price): self
+    public function addVariant(Variant $variant): self
     {
-        $this->price = $price;
+        if (!$this->variants->contains($variant)) {
+            $this->variants[] = $variant;
+            $variant->setProduct($this);
+        }
 
         return $this;
     }
 
-    public function getStock(): ?Stock
+    public function removeVariant(Variant $variant): self
     {
-        return $this->stock;
+        if ($this->variants->contains($variant)) {
+            $this->variants->removeElement($variant);
+            // set the owning side to null (unless already changed)
+            if ($variant->getProduct() === $this) {
+                $variant->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setStock(Stock $stock): self
+    public function getSupplier(): ?User
     {
-        $this->stock = $stock;
+        return $this->supplier;
+    }
 
-        // set the owning side of the relation if necessary
-        if ($this !== $stock->getProduct()) {
-            $stock->setProduct($this);
-        }
+    public function setSupplier(?User $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

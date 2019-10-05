@@ -11,10 +11,7 @@
 <div class="example-wrapper">
     <header>
         {% if( is_granted('ROLE_USER')) %}
-            <a href="{{ path('logout') }}">Logout</a>
-        {% else %}
-            <a href="{{ path('login') }}">Login</a> 
-            <a href="{{ path('register') }}">Register</a>
+            <a href="{{ path('get_cart_item') }}" >My cart</a>
         {% endif %}
     </header>
     {% if( is_granted('ROLE_ADMIN')) %}

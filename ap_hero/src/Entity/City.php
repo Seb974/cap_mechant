@@ -26,6 +26,11 @@ class City
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeliverable;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,18 @@ class City
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIsDeliverable(): ?bool
+    {
+        return $this->isDeliverable;
+    }
+
+    public function setIsDeliverable(bool $isDeliverable): self
+    {
+        $this->isDeliverable = $isDeliverable;
 
         return $this;
     }

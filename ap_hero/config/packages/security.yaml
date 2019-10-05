@@ -4,9 +4,9 @@ security:
             algorithm: auto
 
     role_hierarchy:
-        ROLE_PROVIDER:     ROLE_USER
+        ROLE_SUPPLIER:     ROLE_USER
         ROLE_DELIVERER:    ROLE_USER
-        ROLE_ADMIN: [ROLE_USER, ROLE_PROVIDER, ROLE_DELIVERER, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: [ROLE_USER, ROLE_SUPPLIER, ROLE_DELIVERER, ROLE_ALLOWED_TO_SWITCH]
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,6 +52,27 @@ class User implements UserInterface
      */
     private $avatar;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="user", orphanRemoval=true)
+     */
+    private $cart;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Metadata", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $metadata;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="supplier")
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->datetime = new ArrayCollection();
+        $this->products = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,7 +97,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -84,7 +107,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_ADMIN';
 
         return array_unique($roles);
     }
@@ -155,6 +178,85 @@ class User implements UserInterface
     public function setAvatar(?Pics $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CartItem[]
+     */
+    public function getCart(): Collection
+    {
+        return $this->cart;
+    }
+
+    public function addToCart(CartItem $cartItem): self
+    {
+        if (!$this->cart->contains($cartItem)) {
+            $this->cart[] = $cartItem;
+            $cartItem->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cart->contains($cartItem)) {
+            $this->cart->removeElement($cartItem);
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getUser() === $this) {
+                $cartItem->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMetadata(): ?Metadata
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(Metadata $metadata): self
+    {
+        $this->metadata = $metadata;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $metadata->getUser()) {
+            $metadata->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setSupplier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getSupplier() === $this) {
+                $product->setSupplier(null);
+            }
+        }
 
         return $this;
     }

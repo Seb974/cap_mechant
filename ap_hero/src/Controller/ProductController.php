@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\CartItem;
 use App\Entity\Nutritionals;
 use App\Entity\Product;
+use App\Entity\Variant;
 use App\Entity\Pics;
+use App\Entity\Stock;
 use App\Form\ProductType;
+use App\Form\CartItemType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +41,6 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $picFile = $form->get('picture')->getData();
             if ($picFile) {
                 $picture = new Pics();
@@ -48,6 +51,7 @@ class ProductController extends AbstractController
             $nutritionals = $this->hydrateNutritionals($form);
             $product->setNutritionals($nutritionals);
             $entityManager = $this->getDoctrine()->getManager();
+            $this->addVariants($product, $entityManager);
             $entityManager->persist($product);
             $entityManager->flush();
             return $this->redirectToRoute('product_index');
@@ -85,8 +89,12 @@ class ProductController extends AbstractController
                 $product->setPicture($picture);
             }
             $nutritionals = $this->hydrateNutritionals($form);
-            $product->setNutritionals($nutritionals);
-            $this->getDoctrine()->getManager()->flush();
+            if ($nutritionals) {
+                $product->setNutritionals($nutritionals);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $this->addVariants($product, $entityManager);
+            $entityManager->flush();
             return $this->redirectToRoute('product_index');
         }
 
@@ -146,8 +154,20 @@ class ProductController extends AbstractController
             $nutritionals->setSalt($sodium);
             $nutritionals->setKCal(($prots + $carbs) * 4 + $fat * 9);
             $nutritionals->setKJ($nutritionals->getKCal() * 4,184);
+            return $nutritionals;
         }
-        return $nutritionals;
+        return null;
+    }
+
+    private function addVariants($product, $entityManager)
+    {
+        foreach($product->getVariants() as $variant) {
+            if ($variant->getStock() === null) {
+                $stock = new Stock();
+                $stock->setQuantity(0);
+                $variant->setStock($stock);
+                $entityManager->persist($variant);
+            }
+        }
     }
 }
-

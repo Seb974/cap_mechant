@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Stock;
-use App\Entity\Product;
+use App\Entity\Variant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,7 +16,7 @@ class StockType extends AbstractType
     {
         $builder
             ->add('product', EntityType::class, [
-                'class' => Product::class,
+                'class' => Variant::class,
                 'choice_label' => function ($product) {
                     return $product->getName();
                 },
