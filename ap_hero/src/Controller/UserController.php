@@ -44,18 +44,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
-            $metadata = $this->updateMetadata($form, $user);
-            // $user->setMetadata($metadata);
+            $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
+            $this->updateMetadata($form, $user);
+            $user->setRoles([$form->get('roles')->getData()]);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
             return $this->redirectToRoute('user_index');
         }
 
@@ -78,9 +72,8 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, User $user): Response
     {
-        //$form = $this->createForm(UserType::class, $user);
         $metadata = $user->getMetadata();
         $form = $this->createForm(UpdateUserType::class, $user);
         if ($metadata) {
@@ -89,10 +82,12 @@ class UserController extends AbstractController
             $form->get('delivery_address')->setData($metadata->getDeliveryAddress());
             $form->get('city')->setData($metadata->getCity());
         }
+        $form->get('roles')->setData($this->convertRoleToField($user));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->updateMetadata($form, $user);
+            $user->setRoles([$form->get('roles')->getData()]);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('user_index');
         }
@@ -113,35 +108,41 @@ class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('user_index');
     }
 
     private function updateMetadata($form, $user)
     {
-        if ($user->getMetadata() === null ) {
-            $metadata = new Metadata();
-            $user->setMetadata($metadata);
-        } else {
-            $metadata = $user->getMetadata();
-        }
-
         $facturation = $form->get('facturation_address')->getData();
         $delivery = $form->get('delivery_address')->getData();
         $phone = $form->get('phone_number')->getData();
         $city = $form->get('city')->getData();
         
-        if ($facturation && $delivery && $phone) {
-            $entityManager = $this->getDoctrine()->getManager();
+        if ($facturation && $delivery && $phone && $city) {
+            if ($user->getMetadata() === null ) {
+                $metadata = new Metadata();
+                $user->setMetadata($metadata);
+            } else {
+                $metadata = $user->getMetadata();
+            }
             $metadata->setFacturationAddress($facturation);
             $metadata->setDeliveryAddress($delivery);
             $metadata->setPhoneNumber($phone);
             $metadata->setCity($city);
-            // $user->setMetadata($metadata);
-            // $entityManager->persist($metadata);
-            // $entityManager->flush();
-            return $metadata;
         }
-        return null;
+    }
+
+    private function convertRoleToField($user)
+    {
+        $roles = $user->getRoles();
+        if (in_array('ROLE_ADMIN', $roles)) {
+            return 'ROLE_ADMIN';
+        } elseif (in_array('ROLE_SUPPLIER', $roles)) {
+            return 'ROLE_SUPPLIER';
+        } elseif (in_array('ROLE_DELIVERER', $roles)) {
+            return 'ROLE_DELIVERER';
+        } else {
+            return 'ROLE_USER';
+        }
     }
 }

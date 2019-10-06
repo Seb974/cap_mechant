@@ -19,23 +19,33 @@ class Cart
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\CartItem")
+     * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="cart", cascade={"persist", "remove"})
      */
-    private $CartItem;
+    private $cartItems;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $total_cost;
+    private $totalToPay;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $is_validated;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="cart", cascade={"persist", "remove"})
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $totalTax;
+
     public function __construct()
     {
-        $this->CartItem = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,15 +56,16 @@ class Cart
     /**
      * @return Collection|CartItem[]
      */
-    public function getCartItem(): Collection
+    public function getCartItems(): Collection
     {
-        return $this->CartItem;
+        return $this->cartItems;
     }
 
-    public function addCartItem(CartItem $cartItem): self
+    public function addCartItems(CartItem $cartItem): self
     {
-        if (!$this->CartItem->contains($cartItem)) {
-            $this->CartItem[] = $cartItem;
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems[] = $cartItem;
+            $cartItem->setCart($this);
         }
 
         return $this;
@@ -62,21 +73,21 @@ class Cart
 
     public function removeCartItem(CartItem $cartItem): self
     {
-        if ($this->CartItem->contains($cartItem)) {
-            $this->CartItem->removeElement($cartItem);
+        if ($this->cartItems->contains($cartItem)) {
+            $this->cartItems->removeElement($cartItem);
         }
 
         return $this;
     }
 
-    public function getTotalCost(): ?float
+    public function getTotalToPay(): ?float
     {
-        return $this->total_cost;
+        return $this->totalToPay;
     }
 
-    public function setTotalCost(float $total_cost): self
+    public function setTotalToPay(float $totalToPay): self
     {
-        $this->total_cost = $total_cost;
+        $this->totalToPay = $totalToPay;
 
         return $this;
     }
@@ -89,6 +100,30 @@ class Cart
     public function setIsValidated(bool $is_validated): self
     {
         $this->is_validated = $is_validated;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTotalTax(): ?float
+    {
+        return $this->totalTax;
+    }
+
+    public function setTotalTax(?float $totalTax): self
+    {
+        $this->totalTax = $totalTax;
 
         return $this;
     }

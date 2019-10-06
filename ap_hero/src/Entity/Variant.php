@@ -33,7 +33,7 @@ class Variant
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="variants", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
 

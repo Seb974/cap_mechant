@@ -28,10 +28,10 @@ class CartItem
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="datetime")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="cartItems" , cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $user;
+    private $cart;
 
     public function getId(): ?int
     {
@@ -62,14 +62,14 @@ class CartItem
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getCart(): ?Cart
     {
-        return $this->user;
+        return $this->cart;
     }
 
-    public function setUser(?User $user): self
+    public function setCart(?Cart $cart): self
     {
-        $this->user = $user;
+        $this->cart = $cart;
 
         return $this;
     }
