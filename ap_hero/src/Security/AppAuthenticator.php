@@ -84,6 +84,10 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
+        $cart = $request->getSession()->get('cart');
+        if (!empty($cart)) {
+            return new RedirectResponse($this->urlGenerator->generate('get_cart_item'));
+        }
         return new RedirectResponse($this->urlGenerator->generate('index'));
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
