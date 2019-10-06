@@ -70,8 +70,8 @@ class CartService
 
     public function generateCartEntity(User $user) : ?Cart
     {
-        $totalToPay = 0;
-        $totalTax = 0;
+        //$totalToPay = 0;
+        //$totalTax = 0;
         $cart = $this->session->get('cart', []);
         $cartEntity = new Cart();
         foreach($cart as $id => $quantity) {
@@ -80,15 +80,64 @@ class CartService
             $cartItem->setQuantity($quantity);
             $cartEntity->addCartItems($cartItem);
             $this->entityManager->persist($cartItem);
-            $totalToPay += ( $cartItem->getProduct()->getPrice() * $cartItem->getQuantity() );
-            $totalTax += ( $totalToPay * $cartItem->getProduct()->getProduct()->getTva()->getTaux() );
+            //$totalToPay += ( $cartItem->getProduct()->getPrice() * $cartItem->getQuantity() );
+            //$totalTax += ( $totalToPay * $cartItem->getProduct()->getProduct()->getTva()->getTaux() );
         }
-        $cartEntity->setTotalToPay($totalToPay);
-        $cartEntity->setTotalTax($totalTax);
+        //$cartEntity->setTotalToPay($totalToPay);
+        //$cartEntity->setTotalTax($totalTax);
+        $cartEntity->setTotalToPay($this->getTotalToPay($cartEntity));
+        $cartEntity->setTotalTax($this->getTotalTax($cartEntity));
         $cartEntity->setUser($user);
         $cartEntity->setIsValidated(false);
         $this->entityManager->persist($cartEntity);
         $this->entityManager->flush();
         return $cartEntity;
     }
+
+    public function updateCartEntity(Cart $cartEntity) : ?Cart
+    {
+        $cart = $this->session->get('cart', []);
+        $cartEntity = $this->clearCartItems($cartEntity);
+        foreach($cart as $id => $quantity) {
+            $cartItem = new CartItem();
+            $cartItem->setProduct($this->variantRepository->find($id));
+            $cartItem->setQuantity($quantity);
+            $cartEntity->addCartItems($cartItem);
+            $this->entityManager->persist($cartItem);
+        }
+        $cartEntity->setTotalToPay($this->getTotalToPay($cartEntity));
+        $cartEntity->setTotalTax($this->getTotalTax($cartEntity));
+        $this->entityManager->flush();
+        return $cartEntity;
+    }
+
+    private function clearCartItems(Cart $cartEntity) : ?Cart
+    {
+        foreach($cartEntity->getCartItems() as $cartItem) {
+            $cartEntity->removeCartItem($cartItem);
+            $this->entityManager->remove($cartItem);
+        }
+        $this->entityManager->flush();
+        return $cartEntity;
+    }
+
+    private function getTotalToPay(Cart $cart) 
+    {
+        $totalToPay = 0;
+        foreach($cart->getCartItems() as $cartItem) {
+            $totalToPay += ( $cartItem->getProduct()->getPrice() * $cartItem->getQuantity() );
+        }
+        return $totalToPay;
+    }
+
+    private function getTotalTax(Cart $cart)
+    {
+        $totalTax = 0;
+        foreach($cart->getCartItems() as $cartItem) {
+            $tva = $cartItem->getProduct()->getProduct()->getTva()->getTaux();
+            $totalTax += ( $cartItem->getProduct()->getPrice() * $cartItem->getQuantity() * $tva);
+        }
+        return $totalTax;
+    }
+
 }
