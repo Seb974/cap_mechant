@@ -11,7 +11,7 @@
 <div class="example-wrapper">
     <header>
         {% if( is_granted('ROLE_USER')) %}
-            <a href="{{ path('get_cart_item') }}" >My cart</a>
+            <a href="{{ path('get_cart') }}" >My cart</a>
         {% endif %}
     </header>
     {% if( is_granted('ROLE_ADMIN')) %}
