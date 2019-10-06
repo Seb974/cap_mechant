@@ -52,20 +52,21 @@ class User implements UserInterface
      */
     private $avatar;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="user", orphanRemoval=true)
+    /*
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", orphanRemoval=true)
      */
-    private $cart;
+    //private $cart;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Metadata", mappedBy="user", cascade={"persist", "remove"})
      */
     private $metadata;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="supplier")
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", cascade={"persist", "remove"})
      */
-    private $products;
+    private $cart;
 
     public function __construct()
     {
@@ -182,36 +183,36 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
+    /*
      * @return Collection|CartItem[]
      */
-    public function getCart(): Collection
-    {
-        return $this->cart;
-    }
+    // public function getCart(): Collection
+    // {
+    //     return $this->cart;
+    // }
 
-    public function addToCart(CartItem $cartItem): self
-    {
-        if (!$this->cart->contains($cartItem)) {
-            $this->cart[] = $cartItem;
-            $cartItem->setUser($this);
-        }
+    // public function addToCart(CartItem $cartItem): self
+    // {
+    //     if (!$this->cart->contains($cartItem)) {
+    //         $this->cart[] = $cartItem;
+    //         $cartItem->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeCartItem(CartItem $cartItem): self
-    {
-        if ($this->cart->contains($cartItem)) {
-            $this->cart->removeElement($cartItem);
-            // set the owning side to null (unless already changed)
-            if ($cartItem->getUser() === $this) {
-                $cartItem->setUser(null);
-            }
-        }
+    // public function removeCartItem(CartItem $cartItem): self
+    // {
+    //     if ($this->cart->contains($cartItem)) {
+    //         $this->cart->removeElement($cartItem);
+    //         // set the owning side to null (unless already changed)
+    //         if ($cartItem->getUser() === $this) {
+    //             $cartItem->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getMetadata(): ?Metadata
     {
@@ -230,32 +231,50 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
+    /*
      * @return Collection|Product[]
      */
-    public function getProducts(): Collection
+    // public function getProducts(): Collection
+    // {
+    //     return $this->products;
+    // }
+
+    // public function addProduct(Product $product): self
+    // {
+    //     if (!$this->products->contains($product)) {
+    //         $this->products[] = $product;
+    //         $product->setSupplier($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeProduct(Product $product): self
+    // {
+    //     if ($this->products->contains($product)) {
+    //         $this->products->removeElement($product);
+    //         // set the owning side to null (unless already changed)
+    //         if ($product->getSupplier() === $this) {
+    //             $product->setSupplier(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    public function getCart(): ?Cart
     {
-        return $this->products;
+        return $this->cart;
     }
 
-    public function addProduct(Product $product): self
+    public function setCart(?Cart $cart): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setSupplier($this);
-        }
+        $this->cart = $cart;
 
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            // set the owning side to null (unless already changed)
-            if ($product->getSupplier() === $this) {
-                $product->setSupplier(null);
-            }
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = $cart === null ? null : $this;
+        if ($newUser !== $cart->getUser()) {
+            $cart->setUser($newUser);
         }
 
         return $this;
