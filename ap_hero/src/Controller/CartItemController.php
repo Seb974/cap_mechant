@@ -22,11 +22,12 @@ class CartItemController extends AbstractController
     /**
      * @Route("/add", name="cart_item_add", methods={"GET","POST"})
      */
-    public function add(Request $request, CartService $cartService, VariantRepository $variantRepository): Response
+    public function add(Request $request, CartService $cartService): Response
     {
-        $variant = $variantRepository->find($request->query->get('id'));
+        //$variant = $variantRepository->find($request->query->get('id'));
+        $id = $request->query->get('id');
         $quantity = $request->request->get($request->query->get('id'));
-        $cartService->add($variant, $quantity);
+        $cartService->add($id, $quantity);
 
         return $this->redirectToRoute('product_index');
     }
@@ -36,32 +37,36 @@ class CartItemController extends AbstractController
      */
     public function getCurrentCart(CartService $cartService)
     {
+        $totalToPay = 0;
+        $totalTax = 0;
+        $cart = $cartService->getCart();
+        foreach ($cart as $item) {
+            $totalToPay += $item['product']->getPrice() * $item['quantity'];
+            $totalTax += $totalToPay * $item['product']->getProduct()->getTva()->getTaux();
+        }
         return $this->render('cart_item/showCurrent.html.twig', [
-            'currentCart' => $cartService->getFullCart(),
+            'currentCart' => $cart,
+            'totalToPay' => $totalToPay,
+            'totalTax' => $totalTax,
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="cart_item_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, CartService $cartService, CartItem $cartItem): Response
+    public function edit($id, Request $request, CartService $cartService) : Response
     {
-        $newQty = $request->request->get($cartItem->getId());
-        $cartService->update($cartItem, $newQty);
+        $newQty = $request->request->get($id);
+        $cartService->update($id, $newQty);
         return $this->redirectToRoute('get_cart_item');
     }
 
     /**
      * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, CartService $cartService, CartItem $cartItem): Response
+    public function delete($id, CartService $cartService): Response
     {
-        $cartService->remove($cartItem);
-        //if ($this->isCsrfTokenValid('delete'.$cartItem->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($cartItem);
-            $entityManager->flush();
-        //}
+        $cartService->remove($id);
 
         return $this->redirectToRoute('get_cart_item');
     }

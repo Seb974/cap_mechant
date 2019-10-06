@@ -59,7 +59,7 @@ class Product
     private $variants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $supplier;
 

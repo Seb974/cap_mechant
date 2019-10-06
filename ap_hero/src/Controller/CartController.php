@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Cart;
 use App\Form\CartType;
 use App\Repository\CartRepository;
+use App\Service\Cart\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +47,19 @@ class CartController extends AbstractController
             'cart' => $cart,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/validation", name="cart_validate", methods={"GET"})
+     */
+    public function validate(CartService $cartService): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('login');
+        }
+        $cartService->generateCartEntity($user);
+        return $this->redirectToRoute('variant_index');
     }
 
     /**

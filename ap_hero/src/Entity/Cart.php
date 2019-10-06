@@ -21,7 +21,7 @@ class Cart
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="cart", cascade={"persist", "remove"})
      */
-    private $CartItems;
+    private $cartItems;
 
     /**
      * @ORM\Column(type="float")
@@ -45,7 +45,7 @@ class Cart
 
     public function __construct()
     {
-        $this->CartItems = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,13 +58,13 @@ class Cart
      */
     public function getCartItems(): Collection
     {
-        return $this->CartItems;
+        return $this->cartItems;
     }
 
     public function addCartItems(CartItem $cartItem): self
     {
-        if (!$this->CartItems->contains($cartItem)) {
-            $this->CartItems[] = $cartItem;
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems[] = $cartItem;
             $cartItem->setCart($this);
         }
 
@@ -73,8 +73,8 @@ class Cart
 
     public function removeCartItem(CartItem $cartItem): self
     {
-        if ($this->CartItems->contains($cartItem)) {
-            $this->CartItems->removeElement($cartItem);
+        if ($this->cartItems->contains($cartItem)) {
+            $this->cartItems->removeElement($cartItem);
         }
 
         return $this;
