@@ -35,14 +35,35 @@ class CartService
         $this->addNewCartItem($cart, $product, $quantity);
     }
 
-    public function remove($id) {
+    public function remove(CartItem $cartItem) {
+        $cart = $this->session->get('cart', new Cart());
+        foreach($cart->getCartItems() as $registeredCartItem) {
+            if ($registeredCartItem->getId() == $cartItem->getId()) {
+                $cart->removeCartItem($registeredCartItem);
+                $this->setTotals($cart);
+                $this->entityManager->flush();
+                $this->session->set('cart', $cart);
+                return ;
+            }
+        }
+    }
 
+    public function update(CartItem $cartItem, float $newQty) {
+        $cart = $this->session->get('cart', new Cart());
+        foreach($cart->getCartItems() as $registeredCartItem) {
+            if ($registeredCartItem->getId() == $cartItem->getId()) {
+                $registeredCartItem->setQuantity($newQty);
+                $this->setTotals($cart);
+                $this->entityManager->flush();
+                $this->session->set('cart', $cart);
+                return ;
+            }
+        }
     }
 
     public function getFullCart() : ?Cart {
         $cart = $this->session->get('cart', new Cart());
         $this->session->set('cart', $cart);
-        dump($cart);
         return $cart;
     }
 

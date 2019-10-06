@@ -44,26 +44,24 @@ class CartItemController extends AbstractController
     /**
      * @Route("/{id}/edit", name="cart_item_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, CartItem $cartItem): Response
+    public function edit(Request $request, CartService $cartService, CartItem $cartItem): Response
     {
-        $newQty = (int) $request->request->get($cartItem->getId());
-        $cartItem->setQuantity($newQty);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($cartItem);
-        $entityManager->flush();
+        $newQty = $request->request->get($cartItem->getId());
+        $cartService->update($cartItem, $newQty);
         return $this->redirectToRoute('get_cart_item');
     }
 
     /**
      * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, CartItem $cartItem): Response
+    public function delete(Request $request, CartService $cartService, CartItem $cartItem): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$cartItem->getId(), $request->request->get('_token'))) {
+        $cartService->remove($cartItem);
+        //if ($this->isCsrfTokenValid('delete'.$cartItem->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cartItem);
             $entityManager->flush();
-        }
+        //}
 
         return $this->redirectToRoute('get_cart_item');
     }
