@@ -18,13 +18,13 @@ class FacebookController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function connectAction(ClientRegistry $clientRegistry)
+    public function connectAction( ClientRegistry $clientRegistry )
     {
         return $clientRegistry
             ->getClient('facebook')
-            ->redirect([
+            ->redirect( [
                 'public_profile', 'email' // the scopes you want to access
-            ])
+            ] )
         ;
     }
 
@@ -39,7 +39,7 @@ class FacebookController extends AbstractController
      * @Route("/connect/facebook/check", name="connect_facebook_check")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
+    public function connectCheckAction( Request $request, ClientRegistry $clientRegistry )
     {
         return $this->redirectToRoute('your_homepage_route');
     }
