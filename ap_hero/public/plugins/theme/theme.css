@@ -595,11 +595,11 @@ img {
 }
 
 #header .navbar-backdrop {
-  background-color: #242629;
+  background-color: #b5067f;
 }
 
 .navbar-search {
-  background-color: #242629;
+  background-color: #b5067f;
   padding: 5px 15px 15px 15px;
   position: absolute;
   width: 100%;
@@ -10287,7 +10287,7 @@ figure {
     text-align: center;
   }
   #header .logo img {
-    width: auto;
+    height: 30px;
   }
   .nav-responsive > ul > li.mega-menu .col {
     max-width: 100%;
