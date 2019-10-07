@@ -41,8 +41,6 @@ class FacebookController extends AbstractController
      */
     public function connectCheckAction( Request $request, ClientRegistry $clientRegistry )
     {
-		dump( $request );
-		dump( $clientRegistry );
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('api_callback');
     }
 }
