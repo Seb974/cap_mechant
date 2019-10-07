@@ -17,9 +17,8 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index( ProductRepository $productRepository, CartService $cartService, Request $request ): Response
+    public function index( ProductRepository $productRepository, Request $request ): Response
     {
-		$user = $this->getUser();
 		$cart_items = $request->getSession()->get('cart', []);
 		$cart_count = 0;
 		foreach ( $cart_items as $id => $qty) {

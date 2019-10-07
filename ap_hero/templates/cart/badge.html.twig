@@ -1,0 +1,9 @@
+
+<li>
+	<a href="{{path('get_cart')  }}">
+	<i class="fas fa-shopping-cart"></i>
+	{% if count > 0 %}
+		<span class="badge badge-cart">{{ count }}</span>
+	{% endif %}
+	</a>
+</li>
