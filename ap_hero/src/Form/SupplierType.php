@@ -4,7 +4,8 @@ namespace App\Form;
 
 use App\Entity\Supplier;
 use App\Entity\User;
-use Proxies\__CG__\App\Entity\Product;
+use Doctrine\ORM\EntityRepository;
+use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,9 +19,16 @@ class SupplierType extends AbstractType
             ->add('name')
             ->add('users', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => function ($user) {
-                    return $user->getEmail();
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->where('u.roles LIKE :role_supplier')
+                              ->setParameter('role_supplier', '%"'.'ROLE_SUPPLIER'.'"%')
+                              ->orderBy('u.email', 'ASC');
                 },
+                'choice_label' => 'email',
+                // 'choice_label' => function ($user) {
+                //     return $user->getEmail();
+                // },
                 'multiple' => true,
                 'required' => true,
             ])
