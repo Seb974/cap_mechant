@@ -162,12 +162,14 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 				$variant->setName   ( $value  ['name']  );
 				$variant->setPrice  ( $value  ['price'] );
 				$manager->persist( $variant );
+
+				$stock = new Stock();
+				$stock->setProduct( $variant );
+				$stock->setQuantity( random_int( 0, 50 ) );
+				$manager->persist( $stock );
 			}
 
-			$stock = new Stock();
-			$stock->setProduct( $variant );
-			$stock->setQuantity( random_int( 0, 50 ) );
-			$manager->persist( $stock );
+
         }
         $manager->flush();
     }
