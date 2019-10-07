@@ -26,9 +26,13 @@
 								<a href="#">{{ product.name }}</a>
 							</h4>
 							<p class="card-text">{{ product.description }}</p>
-							{% for variant in product.variants %}
-								<a href="#" class="btn btn-primary btn-sm"">{{ variant.name }} - {{ variant.price }}€</a>
-							{% endfor %}
+							<div class="row">
+								{% for variant in product.variants %}
+									<form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
+										<button type="submit" class="btn btn-primary btn-sm m-1">{{ variant.name }} - {{ variant.price }}€</button>
+									</form>
+								{% endfor %}
+							</div>
 						</div>
 					</div>
 				</div>

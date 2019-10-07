@@ -19,8 +19,9 @@ class CartController extends AbstractController
     public function add(Request $request, CartService $cartService): Response
     {
         //$variant = $variantRepository->find($request->query->get('id'));
-        $id = $request->query->get('id');
-        $quantity = $request->request->get($request->query->get('id'));
+		$id = $request->query->get('id');
+		$quantity = $request->query->get('quantity');
+        // $quantity = $request->request->get($request->query->get('id'));
         $cartService->add($id, $quantity);
         $this->updateCartEntityIfExists($cartService);
 
