@@ -56,14 +56,24 @@ class CartController extends AbstractController
      */
     public function getBadgeCurrentCart( CartService $cartService, Request $request )
     {
-		$cart_items = $request->getSession()->get('cart', []);
 		$cart_count = 0;
+		$totalToPay = 0;
+        $totalTax   = 0;
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
+            $totalToPay += $item['product']->getPrice() * $item['quantity'];
+		}
+
 		foreach ( $cart_items as $id => $qty) {
 			$cart_count += $qty;
 		}
         return $this->render('cart/badge.html.twig', [
-			'count' => $cart_count,
-			'items' => $cart_items
+			'count'      => $cart_count,
+			'items'      => $cart_items,
+			'cart'       => $cart      ,
+			'totalToPay' => $totalToPay
         ]);
     }
 

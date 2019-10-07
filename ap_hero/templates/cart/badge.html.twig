@@ -11,24 +11,22 @@
             Panier</h5>
         <div class="dropdown-block">
             <ul class="dropdown-list">
-                {% for item in items %}
-                    <li class="dropdown-list-item">
-                        <img style="height:40px" class="mr-1" src="https://loremflickr.com/320/240/{{item}}" alt=""><div class="pl-2">
-                            <a class="font-weight-semibold" href="#">Item</a>
-                            <div class="font-size-md text-muted">Quantité: 1</div>
-                            <div class="font-size-md font-weight-bold mt-1">75.00€</div>
-                        </div>
-                        <button type="button" class="btn btn-link cart-remove">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                {% for item in cart %}
+                    <li class="d-flex flex-row ml-auto">
+                        <a href="#" class="d-flex flex-row ml-auto">
+                            x{{ item.quantity }} {{ item.product.name }} | {{ item.product.price }}€
+                        </a>
+                        <button type="button" class="btn btn-link">
+                            <i class="fa fa-trash"></i>
                         </button>
                     </li>
                 {% endfor %}
             </ul>
             <div class="d-flex border-bottom mb-2 px-3 py-2">Total:
-                <span class="ml-auto font-weight-bold text-danger">149.55€</span>
+                <span class="ml-auto font-weight-bold text-danger">{{ totalToPay }}€</span>
             </div>
             <div class="d-flex px-3">
-                <a class="btn btn-outline btn-sm" href="#">Editer panier</a>
+                <a class="btn btn-outline btn-sm" href="{{ path('get_cart') }}">Editer quantité</a>
                 <a class="btn btn-primary btn-sm ml-auto" href="#">Payer</a>
             </div>
         </div>
