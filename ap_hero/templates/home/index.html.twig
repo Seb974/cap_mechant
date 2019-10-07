@@ -1,46 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ClikEat - l'apéro à domicile{% endblock %}
+{% block title %}ClikEat - l'apéro à domicile
+{% endblock %}
 
 {% block body %}
-	<style>
-		.product-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-	</style>
+    <style>
+        .product-wrapper
+        {
+            margin: 0.5em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px / 1.5 sans-serif;
+        }
+    </style>
 
-	<div class="product-wrapper">
-		<section class="p-t-30">
-			<div class="container">
-				<div class="row">
-					{% for product in products %}
-						<div class="col-12 col-sm-6 col-md-6">
-							<div class="card card-lg">
-								<div class="card-img">
-									<a href="{{ path('product_show', { id: product.id }) }}">
-										<img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
-									</a>
-								</div>
-								<div class="card-block">
-									<h4 class="card-title">
-										<a href="{{ path('product_show', { id: product.id }) }}">{{ product.supplier.name }} || {{ product.name }}</a>
-									</h4>
-									<p class="card-text">{{ product.description }}</p>
-									<div class="row">
-										{% for variant in product.variants %}
-											<form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
-												<button type="submit" class="btn btn-primary btn-sm m-1">
-													{{ variant.name }} à {{ variant.price }}€
-													<i class="fa fa-plus"></i>
-												</button>
-											</form>
-										{% endfor %}
-									</div>
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-		</section>
-	</div>
+    <div class="product-wrapper">
+        <section class="p-t-30">
+            <div class="container">
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-12 col-sm-6 col-md-6">
+                            <div class="card card-lg">
+                                <div class="card-img">
+                                    <a href="{{ path('product_show', { id: product.id }) }}">
+                                        <img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
+                                    </a>
+                                </div>
+                                <div class="card-block">
+                                    <ul>
+                                        <li>
+                                            <a href="{{ path('product_show', { id: product.id }) }}">
+                                                {{ product.name }}
+                                                <br/>@
+                                                {{ product.supplier.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    {% for variant in product.variants %}
+                                        <hr/>
+                                        <ul class="d-flex flex-row-reverse">
+                                            <li>
+                                                <form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
+                                                    <i class="fas fa-dolly"></i>
+                                                    {{ variant.stock.quantity }}u |
+                                                    <i class="fas fa-truck"></i>
+                                                    30mn |
+                                                    <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        {{ variant.name }}
+                                                        à
+                                                        {{ variant.price }}€</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
 
 {% endblock %}
