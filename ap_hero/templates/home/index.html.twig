@@ -12,23 +12,25 @@
 <section class="p-t-30">
 	<div class="container">
 		<div class="row">
-			{% for variant in variants %}
+			{% for product in products %}
 				<div class="col-12 col-sm-6 col-md-4">
 					<div class="card card-lg">
 						<div class="card-img">
 							<a href="#">
-								<img src="{{ variant.product.picture.b64 }}" class="card-img-top" alt="{{ variant.product.picture.b64 }}">
+								<img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
 							</a>
 						</div>
 
 						<div class="card-block">
 							<h4 class="card-title">
-								<a href="#">{{ variant.product.name }}</a>
+								<a href="#">{{ product.name }}</a>
 							</h4>
+							{% for variant in product.variants %}
 							<div class="card-meta">
 								<span>{{ variant.name }} - {{ variant.price }}€</span>
 							</div>
-							<p class="card-text">{{ variant.product.description }}</p>
+							{% endfor %}
+							<p class="card-text">{{ product.description }}</p>
 						</div>
 					</div>
 				</div>
