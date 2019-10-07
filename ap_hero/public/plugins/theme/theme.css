@@ -275,7 +275,7 @@ img {
 
 #header .nav > ul > li > a,
 #header .nav > ul > li > a {
-  color: #B1B1B1;
+  color: #FFD710;
   font-size: 15px;
   font-weight: 500;
   padding: 0 10px;
@@ -658,7 +658,7 @@ img {
 }
 
 #footer {
-  background-color: #ffd710;
+  background-color: #B5067F;
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.4);
   padding: 65px 0 20px 0;
