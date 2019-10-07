@@ -4,29 +4,40 @@
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+	.example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+	.example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <header>
-        {% if( is_granted('ROLE_USER')) %}
-            <a href="{{ path('get_cart') }}" >My cart</a>
-        {% endif %}
-    </header>
-    {% if( is_granted('ROLE_ADMIN')) %}
-        <h1>Hello Admin {{ app.user.email }}! ✅</h1>
-    {% elseif( is_granted('ROLE_USER')) %}
-        <h1>Hello {{ app.user.email }}! ✅</h1>
-    {% else %}
-        <h1>Hello jeune inconnu(e) ! ✅</h1>
-    {% endif %}
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/sebastienmaillot/Sites/gitHub/codac-pff/ap_hero/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/sebastienmaillot/Sites/gitHub/codac-pff/ap_hero/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+<section class="p-t-30">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-sm-6 col-md-4">
+			{% for variant in variants %}
+				<div class="card card-lg">
+					<div class="card-img">
+						<a href="game-post.html">
+							<img src="img/game/game-1.jpg" class="card-img-top" alt="{{ product.name }}">
+						</a>
+						<div class="card-likes">
+							<a href="#">15</a>
+						</div>
+					</div>
+					<div class="card-block">
+						<h4 class="card-title">
+							<a href="game-post.html">{{ variant.name }}</a>
+						</h4>
+						<div class="card-meta">
+							<span>Oct 7, 2019</span>
+						</div>
+						<p class="card-text">{{ variant.description }}</p>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+
 {% endblock %}
 
 {% block js %}
