@@ -68,10 +68,17 @@ class CartService
         return $cartWithData;
     }
 
+    public function generateCartSession(Cart $cartEntity)
+    {
+        $cart = [];
+        foreach ($cartEntity->getCartItems() as $cartItem) {
+            $cart[$cartItem->getProduct()->getId()] = $cartItem->getQuantity();
+        }
+        $this->session->set('cart', $cart);
+    }
+
     public function generateCartEntity(User $user) : ?Cart
     {
-        //$totalToPay = 0;
-        //$totalTax = 0;
         $cart = $this->session->get('cart', []);
         $cartEntity = new Cart();
         foreach($cart as $id => $quantity) {
@@ -80,11 +87,7 @@ class CartService
             $cartItem->setQuantity($quantity);
             $cartEntity->addCartItems($cartItem);
             $this->entityManager->persist($cartItem);
-            //$totalToPay += ( $cartItem->getProduct()->getPrice() * $cartItem->getQuantity() );
-            //$totalTax += ( $totalToPay * $cartItem->getProduct()->getProduct()->getTva()->getTaux() );
         }
-        //$cartEntity->setTotalToPay($totalToPay);
-        //$cartEntity->setTotalTax($totalTax);
         $cartEntity->setTotalToPay($this->getTotalToPay($cartEntity));
         $cartEntity->setTotalTax($this->getTotalTax($cartEntity));
         $cartEntity->setUser($user);
