@@ -18,8 +18,6 @@ class HomeController extends AbstractController
      */
     public function index(VariantRepository $variantRepository): Response
     {
-		$variants = $variantRepository->findAll();
-		dump( $variants[186]->getProduct()->getPicture()->getB64() );
         return $this->render('home/index.html.twig', [
 			'controller_name' => 'HomeController',
 			'variants' => $variantRepository->findAll(),
