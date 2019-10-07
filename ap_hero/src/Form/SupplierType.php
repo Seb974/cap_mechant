@@ -21,14 +21,9 @@ class SupplierType extends AbstractType
                 'class' => User::class,
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                              ->where('u.roles LIKE :role_supplier')
-                              ->setParameter('role_supplier', '%"'.'ROLE_SUPPLIER'.'"%')
                               ->orderBy('u.email', 'ASC');
                 },
                 'choice_label' => 'email',
-                // 'choice_label' => function ($user) {
-                //     return $user->getEmail();
-                // },
                 'multiple' => true,
                 'required' => true,
             ])

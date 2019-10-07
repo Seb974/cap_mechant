@@ -35,6 +35,19 @@ class SupplierController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $users = $form->get('users')->getData();
+            $products = $form->get('products')->getData();
+            foreach($users as $user) {
+                $user->setSupplier($supplier);
+                if ( !in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPPLIER', $user->getRoles()) ) {
+                    $user->setRoles(["ROLE_SUPPLIER"]);
+                }
+            }
+            if ($products) {
+                foreach($products as $product) {
+                    $product->setSupplier($supplier);
+                }
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($supplier);
             $entityManager->flush();

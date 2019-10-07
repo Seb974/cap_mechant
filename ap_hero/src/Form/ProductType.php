@@ -6,6 +6,7 @@ use App\Entity\Tva;
 use App\Entity\Allergen;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Supplier;
 use App\Form\VariantType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,23 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if ($options['role'] !== 'ROLE_ADMIN') {
+            $builder->add('supplier', EntityType::class, [
+                'class' => Supplier::class,
+                'choice_label' => function ($supplier) {
+                    return $supplier->getName();
+                },
+                'disabled' => true,
+            ]);
+        } else {
+            $builder->add('supplier', EntityType::class, [
+                'class' => Supplier::class,
+                'choice_label' => function ($supplier) {
+                    return $supplier->getName();
+                },
+                'disabled' => false,
+            ]);
+        }
         $builder
             ->add('category', EntityType::class, [
                 'class' => Category::class,
@@ -100,6 +118,7 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'role' => 'ROLE_SUPPLIER'
         ]);
     }
 }
