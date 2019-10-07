@@ -3,45 +3,43 @@
 {% block title %}ClikEat - l'apéro à domicile{% endblock %}
 
 {% block body %}
-<style>
-	.example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-	.example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.product-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+		.product-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+	</style>
 
-<div class="example-wrapper">
-<section class="p-t-30">
-	<div class="container">
-		<div class="row">
-			{% for product in products %}
-				<div class="col-12 col-sm-6 col-md-6">
-					<div class="card card-lg">
-						<div class="card-img">
-							<a href="#">
-								<img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
-							</a>
-						</div>
-
-						<div class="card-block">
-							<h4 class="card-title">
-								<a href="#">{{ product.supplier.name }} || {{ product.name }}</a>
-							</h4>
-							<p class="card-text">{{ product.description }}</p>
-							<div class="row">
-								{% for variant in product.variants %}
-									<form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
-										<button type="submit" class="btn btn-primary btn-sm m-1">{{ variant.name }} - {{ variant.price }}€</button>
-									</form>
-								{% endfor %}
+	<div class="product-wrapper">
+		<section class="p-t-30">
+			<div class="container">
+			Items in cart : {{ cart }}
+				<div class="row">
+					{% for product in products %}
+						<div class="col-12 col-sm-6 col-md-6">
+							<div class="card card-lg">
+								<div class="card-img">
+									<a href="{{ path('product_show', { id: product.id }) }}">
+										<img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
+									</a>
+								</div>
+								<div class="card-block">
+									<h4 class="card-title">
+										<a href="{{ path('product_show', { id: product.id }) }}">{{ product.supplier.name }} || {{ product.name }}</a>
+									</h4>
+									<p class="card-text">{{ product.description }}</p>
+									<div class="row">
+										{% for variant in product.variants %}
+											<form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
+												<button type="submit" class="btn btn-primary btn-sm m-1">{{ variant.name }} - {{ variant.price }}€</button>
+											</form>
+										{% endfor %}
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
+					{% endfor %}
 				</div>
-			{% endfor %}
-		</div>
+			</div>
+		</section>
 	</div>
-</section>
 
-{% endblock %}
-
-{% block js %}
 {% endblock %}

@@ -17,17 +17,19 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(ProductRepository $productRepository, CartService $cartService): Response
+    public function index( ProductRepository $productRepository, CartService $cartService, Request $request ): Response
     {
-        $user = $this->getUser();
-        if ($user) {
-            if ($user->getCart() && empty($cartService->getCart())) {
-                $cartService->generateCartSession($user->getCart());
-            }
-        }
+		$user = $this->getUser();
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart_count = 0;
+		foreach ( $cart_items as $id => $qty) {
+			$cart_count += $qty;
+		}
+
         return $this->render('home/index.html.twig', [
 			'controller_name' => 'HomeController',
-			'products' => $productRepository->findAll(),
+			'products'        => $productRepository->findAll(),
+			'cart'            => $cart_count
         ]);
     }
 }

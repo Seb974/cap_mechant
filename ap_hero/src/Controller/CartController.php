@@ -35,17 +35,28 @@ class CartController extends AbstractController
     public function getCurrentCart(CartService $cartService)
     {
         $totalToPay = 0;
-        $totalTax = 0;
-        $cart = $cartService->getCart();
-        foreach ($cart as $item) {
+        $totalTax   = 0;
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
             $totalToPay += $item['product']->getPrice() * $item['quantity'];
-            $totalTax += $totalToPay * $item['product']->getProduct()->getTva()->getTaux();
-        }
+            $totalTax   += $totalToPay - ( $totalToPay / ( 1 + $item['product']->getProduct()->getTva()->getTaux()) );
+		}
+
         return $this->render('cart_item/showCurrent.html.twig', [
-            'currentCart' => $cart,
-            'totalToPay' => $totalToPay,
-            'totalTax' => $totalTax,
+            'currentCart' => $cart      ,
+            'totalToPay'  => $totalToPay,
+            'totalTax'    => $totalTax  ,
         ]);
+    }
+
+
+    /**
+     * @Route("/badge", name="get_badge_cart", methods={"GET"})
+     */
+    public function getBadgeCurrentCart(CartService $cartService)
+    {
+        return $cartService->getCart();
     }
 
     /**
