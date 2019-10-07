@@ -17,16 +17,6 @@ class Metadata
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $facturation_address;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $delivery_address;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $phone_number;
@@ -38,50 +28,18 @@ class Metadata
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\City")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $city;
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $field;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFacturationAddress(): ?string
-    {
-        return $this->facturation_address;
-    }
-
-    public function setFacturationAddress(?string $facturation_address): self
-    {
-        $this->facturation_address = $facturation_address;
-
-        return $this;
-    }
-
-    public function getDeliveryAddress(): ?string
-    {
-        return $this->delivery_address;
-    }
-
-    public function setDeliveryAddress(?string $delivery_address): self
-    {
-        $this->delivery_address = $delivery_address;
-
-        return $this;
-    }
-
-    public function getPhoneNumber(): ?int
-    {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber(?int $phone_number): self
-    {
-        $this->phone_number = $phone_number;
-
-        return $this;
     }
 
     public function getUser(): ?User
@@ -96,14 +54,38 @@ class Metadata
         return $this;
     }
 
-    public function getCity(): ?City
+    public function getType(): ?string
     {
-        return $this->city;
+        return $this->type;
     }
 
-    public function setCity(?City $city): self
+    public function setType(string $type): self
     {
-        $this->city = $city;
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phone_number;
+    }
+
+    public function setPhoneNumber(?string $phone_number): self
+    {
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getField(): ?string
+    {
+        return $this->field;
+    }
+
+    public function setField(?string $field): self
+    {
+        $this->field = $field;
 
         return $this;
     }

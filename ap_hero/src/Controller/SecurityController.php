@@ -49,6 +49,7 @@ class SecurityController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+            $this->updateMetadata($form, $user);
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -96,9 +97,9 @@ class SecurityController extends AbstractController
         $form = $this->createForm(EditSelfType::class, $user);
         if ($metadata) {
             $form->get('phone_number')->setData($metadata->getPhoneNumber());
-            $form->get('facturation_address')->setData($metadata->getFacturationAddress());
-            $form->get('delivery_address')->setData($metadata->getDeliveryAddress());
-            $form->get('city')->setData($metadata->getCity());
+            $form->get('field')->setData($metadata->getField());
+            $form->get('type')->setData($metadata->getType());
+            // $form->get('city')->setData($metadata->getCity());
         }
         $form->handleRequest($request);
 
@@ -128,17 +129,17 @@ class SecurityController extends AbstractController
             $metadata = $user->getMetadata();
         }
 
-        $facturation = $form->get('facturation_address')->getData();
-        $delivery = $form->get('delivery_address')->getData();
+        $field = $form->get('field')->getData();
+        $type = $form->get('type')->getData();
         $phone = $form->get('phone_number')->getData();
-        $city = $form->get('city')->getData();
-        
-        if ($facturation && $delivery && $phone) {
+        // $city = $form->get('city')->getData();
+        dump($form->get('type')->getData());
+        if ($field && $type && $phone) {
             //$entityManager = $this->getDoctrine()->getManager();
-            $metadata->setFacturationAddress($facturation);
-            $metadata->setDeliveryAddress($delivery);
+            $metadata->setField($field);
+            $metadata->setType($type);
             $metadata->setPhoneNumber($phone);
-            $metadata->setCity($city);
+            // $metadata->setCity($city);
             return $metadata;
         }
         return null;

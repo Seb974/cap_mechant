@@ -13,16 +13,16 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Téléphone</th>
-                <th>Adresse de Facturation</th>
-                <th>Adresse de Livraison</th>
+                <th>Fields</th>
+                <th>Types</th>
             </tr>
             <tr>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
             {% if user.metadata is not null %}
-                <td>{{ user.metadata.facturationAddress }}</td>
-                <td>{{ user.metadata.deliveryAddress }}</td>
                 <td>{{ user.metadata.phoneNumber }}</td> 
+                <td>{{ user.metadata.field }}</td>
+                <td>{{ user.metadata.type }}</td>
             {% else %}
                 <td>None</td>
                 <td>None</td>

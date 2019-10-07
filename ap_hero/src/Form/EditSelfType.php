@@ -62,11 +62,11 @@ class EditSelfType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('facturation_address', TextareaType::class, [
+            ->add('field', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('delivery_address', TextareaType::class, [
+            ->add('type', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
