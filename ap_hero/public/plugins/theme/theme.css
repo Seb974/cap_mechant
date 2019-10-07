@@ -1713,8 +1713,8 @@ section.error-404 form {
 
 .btn-primary {
   color: #fff;
-  background-color: #2575dc;
-  border-color: #2575dc;
+  background-color: #B5067F;
+  border-color: #B5067F;
 }
 
 .btn-primary:focus, .btn-primary:hover,
@@ -1722,8 +1722,8 @@ section.error-404 form {
 .show > .btn-primary.dropdown-toggle:hover,
 .show > .btn-primary.dropdown-toggle:focus {
   color: #fff;
-  background-color: #327dde;
-  border-color: #327dde;
+  background-color: #FFD710;
+  border-color: #FFD710;
   outline: 0;
 }
 
