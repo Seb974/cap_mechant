@@ -8,8 +8,7 @@
         .product-wrapper
         {
             margin: 0.5em auto;
-            max-width: 800px;
-            width: 95%;
+            width: 100%;
             font: 18px / 1.5 sans-serif;
         }
     </style>
@@ -19,7 +18,7 @@
             <div class="container">
                 <div class="row">
                     {% for product in products %}
-                        <div class="col-12 col-sm-6 col-md-6">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <div class="card card-lg">
                                 <div class="card-img">
                                     <a href="{{ path('product_show', { id: product.id }) }}">
