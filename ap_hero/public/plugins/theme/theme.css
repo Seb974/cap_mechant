@@ -340,7 +340,7 @@ img {
 
 #header .nav > ul > li.dropdown-notification > .dropdown-menu .dropdown-block,
 #header .nav > ul > li.dropdown-notification > .dropdown-menu .dropdown-block {
-  max-height: 200px;
+  max-height: 40%;
   overflow-y: scroll;
 }
 
@@ -2869,7 +2869,7 @@ fieldset[disabled]
 }
 
 .dropdown-notification > .dropdown-menu .dropdown-block {
-  max-height: 200px;
+  max-height: 40%;
   overflow-y: scroll;
 }
 

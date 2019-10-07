@@ -62,7 +62,8 @@ class CartController extends AbstractController
 			$cart_count += $qty;
 		}
         return $this->render('cart/badge.html.twig', [
-            'count' => $cart_count,
+			'count' => $cart_count,
+			'items' => $cart_items
         ]);
     }
 
