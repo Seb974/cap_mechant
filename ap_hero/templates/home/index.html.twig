@@ -12,25 +12,22 @@
 <section class="p-t-30">
 	<div class="container">
 		<div class="row">
-			<div class="col-12 col-sm-6 col-md-4">
 			{% for variant in variants %}
+			<div class="col-12 col-sm-6 col-md-4">
 				<div class="card card-lg">
 					<div class="card-img">
-						<a href="game-post.html">
-							<img src="img/game/game-1.jpg" class="card-img-top" alt="{{ variant.name }}">
+						<a href="#">
+							<img src="{{ variant.product.picture.b64 }}" class="card-img-top" alt="{{ variant.product.picture.b64 }}">
 						</a>
-						<div class="card-likes">
-							<a href="#">15</a>
-						</div>
 					</div>
 					<div class="card-block">
 						<h4 class="card-title">
-							<a href="game-post.html">{{ variant.name }}</a>
+							<a href="#">{{ variant.product.name }}</a>
 						</h4>
 						<div class="card-meta">
-							<span>Oct 7, 2019</span>
+							<span>{{ variant.name }} - {{ variant.price }}€</span>
 						</div>
-						<p class="card-text"></p>
+						<p class="card-text">{{ variant.product.description }}</p>
 					</div>
 				</div>
 			{% endfor %}

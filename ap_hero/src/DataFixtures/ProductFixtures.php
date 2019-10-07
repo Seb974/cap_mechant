@@ -128,7 +128,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
 			$picture = new Pics();
 			$rnd = random_int( 0, 100 );
-			$picture->setB64("https://loremflickr.com/640/480/{$product_name}?random={$rnd}");
+			$picture->setB64("https://loremflickr.com/640/480/{$product_name}");
 			$manager->persist( $picture );
 
 			$nutri = new Nutritionals();
