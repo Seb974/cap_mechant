@@ -8,6 +8,10 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v4.0&appId=502084787008815&autoLogAppEvents=1"></script>
+<div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="true" data-use-continue-as="true"></div>
+
 <div class="example-wrapper">
     <header>
         {% if( is_granted('ROLE_USER')) %}
@@ -27,4 +31,19 @@
         <li>Your template at <code><a href="{{ '/Users/sebastienmaillot/Sites/gitHub/codac-pff/ap_hero/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
     </ul>
 </div>
+<button onclick="myFunction()" id="demo">Click me</button>
+{% endblock %}
+
+{% block js %}
+<script>
+document.getElementById("demo").onclick = function() {myFunction()};
+
+function myFunction() {
+  FB.getLoginStatus(function(response) {
+  if (response.status === 'connected') {
+    console.log(response.authResponse.accessToken);
+  }
+});
+}
+</script>
 {% endblock %}

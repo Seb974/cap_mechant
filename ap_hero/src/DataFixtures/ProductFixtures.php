@@ -158,9 +158,9 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
 			foreach ($product_variant as $key => $value) {
 				$variant = new Variant();
-				$variant->setProduct( $product          );
-				$variant->setName   ( $value  ['name']  );
-				$variant->setPrice  ( $value  ['price'] );
+				$variant->setProduct( $product );
+				$variant->setName( $value['name'] );
+				$variant->setPrice( $value['price'] );
 				$manager->persist( $variant );
 
 				$stock = new Stock();
@@ -168,7 +168,6 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 				$stock->setQuantity( random_int( 0, 50 ) );
 				$manager->persist( $stock );
 			}
-
 
         }
         $manager->flush();
