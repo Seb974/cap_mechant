@@ -27,13 +27,15 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $userProvider;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, UserProviderInterface $userProvider)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->userProvider = $userProvider;
     }
 
     public function supports(Request $request)
@@ -86,7 +88,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         }
         $cart = $request->getSession()->get('cart');
         if (!empty($cart)) {
-            return new RedirectResponse($this->urlGenerator->generate('get_cart_item'));
+            return new RedirectResponse($this->urlGenerator->generate('get_cart'));
         }
         return new RedirectResponse($this->urlGenerator->generate('index'));
 
