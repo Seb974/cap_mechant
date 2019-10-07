@@ -40,12 +40,12 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
         $faker->addProvider( new \FakerRestaurant\Provider\en_US\Restaurant( $faker ) );
 
 		// category
-		$burger  = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'plats'          ] );
+		$burger  = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'burger'         ] );
 		$boisson = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'boisson'        ] );
 		$laitier = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'produit laitier'] );
 		$legume  = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'legume'         ] );
 		$fruit   = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'fruits'         ] );
-		$plats   = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'ingrédients'    ] );
+		$plats   = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'plats cuisinés' ] );
 
 		// tva
 		$tva_alcool = $this->em->getRepository( Tva::class )->findOneBy( ['taux' => 0.085 ] );
