@@ -17,17 +17,6 @@ class Metadata
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $phone_number;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="metadata", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $type;
@@ -37,21 +26,14 @@ class Metadata
      */
     private $field;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="metadata", cascade={"persist"})
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getType(): ?string
@@ -66,18 +48,6 @@ class Metadata
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber(?string $phone_number): self
-    {
-        $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
     public function getField(): ?string
     {
         return $this->field;
@@ -86,6 +56,18 @@ class Metadata
     public function setField(?string $field): self
     {
         $this->field = $field;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

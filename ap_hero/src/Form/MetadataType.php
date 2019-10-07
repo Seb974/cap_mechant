@@ -16,7 +16,7 @@ class MetadataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('phone_number')
+            // ->add('phone_number')
             ->add('type', TextType::class, [
                 'required' => false,
             ])

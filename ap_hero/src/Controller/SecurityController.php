@@ -15,6 +15,8 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Repository\MetadataRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class SecurityController extends AbstractController
 {
@@ -49,12 +51,11 @@ class SecurityController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
-            $this->updateMetadata($form, $user);
+            $this->createMetadata($form, $user);
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
@@ -90,28 +91,30 @@ class SecurityController extends AbstractController
     /**
      * @Route("/account/edit", name="self_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, MetadataRepository $metadataRepository): Response
     {
         $user = $this->getUser();
         $metadata = $user->getMetadata();
+        dump($metadata);
         $form = $this->createForm(EditSelfType::class, $user);
-        if ($metadata) {
-            $form->get('phone_number')->setData($metadata->getPhoneNumber());
-            $form->get('field')->setData($metadata->getField());
-            $form->get('type')->setData($metadata->getType());
-            // $form->get('city')->setData($metadata->getCity());
-        }
+        // if ($metadata) {
+        //     $form->get('phone_number')->setData($metadata->getPhoneNumber());
+        //     $form->get('line_1')->setData($metadata->getField());
+        //     $form->get('line_2')->setData($metadata->getType());
+        //     $form->get('city')->setData($metadata->getCity());
+        // }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->updateMetadata($form, $user);
+            $this->updateMetadata($form, $user, $metadataRepository);
+
             if (strlen($form->get('password')->getData()) > 0) {
                 $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
             }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_self_show');
+            //  return $this->redirectToRoute('user_self_show');
         }
 
         return $this->render('user/edit_self.html.twig', [
@@ -120,38 +123,105 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    private function updateMetadata($form, $user)
+    private function createMetadata($form, User $user)
     {
-        if ($user->getMetadata() === null ) {
-            $metadata = new Metadata();
-            $user->setMetadata($metadata);
+        $line_1 = $form->get('line_1')->getData();
+        $line_2 = $form->get('line_2')->getData();
+        $phone = strval($form->get('phone_number')->getData());
+        $city = strval($form->get('city')->getData()->getId());
+        $type1 = 'line_1';
+        $type2 = 'line_2';
+        $type3 = 'phone_number';
+        $type4 = 'city';
+        dump(gettype(strval($city)));
+        if ($line_1) {
+            $this->hydrateNewMetadata($line_1, $type1, $user);
+        }
+        if ($line_2) {
+            $this->hydrateNewMetadata($line_2, $type2, $user);
         } else {
-            $metadata = $user->getMetadata();
+            $this->hydrateNewMetadata('None', $type2, $user);
         }
+        if ($phone) {
+            $this->hydrateNewMetadata($phone, $type3, $user);
+        }
+        if ($city) {
+            $this->hydrateNewMetadata($city, $type4, $user);
+        }
+    }
 
-        $field = $form->get('field')->getData();
-        $type = $form->get('type')->getData();
-        $phone = $form->get('phone_number')->getData();
-        // $city = $form->get('city')->getData();
-        dump($form->get('type')->getData());
-        if ($field && $type && $phone) {
-            //$entityManager = $this->getDoctrine()->getManager();
-            $metadata->setField($field);
-            $metadata->setType($type);
-            $metadata->setPhoneNumber($phone);
-            // $metadata->setCity($city);
-            return $metadata;
+    private function updateMetadata($form, User $user, MetadataRepository $metadataRepository)
+    {
+        $line_1 = $form->get('line_1')->getData();
+        $line_2 = $form->get('line_2')->getData();
+        $phone = strval($form->get('phone_number')->getData());
+        $city = strval($form->get('city')->getData()->getId());
+        $type1 = 'line_1';
+        $type2 = 'line_2';
+        $type3 = 'phone_number';
+        $type4 = 'city';
+
+        dump($metadata);
+        if ($line_1) {
+            $metadata = $metadataRepository->findBy(['user' => $this->getUser()->getId()]);
+            dump($metadata[0]->getField());
+            // $metadata->setField($line_1);
+            // $metadata->setType($type1);
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($metadata);
+            // $user->addMetadata($metadata);
+            // $entityManager->flush();
         }
+        // if ($line_2) {
+        //     $metadata = $user->getMetadata();
+        //     $metadata->setField($line_2);
+        //     $metadata->setType($type2);
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($metadata);
+        //     $user->addMetadata($metadata);
+        //     $entityManager->flush();
+        // }
+        // if ($phone) {
+        //     $metadata = $user->getMetadata();
+        //     $metadata->setField($phone);
+        //     $metadata->setType($type3);
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($metadata);
+        //     $user->addMetadata($metadata);
+        //     $entityManager->flush();
+        // }
+        // if ($city) {
+        //     $metadata = $user->getMetadata();
+        //     $metadata->setField($city);
+        //     $metadata->setType($type4);
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($metadata);
+        //     $user->addMetadata($metadata);
+        //     $entityManager->flush();
+        // }
+            return $metadata;
         return null;
+    }
+
+    public function hydrateNewMetadata(String $field, String $type, User $user)
+    {
+        $metadata = new Metadata();
+        $metadata->setField($field);
+        $metadata->setType($type);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($metadata);
+        $user->addMetadata($metadata);
+        $entityManager->flush();
     }
 
     /**
      * @Route("/self", name="user_self_show", methods={"GET"})
      */
-    public function show(): Response
+    public function show(MetadataRepository $metadataRepository): Response
     {
         return $this->render('user/show_self.html.twig', [
             'user' => $this->getUser(),
+            'metadata' => $metadataRepository->findBy(['user' => $this->getUser()->getId()]),
         ]);
     }
  }

@@ -57,21 +57,22 @@ class User implements UserInterface
      */
     //private $cart;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Metadata", mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $metadata;
-
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", cascade={"persist", "remove"})
      */
     private $cart;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Metadata", mappedBy="user")
+     */
+    private $metadata;
+
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->metadata = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,23 +215,6 @@ class User implements UserInterface
     //     return $this;
     // }
 
-    public function getMetadata(): ?Metadata
-    {
-        return $this->metadata;
-    }
-
-    public function setMetadata(Metadata $metadata): self
-    {
-        $this->metadata = $metadata;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $metadata->getUser()) {
-            $metadata->setUser($this);
-        }
-
-        return $this;
-    }
-
     /*
      * @return Collection|Product[]
      */
@@ -275,6 +259,37 @@ class User implements UserInterface
         $newUser = $cart === null ? null : $this;
         if ($newUser !== $cart->getUser()) {
             $cart->setUser($newUser);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Metadata[]
+     */
+    public function getMetadata(): Collection
+    {
+        return $this->metadata;
+    }
+
+    public function addMetadata(Metadata $metadata): self
+    {
+        if (!$this->metadata->contains($metadata)) {
+            $this->metadata[] = $metadata;
+            $metadata->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMetadata(Metadata $metadata): self
+    {
+        if ($this->metadata->contains($metadata)) {
+            $this->metadata->removeElement($metadata);
+            // set the owning side to null (unless already changed)
+            if ($metadata->getUser() === $this) {
+                $metadata->setUser(null);
+            }
         }
 
         return $this;

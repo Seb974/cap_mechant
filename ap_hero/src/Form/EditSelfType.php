@@ -60,13 +60,13 @@ class EditSelfType extends AbstractType
             ])
             ->add('phone_number', NumberType::class, [
                 'mapped' => false,
-                'required' => false,
+                'required' => true,
             ])
-            ->add('field', TextareaType::class, [
+            ->add('line_1', TextareaType::class, [
                 'mapped' => false,
-                'required' => false,
+                'required' => true,
             ])
-            ->add('type', TextareaType::class, [
+            ->add('line_2', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
