@@ -93,4 +93,19 @@ class CartController extends AbstractController
             }
         }
     }
+
+    /**
+     * @Route("/disconnect", name="disconnect")
+     */
+    public function disconnect(CartService $cartService)
+    {
+        $cart = $cartService->getCart();
+        $user = $this->getUser();
+        if (!empty($cart)) {
+            if (!$user->getCart()) {
+                $cartService->generateCartEntity($user);
+            }
+        }
+        return $this->redirectToRoute('logout');
+    }
 }

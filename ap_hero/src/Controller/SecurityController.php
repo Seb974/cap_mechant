@@ -8,6 +8,7 @@ use App\Form\EditSelfType;
 use App\Controller\UserController;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
+use App\Service\Cart\CartService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,15 +77,6 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
-
-
-
-
-
-
-
-
-
 
     /**
      * @Route("/account/edit", name="self_edit", methods={"GET","POST"})

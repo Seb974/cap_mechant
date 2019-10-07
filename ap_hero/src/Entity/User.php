@@ -68,6 +68,11 @@ class User implements UserInterface
      */
     private $cart;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="users")
+     */
+    private $supplier;
+
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
@@ -276,6 +281,18 @@ class User implements UserInterface
         if ($newUser !== $cart->getUser()) {
             $cart->setUser($newUser);
         }
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }
