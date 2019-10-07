@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Supplier;
 use App\Entity\Nutritionals;
 use App\Entity\Pics;
 use App\Entity\Product;
@@ -30,6 +31,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
         return array(
 			TvaFixtures::class,
 			CategoryFixtures::class,
+			SupplierFixtures::class,
 		);
     }
 
@@ -51,12 +53,18 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 		$tva_alcool = $this->em->getRepository( Tva::class )->findOneBy( ['taux' => 0.085 ] );
 		$tva_food   = $this->em->getRepository( Tva::class )->findOneBy( ['taux' => 0.021 ] );
 
+		// Supplier
+		$osaka  = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'Osaka'               ] );
+		$mdw    = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'La Maison du Whisky' ] );
+		$bgrMry = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'BurgerMary'          ] );
+
         for ( $i = 0; $i < 25; $i++ ) {
 			$price = random_int( 0, 25 );
 
             switch ( $cycle ) {
 				case 0:
 					$product_name     = $faker->foodname();
+					$product_supplier = $bgrMry;
 					$product_category = $burger           ;
 					$product_tva      = $tva_food         ;
 					$product_variant  = array(
@@ -68,6 +76,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 1:
 					$product_name     = $faker->beverageName();
+					$product_supplier = $mdw;
 					$product_category = $boisson              ;
 					$product_tva      = $tva_alcool           ;
 					$product_variant  = array(
@@ -79,6 +88,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 2:
 					$product_name     = $faker->dairyName();
+					$product_supplier = $osaka;
 					$product_category = $laitier           ;
 					$product_tva      = $tva_food          ;
 					$product_variant  = array(
@@ -89,6 +99,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 3:
 					$product_name     = $faker->vegetableName();
+					$product_supplier = $osaka;
 					$product_category = $legume                ;
 					$product_tva      = $tva_food              ;
 					$product_variant  = array(
@@ -100,6 +111,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 4:
 					$product_name     = $faker->fruitName();
+					$product_supplier = $bgrMry;
 					$product_category = $fruit             ;
 					$product_tva      = $tva_food          ;
 					$product_variant  = array(
@@ -111,6 +123,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 5:
 					$product_name     = $faker->meatName();
+					$product_supplier = $osaka;
 					$product_category = $plats            ;
 					$product_tva      = $tva_food         ;
 					$product_variant  = array(
@@ -146,7 +159,8 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
             $product->setCategory    ( $product_category                                         );
             $product->setTva         ( $product_tva                                              );
             $product->setPicture     ( $picture                                                  );
-            $product->setNutritionals( $nutri                                                    );
+			$product->setNutritionals( $nutri                                                    );
+			$product->setSupplier    ( $product_supplier                                         );
             $manager->persist( $product );
 
             $cycle++;
