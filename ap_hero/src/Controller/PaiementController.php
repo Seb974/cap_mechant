@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Payplug\Payment;
 use Payplug;
+use Payplug\Payment;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PaiementController extends AbstractController
 {
@@ -17,11 +17,9 @@ class PaiementController extends AbstractController
     public function index()
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-
-		$email      = 'john.watson@example.net';
-		$first_name = 'John'                   ;
-		$last_name  = 'Watson'                 ;
-		$uniq_id    = uniqid()                 ;
+		$user     = $this->getUser();
+		$metadata = $user ->getMetadata();
+		$uniq_id  = uniqid( $user->getEmail(), true );
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'         => 3680,
@@ -30,23 +28,23 @@ class PaiementController extends AbstractController
 				'title'        => 'mr',
 				'first_name'   => 'John',
 				'last_name'    => 'Watson',
-				'email'        => 'john.watson@example.net',
+				'email'        => $user->getEmail(),
 				'address1'     => '221B Baker Street',
 				'postcode'     => 'NW16XE',
 				'city'         => 'London',
-				'country'      => 'GB',
-				'language'     => 'en'
+				'country'      => 'fr',
+				'language'     => 'fr'
 			),
 			'shipping'          => array(
 				'title'         => 'mr',
 				'first_name'    => 'John',
 				'last_name'     => 'Watson',
-				'email'         => 'john.watson@example.net',
+				'email'         => $user->getEmail(),
 				'address1'      => '221B Baker Street',
 				'postcode'      => 'NW16XE',
 				'city'          => 'London',
-				'country'       => 'GB',
-				'language'      => 'en',
+				'country'       => 'fr',
+				'language'      => 'fr',
 				'delivery_type' => 'BILLING'
 			),
 			'hosted_payment' => array(
