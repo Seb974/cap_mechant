@@ -4,22 +4,31 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
-//test purpose only
-//! Delete this part after pushing features
-use Faker\Factory;
-use Faker\Generator;
+use Symfony\Component\HttpFoundation\Response;
+use App\Service\Cart\CartService;
+use App\Repository\VariantRepository;
+use App\Repository\ProductRepository;
 use App\Entity\Product;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class HomeController extends AbstractController
 {
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function index( ProductRepository $productRepository, Request $request ): Response
     {
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart_count = 0;
+		foreach ( $cart_items as $id => $qty) {
+			$cart_count += $qty;
+		}
+
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+			'controller_name' => 'HomeController',
+			'products'        => $productRepository->findAll(),
+			'cart'            => $cart_count
         ]);
     }
 }

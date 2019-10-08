@@ -19,12 +19,14 @@ class CartController extends AbstractController
     public function add(Request $request, CartService $cartService): Response
     {
         //$variant = $variantRepository->find($request->query->get('id'));
-        $id = $request->query->get('id');
-        $quantity = $request->request->get($request->query->get('id'));
-        $cartService->add($id, $quantity);
-        $this->updateCartEntityIfExists($cartService);
+		// $quantity = $request->request->get($request->query->get('id'));
 
-        return $this->redirectToRoute('product_index');
+		$id  = $request->query->get('id'      );
+		$qty = $request->query->get('quantity');
+        $cartService->add($id, $qty);
+        $this->updateCartEntityIfExists( $cartService );
+
+        return $this->redirectToRoute('index');
     }
 
     /**
@@ -33,16 +35,45 @@ class CartController extends AbstractController
     public function getCurrentCart(CartService $cartService)
     {
         $totalToPay = 0;
-        $totalTax = 0;
-        $cart = $cartService->getCart();
-        foreach ($cart as $item) {
+        $totalTax   = 0;
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
             $totalToPay += $item['product']->getPrice() * $item['quantity'];
-            $totalTax += $totalToPay * $item['product']->getProduct()->getTva()->getTaux();
-        }
+            $totalTax   += $totalToPay - ( $totalToPay / ( 1 + $item['product']->getProduct()->getTva()->getTaux()) );
+		}
+
         return $this->render('cart_item/showCurrent.html.twig', [
-            'currentCart' => $cart,
-            'totalToPay' => $totalToPay,
-            'totalTax' => $totalTax,
+            'currentCart' => $cart      ,
+            'totalToPay'  => $totalToPay,
+            'totalTax'    => $totalTax  ,
+        ]);
+    }
+
+
+    /**
+     * @Route("/badge", name="get_badge_cart", methods={"GET"})
+     */
+    public function getBadgeCurrentCart( CartService $cartService, Request $request )
+    {
+		$cart_count = 0;
+		$totalToPay = 0;
+        $totalTax   = 0;
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
+            $totalToPay += $item['product']->getPrice() * $item['quantity'];
+		}
+
+		foreach ( $cart_items as $id => $qty) {
+			$cart_count += $qty;
+		}
+        return $this->render('cart/badge.html.twig', [
+			'count'      => $cart_count,
+			'items'      => $cart_items,
+			'cart'       => $cart      ,
+			'totalToPay' => $totalToPay
         ]);
     }
 
@@ -92,5 +123,20 @@ class CartController extends AbstractController
                 $cartService->updateCartEntity($user->getCart());
             }
         }
+    }
+
+    /**
+     * @Route("/disconnect", name="disconnect")
+     */
+    public function disconnect(CartService $cartService)
+    {
+        $cart = $cartService->getCart();
+        $user = $this->getUser();
+        if (!empty($cart)) {
+            if (!$user->getCart()) {
+                $cartService->generateCartEntity($user);
+            }
+        }
+        return $this->redirectToRoute('logout');
     }
 }

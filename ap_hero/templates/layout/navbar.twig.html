@@ -2,58 +2,71 @@
     <div class="container">
         <div class="navbar-backdrop">
             <div class="navbar">
+                <a class="navbar-toggle">
+                    <i class="fas fa-bars"></i>
+                </a>
+
+                <a href="{{ path('index') }}" class="logo">
+					<img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
+				</a>
+
                 <div class="navbar-left">
-                    <a class="navbar-toggle"><i class="fas fa-bars"></i></a>
-                    <a href="{{ path('index') }}" class="logo"><img src="{{ asset('uploads/logos/clikEat.png') }}"
-                            alt="Clik Eat Logo" height="50px"></a>
-                    <nav class="nav">
-                        <ul>
-                            <li>
-                                <a href="{{ path('variant_index') }}">Produits </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('get_cart') }}"><i class="fas fa-shopping-cart"></i> Panier</a>
-                            </li>
-                        </ul>
+                    <nav class="nav navbar-left">
+                        {% if app.user %}
+                            <ul>
+                                <li class="dropdown">
+                                    <a href="{{ path('login') }}" data-toggle="dropdown">
+										<img src="" alt="">
+                                        <span>{{ app.user.username }}
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ path('user_self_show') }}">
+                                            <i class="fas fa-user"></i>Mon profil
+										</a>
+
+										{% if is_granted('ROLE_ADMIN') %}
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="#">
+												<i class="fas fa-user"></i>Admin Panel
+											</a>
+										{% endif %}
+
+										<div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ path('disconnect') }}">
+                                            <i class="fas fa-sign-out-alt"></i>Se déconnecter
+										</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="{{ path('get_cart') }}">
+                                        <i class="fas fa-shopping-cart"></i>
+									</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="search">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <ul>
+                                <li><a href="{{ path('login')    }}">Se connecter / S'inscire</a></li>
+								{{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                                <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
+                            </ul>
+                        {% endif %}
                     </nav>
                 </div>
-                <div class="nav navbar-right">{% if app.user %}
-                    <ul>
-                        <li class="dropdown">
-                            <a href="login.html" data-toggle="dropdown"><img src="" alt="">
-                                <span>{{ app.user.username }} <i class="fas fa-chevron-down"></i></span></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ path('user_self_show') }}"><i class="fas fa-user"></i>Mon profil</a>
-                                <div class="dropdown-divider"></div>
-                                {% if is_granted('ROLE_ADMIN') %}
-                                <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Admin Panel</a>
-                                <div class="dropdown-divider"></div>
-                                {% endif %}
-                                <a class="dropdown-item" href="{{ path('logout') }}"><i
-                                        class="fas fa-sign-out-alt"></i>Se
-                                    déconnecter</a>
-                            </div>
-                        </li>
-                        <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                    </ul>
-                    {% else %}
-                    <ul>
-                        <li class="hidden-xs-down"><a href="{{ path('login') }}">Se connecter</a></li>
-                        <li class="hidden-xs-down"><a href="{{ path('register') }}">S'inscrire</a></li>
-                        <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                    </ul>
-                    {% endif %}
+            </div>
+            <div class="navbar-search">
+                <div class="container">
+                    <form method="post">
+                        <input type="text" class="form-control" placeholder="Rechercher...">
+                        <i class="fas fa-times close"></i>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="navbar-search">
-            <div class="container">
-                <form method="post">
-                    <input type="text" class="form-control" placeholder="Rechercher...">
-                    <i class="fas fa-times close"></i>
-                </form>
-            </div>
-        </div>
-    </div>
-</header>
+    </header>

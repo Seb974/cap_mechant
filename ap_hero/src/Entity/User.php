@@ -68,6 +68,11 @@ class User implements UserInterface
      */
     private $metadata;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="users")
+     */
+    private $supplier;
+
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
@@ -184,68 +189,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /*
-     * @return Collection|CartItem[]
-     */
-    // public function getCart(): Collection
-    // {
-    //     return $this->cart;
-    // }
-
-    // public function addToCart(CartItem $cartItem): self
-    // {
-    //     if (!$this->cart->contains($cartItem)) {
-    //         $this->cart[] = $cartItem;
-    //         $cartItem->setUser($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeCartItem(CartItem $cartItem): self
-    // {
-    //     if ($this->cart->contains($cartItem)) {
-    //         $this->cart->removeElement($cartItem);
-    //         // set the owning side to null (unless already changed)
-    //         if ($cartItem->getUser() === $this) {
-    //             $cartItem->setUser(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
-    /*
-     * @return Collection|Product[]
-     */
-    // public function getProducts(): Collection
-    // {
-    //     return $this->products;
-    // }
-
-    // public function addProduct(Product $product): self
-    // {
-    //     if (!$this->products->contains($product)) {
-    //         $this->products[] = $product;
-    //         $product->setSupplier($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeProduct(Product $product): self
-    // {
-    //     if ($this->products->contains($product)) {
-    //         $this->products->removeElement($product);
-    //         // set the owning side to null (unless already changed)
-    //         if ($product->getSupplier() === $this) {
-    //             $product->setSupplier(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
     public function getCart(): ?Cart
     {
         return $this->cart;
@@ -291,6 +234,16 @@ class User implements UserInterface
                 $metadata->setUser(null);
             }
         }
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

@@ -86,7 +86,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         }
         $cart = $request->getSession()->get('cart');
         if (!empty($cart)) {
-            return new RedirectResponse($this->urlGenerator->generate('get_cart_item'));
+            return new RedirectResponse($this->urlGenerator->generate('get_cart'));
         }
         return new RedirectResponse($this->urlGenerator->generate('index'));
 

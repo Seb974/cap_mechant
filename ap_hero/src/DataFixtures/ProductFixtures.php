@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Supplier;
 use App\Entity\Nutritionals;
 use App\Entity\Pics;
 use App\Entity\Product;
@@ -30,15 +31,15 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
         return array(
 			TvaFixtures::class,
 			CategoryFixtures::class,
+			SupplierFixtures::class,
 		);
     }
 
     public function load(ObjectManager $manager)
     {
+        $cycle = 0;
         $faker = Factory::create();
-        $faker->addProvider( new \FakerRestaurant\Provider\fr_FR\Restaurant( $faker ) );
-
-        $cycle   = 0;
+        $faker->addProvider( new \FakerRestaurant\Provider\en_US\Restaurant( $faker ) );
 
 		// category
 		$burger  = $this->em->getRepository( Category::class )->findOneBy( ['name' => 'burger'         ] );
@@ -52,34 +53,42 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 		$tva_alcool = $this->em->getRepository( Tva::class )->findOneBy( ['taux' => 0.085 ] );
 		$tva_food   = $this->em->getRepository( Tva::class )->findOneBy( ['taux' => 0.021 ] );
 
-        for ( $i = 0; $i < 100; $i++ ) {
+		// Supplier
+		$osaka  = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'Osaka'               ] );
+		$mdw    = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'La Maison du Whisky' ] );
+		$bgrMry = $this->em->getRepository( Supplier::class )->findOneBy( ['name' => 'BurgerMary'          ] );
+
+        for ( $i = 0; $i < 25; $i++ ) {
 			$price = random_int( 0, 25 );
 
             switch ( $cycle ) {
 				case 0:
 					$product_name     = $faker->foodname();
+					$product_supplier = $bgrMry;
 					$product_category = $burger           ;
 					$product_tva      = $tva_food         ;
 					$product_variant  = array(
-						array( 'name' => 'menu', 'price' => $price                          ),
-						array( 'name' => 'xl'  , 'price' => $price + 3 + random_int( 0, 3 ) ),
-						array( 'name' => 'xxl' , 'price' => $price + 6 + random_int( 0, 3 ) ),
+						array( 'name' => 'small', 'price' => $price                          ),
+						array( 'name' => 'xl'   , 'price' => $price + 3 + random_int( 0, 3 ) ),
+						array( 'name' => 'xxl'  , 'price' => $price + 6 + random_int( 0, 3 ) ),
 					);
                     break;
 
                 case 1:
 					$product_name     = $faker->beverageName();
+					$product_supplier = $mdw;
 					$product_category = $boisson              ;
 					$product_tva      = $tva_alcool           ;
 					$product_variant  = array(
-						array( 'name' => '25cl' , 'price' => $price                           ),
-						array( 'name' => '33cl' , 'price' => $price + 1 + random_int( 0, 3 ) ),
-						array( 'name' => '75cl' , 'price' => $price + 2 + random_int( 0, 3 ) ),
+						array( 'name' => '25cl', 'price' => $price                           ),
+						array( 'name' => '33cl', 'price' => $price + 1 + random_int( 0, 3 ) ),
+						array( 'name' => '75cl', 'price' => $price + 2 + random_int( 0, 3 ) ),
 					);
                     break;
 
                 case 2:
 					$product_name     = $faker->dairyName();
+					$product_supplier = $osaka;
 					$product_category = $laitier           ;
 					$product_tva      = $tva_food          ;
 					$product_variant  = array(
@@ -90,6 +99,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 3:
 					$product_name     = $faker->vegetableName();
+					$product_supplier = $osaka;
 					$product_category = $legume                ;
 					$product_tva      = $tva_food              ;
 					$product_variant  = array(
@@ -101,23 +111,25 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
                 case 4:
 					$product_name     = $faker->fruitName();
+					$product_supplier = $bgrMry;
 					$product_category = $fruit             ;
 					$product_tva      = $tva_food          ;
 					$product_variant  = array(
-						array( 'name' => '100g', 'price' => $price                          ),
-						array( 'name' => '500g', 'price' => $price + 3 + random_int( 0, 3 ) ),
-						array( 'name' => '1kg' , 'price' => $price + 6 + random_int( 0, 3 ) ),
+						array( 'name' => '1 tas', 'price' => $price                          ),
+						array( 'name' => '2 tas', 'price' => $price + 3 + random_int( 0, 3 ) ),
+						array( 'name' => '3 tas' , 'price' => $price + 6 + random_int( 0, 3 ) ),
 					);
                     break;
 
                 case 5:
 					$product_name     = $faker->meatName();
+					$product_supplier = $osaka;
 					$product_category = $plats            ;
 					$product_tva      = $tva_food         ;
 					$product_variant  = array(
-						array( 'name' => 'menu', 'price' => $price                          ),
-						array( 'name' => 'xl'  , 'price' => $price + 3 + random_int( 0, 3 ) ),
-						array( 'name' => 'xxl' , 'price' => $price + 6 + random_int( 0, 3 ) ),
+						array( 'name' => 'congelé', 'price' => $price                          ),
+						array( 'name' => 'surgelé', 'price' => $price + 3 + random_int( 0, 3 ) ),
+						array( 'name' => 'frais'  , 'price' => $price + 6 + random_int( 0, 3 ) ),
 					);
                     break;
 
@@ -127,8 +139,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
             }
 
 			$picture = new Pics();
-			$rnd = random_int( 0, 100 );
-			$picture->setB64("https://loremflickr.com/640/480/{$product_name}?random={$rnd}");
+			$picture->setB64("https://loremflickr.com/320/240/{$product_name}");
 			$manager->persist( $picture );
 
 			$nutri = new Nutritionals();
@@ -144,11 +155,12 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
 			$product = new Product();
             $product->setName        ( $product_name                                             );
-            $product->setDescription ( $faker->sentence( $nbWords = 4, $variableNbWords = true ) );
+            $product->setDescription ( $faker->sentence( $nbWords = 8, $variableNbWords = true ) );
             $product->setCategory    ( $product_category                                         );
             $product->setTva         ( $product_tva                                              );
             $product->setPicture     ( $picture                                                  );
-            $product->setNutritionals( $nutri                                                    );
+			$product->setNutritionals( $nutri                                                    );
+			$product->setSupplier    ( $product_supplier                                         );
             $manager->persist( $product );
 
             $cycle++;
@@ -158,13 +170,13 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
 			foreach ($product_variant as $key => $value) {
 				$variant = new Variant();
-				$variant->setProduct( $product );
-				$variant->setName( $value['name'] );
-				$variant->setPrice( $value['price'] );
+				$variant->setProduct( $product        );
+				$variant->setName   ( $value['name']  );
+				$variant->setPrice  ( $value['price'] );
 				$manager->persist( $variant );
 
 				$stock = new Stock();
-				$stock->setProduct( $variant );
+				$stock->setProduct ( $variant            );
 				$stock->setQuantity( random_int( 0, 50 ) );
 				$manager->persist( $stock );
 			}
