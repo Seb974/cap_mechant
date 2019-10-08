@@ -234,6 +234,7 @@ class User implements UserInterface
                 $metadata->setUser(null);
             }
         }
+        return $this;
     }
 
     public function getSupplier(): ?Supplier

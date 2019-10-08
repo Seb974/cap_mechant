@@ -89,7 +89,9 @@ class CartController extends AbstractController
         if (!$user->getCart()) {
             $cartService->generateCartEntity($user);
         }
-        return $this->redirectToRoute('variant_index');
+        // actions
+        //$cartService->convertCartToOrders($user->getCart());
+        return $this->redirectToRoute('payment');
     }
 
     /**

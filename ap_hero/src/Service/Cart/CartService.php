@@ -4,6 +4,7 @@ namespace App\Service\Cart;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\Orders;
 use App\Entity\User;
 use App\Repository\CartItemRepository;
 use App\Entity\Variant;
@@ -114,6 +115,26 @@ class CartService
         return $cartEntity;
     }
 
+    public function convertCartToOrders(Cart $cartEntity, string $internalId, string $paymentId, string $paymentType) {
+
+        foreach ($cartEntity->getCartItems() as $cartItem) {
+            $order = new Orders();
+            $order->setInternalId($internalId);
+            $order->setPaymentId($paymentId);
+            $order->setPaymentType($paymentType);
+            $order->setUser($cartEntity->getUser());
+            $order->setCartItem($cartItem);
+            $order->setTaxRate($cartItem->getProduct()->getProduct()->getTva()->getTaux());
+            $order->setTotalToPayTTC($cartItem->getProduct()->getPrice());
+            $order->setTotalTax($order->getTotalToPayTTC()/(1 + $order->getTaxRate()));
+            $order->setTotalToPayHT($order->getTotalToPayTTC() - $order->getTotalTax());
+            $order->setSupplier($cartItem->getProduct()->getProduct()->getSupplier());
+            $order->setOrderStatus("PENDING");
+			$this->entityManager->persist($order);
+		}
+		$this->entityManager->flush();
+    }
+
     private function clearCartItems(Cart $cartEntity) : ?Cart
     {
         foreach($cartEntity->getCartItems() as $cartItem) {
@@ -124,7 +145,7 @@ class CartService
         return $cartEntity;
     }
 
-    private function getTotalToPay(Cart $cart) 
+    private function getTotalToPay(Cart $cart)
     {
         $totalToPay = 0;
         foreach($cart->getCartItems() as $cartItem) {

@@ -2,62 +2,66 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Payplug\Payment;
+use App\Service\Cart\CartService;
+use Doctrine\Common\Persistence\ObjectManager;
 use Payplug;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PaiementController extends AbstractController
 {
     /**
      * @Route("/payment", name="payment")
      */
-    public function index()
+    public function index( ObjectManager $manager, CartService $cartService )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-
-		$email      = 'john.watson@example.net';
-		$first_name = 'John'                   ;
-		$last_name  = 'Watson'                 ;
-		$uniq_id    = uniqid()                 ;
+		$user     = $this->getUser();
+		// $metadata = $user ->getMetadata();
+		$uniq_id  = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
-			'amount'         => 3680,
-			'currency'       => 'EUR',
-			'billing'          => array(
-				'title'        => 'mr',
-				'first_name'   => 'John',
-				'last_name'    => 'Watson',
-				'email'        => 'john.watson@example.net',
-				'address1'     => '221B Baker Street',
-				'postcode'     => 'NW16XE',
-				'city'         => 'London',
-				'country'      => 'GB',
-				'language'     => 'en'
+			'amount'   => 3680 ,
+			'currency' => 'EUR',
+			'billing'        => array(
+				'title'      => 'mr'               ,
+				'first_name' => 'John'             ,
+				'last_name'  => 'Watson'           ,
+				'email'      => $user->getEmail()  ,
+				'address1'   => '221B Baker Street',
+				'postcode'   => 'NW16XE'           ,
+				'city'       => 'London'           ,
+				'country'    => 'FR'               ,
+				'language'   => 'fr'
 			),
+
 			'shipping'          => array(
-				'title'         => 'mr',
-				'first_name'    => 'John',
-				'last_name'     => 'Watson',
-				'email'         => 'john.watson@example.net',
+				'title'         => 'mr'               ,
+				'first_name'    => 'John'             ,
+				'last_name'     => 'Watson'           ,
+				'email'         => $user->getEmail()  ,
 				'address1'      => '221B Baker Street',
-				'postcode'      => 'NW16XE',
-				'city'          => 'London',
-				'country'       => 'GB',
-				'language'      => 'en',
+				'postcode'      => 'NW16XE'           ,
+				'city'          => 'London'           ,
+				'country'       => 'FR'               ,
+				'language'      => 'fr'               ,
 				'delivery_type' => 'BILLING'
 			),
+
 			'hosted_payment' => array(
 				'return_url' => "http://localhost:8000/payment/success?{$uniq_id}",
 				'cancel_url' => "http://localhost:8000/payment/fail?{$uniq_id}"
 			),
-			'notification_url' => "http://localhost:8000/payment/notif?{$uniq_id}"
+
+			'notification_url' => "https://exemple/payment/notif?{$uniq_id}"
 		));
 
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
+
+		$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug');
 
         return $this->render('paiement/index.html.twig', [
 			'payment_url' => $payment_url,
@@ -69,10 +73,9 @@ class PaiementController extends AbstractController
      * @Route("/payment/success", name="payment_success")
      */
 	public function payement_success(Request $request): Response {
-		dd($request);
-		return $this->render('paiement/index.html.twig', [
-			'controller_name' => 'PaiementController',
-			'payment_url' => 'toto'
+		return $this->render('paiement/success.html.twig', [
+			'payment_url' => 'toto',
+			'request'     => $request
         ]);
 	}
 
