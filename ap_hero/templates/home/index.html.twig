@@ -30,7 +30,8 @@
                                         <li>
                                             <a href="{{ path('product_show', { id: product.id }) }}">
                                                 {{ product.name }}
-                                                <br/>@
+                                                <br/>
+												<i class="fas fa-truck"></i> 30mn @
                                                 {{ product.supplier.name }}
                                             </a>
                                         </li>
@@ -40,15 +41,14 @@
                                         <ul class="d-flex flex-row-reverse">
                                             <li>
                                                 <form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
-                                                    <i class="fas fa-dolly"></i>
-                                                    {{ variant.stock.quantity }}u |
-                                                    <i class="fas fa-truck"></i>
-                                                    30mn |
-                                                    <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
+													<i class="fas fa-dolly"></i>
+                                                    {{ variant.stock.quantity }}
+													<button type="submit" class="btn btn-primary btn-sm" style="width:140px">
                                                         <i class="fas fa-shopping-cart"></i>
-                                                        {{ variant.name }}
-                                                        à
-                                                        {{ variant.price }}€</button>
+															{{ variant.name }}
+															à
+															{{ variant.price }}€
+													</button>
                                                 </form>
                                             </li>
                                         </ul>
