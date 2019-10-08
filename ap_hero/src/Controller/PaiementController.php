@@ -20,7 +20,7 @@ class PaiementController extends AbstractController
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 		$user     = $this->getUser();
 		// $metadata = $user ->getMetadata();
-		$uniq_id  = uniqid();
+		$uniq_id  = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'   => 3680 ,
@@ -29,7 +29,7 @@ class PaiementController extends AbstractController
 				'title'      => 'mr'               ,
 				'first_name' => 'John'             ,
 				'last_name'  => 'Watson'           ,
-				'email'      => "a@a.com"          ,
+				'email'      => $user->getEmail()  ,
 				'address1'   => '221B Baker Street',
 				'postcode'   => 'NW16XE'           ,
 				'city'       => 'London'           ,
@@ -41,7 +41,7 @@ class PaiementController extends AbstractController
 				'title'         => 'mr'               ,
 				'first_name'    => 'John'             ,
 				'last_name'     => 'Watson'           ,
-				'email'         => "a@a.com"          ,
+				'email'         => $user->getEmail()  ,
 				'address1'      => '221B Baker Street',
 				'postcode'      => 'NW16XE'           ,
 				'city'          => 'London'           ,
@@ -51,11 +51,11 @@ class PaiementController extends AbstractController
 			),
 
 			'hosted_payment' => array(
-				'return_url' => "http://localhost:8000/payment/success",
-				'cancel_url' => "http://localhost:8000/payment/fail"
+				'return_url' => "http://localhost:8000/payment/success?{$uniq_id}",
+				'cancel_url' => "http://localhost:8000/payment/fail?{$uniq_id}"
 			),
 
-			'notification_url' => "https://exemple/payment/notif"
+			'notification_url' => "https://exemple/payment/notif?{$uniq_id}"
 		));
 
 		$payment_url = $payment->hosted_payment->payment_url;
@@ -73,10 +73,9 @@ class PaiementController extends AbstractController
      * @Route("/payment/success", name="payment_success")
      */
 	public function payement_success(Request $request): Response {
-		dd($request);
-		return $this->render('paiement/index.html.twig', [
-			'controller_name' => 'PaiementController',
-			'payment_url' => 'toto'
+		return $this->render('paiement/success.html.twig', [
+			'payment_url' => 'toto',
+			'request'     => $request
         ]);
 	}
 

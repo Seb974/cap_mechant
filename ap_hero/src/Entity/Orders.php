@@ -50,12 +50,6 @@ class Orders
     private $totalTax;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Supplier", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $supplier;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $orderStatus;
@@ -75,6 +69,12 @@ class Orders
      * @ORM\Column(type="string", length=64)
      */
     private $internalId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $supplier;
 
     public function __construct()
     {
@@ -158,18 +158,6 @@ class Orders
         return $this;
     }
 
-    public function getSupplier(): ?Supplier
-    {
-        return $this->supplier;
-    }
-
-    public function setSupplier(Supplier $supplier): self
-    {
-        $this->supplier = $supplier;
-
-        return $this;
-    }
-
     public function getOrderStatus(): ?string
     {
         return $this->orderStatus;
@@ -214,6 +202,18 @@ class Orders
     public function setInternalId(string $internalId): self
     {
         $this->internalId = $internalId;
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }
