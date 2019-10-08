@@ -11,24 +11,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class MetadataType extends AbstractType
+class MetadataTypeAdmin extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('phone_number')
+            ->add('phone_number')
             ->add('type', TextType::class, [
+                'mapped' => false,
                 'required' => false,
             ])
             ->add('field', TextType::class, [
-                'required' => false,
-            ])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
                 'mapped' => false,
-                'choice_label' => function ($city) {
-                    return $city->getName();
-                }
+                'required' => false,
             ])
         ;
     }

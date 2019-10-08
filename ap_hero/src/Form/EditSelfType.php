@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\City;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -60,21 +61,41 @@ class EditSelfType extends AbstractType
             ])
             ->add('phone_number', NumberType::class, [
                 'mapped' => false,
-                'required' => false,
+                'required' => true,
             ])
-            ->add('facturation_address', TextareaType::class, [
+            ->add('delivery_line_1', TextareaType::class, [
+                'mapped' => false,
+                'required' => true,
+            ])
+            ->add('delivery_line_2', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('delivery_address', TextareaType::class, [
+            ->add('delivery_city', EntityType::class, [
+                'class' => City::class,
+                'mapped' => false,
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('m')
+                              ->where('m.isDeliverable = true')
+                              ->orderBy('m.zipCode', 'ASC');
+                },
+                'choice_label' => 'zipCode',
+                'multiple' => false,
+                'required' => true,
+            ])
+            ->add('billing_line_1', TextareaType::class, [
+                'mapped' => false,
+                'required' => true,
+            ])
+            ->add('billing_line_2', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('city', EntityType::class, [
+            ->add('billing_city', EntityType::class, [
                 'class' => City::class,
                 'mapped' => false,
                 'choice_label' => function ($city) {
-                    return $city->getName();
+                    return $city->getZipCode();
                 }
             ])
             ->add('picture', FileType::class, [

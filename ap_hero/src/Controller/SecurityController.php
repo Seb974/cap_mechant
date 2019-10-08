@@ -16,6 +16,7 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class SecurityController extends AbstractController
 {
@@ -50,11 +51,11 @@ class SecurityController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+            $this->createMetadata($form, $user);
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
@@ -86,17 +87,30 @@ class SecurityController extends AbstractController
         $user = $this->getUser();
         $metadata = $user->getMetadata();
         $form = $this->createForm(EditSelfType::class, $user);
-        if ($metadata) {
-            $form->get('phone_number')->setData($metadata->getPhoneNumber());
-            $form->get('facturation_address')->setData($metadata->getFacturationAddress());
-            $form->get('delivery_address')->setData($metadata->getDeliveryAddress());
-            $form->get('city')->setData($metadata->getCity());
+        $metadataTab = [];
+
+        foreach ($metadata as $data) {
+            $field = $data->getField();
+            $type = $data->getType();
+            $metadataTab += [$type => $field];
+        }
+
+        if ($metadataTab != []) {
+            $form->get('phone_number')->setData($metadataTab['phone_number']);
+            $form->get('delivery_line_1')->setData($metadataTab['delivery_line_1']);
+            $form->get('delivery_line_2')->setData($metadataTab['delivery_line_2']);
+            $form->get('delivery_city')->setData($metadataTab['delivery_city']);
+
+            $form->get('billing_line_1')->setData($metadataTab['billing_line_1']);
+            $form->get('billing_line_2')->setData($metadataTab['billing_line_2']);
+            $form->get('billing_city')->setData($metadataTab['billing_city']);
         }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->updateMetadata($form, $user);
+
             if (strlen($form->get('password')->getData()) > 0) {
                 $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
             }
@@ -111,29 +125,111 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    private function updateMetadata($form, $user)
+    private function createMetadata($form, User $user)
     {
-        if ($user->getMetadata() === null ) {
-            $metadata = new Metadata();
-            $user->setMetadata($metadata);
+        $phone = strval($form->get('phone_number')->getData());
+        $billing_line_1 = $form->get('billing_line_1')->getData();
+        $billing_line_2 = $form->get('billing_line_2')->getData();
+        $city = strval($form->get('city')->getData()->getId());
+        $type1 = 'phone_number';
+        $type1_billing = 'billing_line_1';
+        $type2_billing = 'billing_line_2';
+        $type4_billing = 'city';
+
+        $delivery_line_1 = $form->get('delivery_line_1')->getData();
+        $delivery_line_2 = $form->get('delivery_line_2')->getData();
+        $city = strval($form->get('city')->getData()->getId());
+        $type1_delivery = 'delivery_line_1';
+        $type2_delivery = 'delivery_line_2';
+        $type4_delivery = 'city';
+
+        if ($phone) {
+            $this->hydrateNewMetadata($phone, $type1, $user);
+        }
+        if ($billing_line_1) {
+            $this->hydrateNewMetadata($billing_line_1, $type1_billing, $user);
+        }
+        if ($billing_line_2) {
+            $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
         } else {
-            $metadata = $user->getMetadata();
+            $this->hydrateNewMetadata('None', $type2_billing, $user);
+        }
+        if ($billing_city) {
+            $this->hydrateNewMetadata($city, $type4_billing, $user);
         }
 
-        $facturation = $form->get('facturation_address')->getData();
-        $delivery = $form->get('delivery_address')->getData();
-        $phone = $form->get('phone_number')->getData();
-        $city = $form->get('city')->getData();
-        
-        if ($facturation && $delivery && $phone) {
-            //$entityManager = $this->getDoctrine()->getManager();
-            $metadata->setFacturationAddress($facturation);
-            $metadata->setDeliveryAddress($delivery);
-            $metadata->setPhoneNumber($phone);
-            $metadata->setCity($city);
-            return $metadata;
+        if ($delivery_line_1) {
+            $this->hydrateNewMetadata($delivery_line_1, $type1_delivery, $user);
         }
-        return null;
+        if ($delivery_line_2) {
+            $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
+        } else {
+            $this->hydrateNewMetadata('None', $type2_delivery, $user);
+        }
+        if ($delivery_city) {
+            $this->hydrateNewMetadata($city, $type4_delivery, $user);
+        }
+    }
+
+    private function updateMetadata($form, User $user)
+    {
+        $phone = strval($form->get('phone_number')->getData());
+        $delivery_line_1 = $form->get('delivery_line_1')->getData();
+        $delivery_line_2 = $form->get('delivery_line_2')->getData();
+        $delivery_city = strval($form->get('delivery_city')->getData()->getId());
+        $type1 = 'phone_number';
+        $type1_delivery = 'delivery_line_1';
+        $type2_delivery = 'delivery_line_2';
+        $type4_delivery = 'delivery_city';
+
+        $billing_line_1 = $form->get('billing_line_1')->getData();
+        $billing_line_2 = $form->get('billing_line_2')->getData();
+        $billing_city = strval($form->get('billing_city')->getData()->getId());
+        $type1_billing = 'billing_line_1';
+        $type2_billing = 'billing_line_2';
+        $type4_billing = 'billing_city';
+
+            $metadata = $user->getMetadata()->unwrap();
+
+            foreach ($metadata as $data) { 
+                if ($data->getType() == $type1 && $phone) {
+                    $data->setField($phone);
+                };
+                if ($data->getType() == $type1_delivery && $delivery_line_1) {
+                    $data->setField($delivery_line_1);
+                };
+                if ($data->getType() == $type2_delivery && $delivery_line_2) {
+                    $data->setField($delivery_line_2);
+                } else {
+                    $data->setField('None');
+                };
+                if ($data->getType() == $type4_delivery && $delivery_city) {
+                    $data->setField($delivery_city);
+                };
+
+                if ($data->getType() == $type1_billing && $billing_line_1) {
+                    $data->setField($billing_line_1);
+                };
+                if ($data->getType() == $type2_billing && $billing_line_2) {
+                    $data->setField($billing_line_2);
+                } else {
+                    $data->setField('None');
+                };
+                if ($data->getType() == $type4_billing && $billing_city) {
+                    $data->setField($billing_city);
+                };
+            }
+    }
+
+    public function hydrateNewMetadata(String $field, String $type, User $user)
+    {
+        $metadata = new Metadata();
+        $metadata->setField($field);
+        $metadata->setType($type);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($metadata);
+        $user->addMetadata($metadata);
+        $entityManager->flush();
     }
 
     /**
