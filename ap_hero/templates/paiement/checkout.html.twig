@@ -7,21 +7,59 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-<div class="example-wrapper">
-	Insérer ici les infos user
-</div>
 
-<div class="example-wrapper">
-	Insérer ici les adresses de facturation
-</div>
+	<div class="example-wrapper">
+		<p>{{ cart.user.username }}</p>
+	</div>
 
-<div class="example-wrapper">
-	Insérer ici les adresses de livraison
-</div>
+	<br/>
+	<p></p>
 
-<div class="example-wrapper">
-	Insérer ici un récap du panier
-</div>
+	<div class="example-wrapper">
+		<p>Adresses : </p>
+		{% for metadata in cart.user.metadata %}
+			<p>{{ metadata.type }} - {{ metadata.field }}</p>
+		{% endfor %}
+	</div>
+
+	<div class="example-wrapper">
+		<p>Récapitulatif de la commande : </p>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th>Product</th>
+					<th>Name</th>
+					<th>Quantity</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for item in cart.cartItems %}
+					{# <p>{{ item.type }} - {{ metadata.field }}</p> #}
+					<tr>
+						<td>{{ item.product.product.category.name }}</td>
+						<td>{{ item.product.product.name }}</td>
+						<td>{{ item.product.name }}</td>
+						<td>{{ item.quantity }}</td>
+						<td>{{ item.product.price }} €</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+
+			<tfoot>
+				<tr>
+					<td colspan="4">Total TTC</td>
+					<td>{{ cart.totalToPay }} €</td>
+				</tr>
+				<tr>
+					<td colspan="4">TVA (included)</td>
+					<td>{{ cart.totalTax }} €</td>
+				</tr>
+			</tfoot>
+    	</table>
+	</div>
 
 <a href="{{ payment_url }}" target="_blank"><button>PAYER</button></a>
 {% endblock %}
