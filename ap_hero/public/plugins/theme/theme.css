@@ -10382,9 +10382,7 @@ figure {
   .lightbox .lightbox-block .lightbox-video {
     max-width: 400px;
   }
-  .dropdown-notification {
-    display: none !important;
-  }
+
 }
 
 @media (max-width: 500px) {
