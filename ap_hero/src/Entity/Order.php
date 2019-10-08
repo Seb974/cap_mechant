@@ -66,6 +66,16 @@ class Order
      */
     private $cartItem;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $taxRate;
+
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private $internalId;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
@@ -180,6 +190,30 @@ class Order
     public function setCartItem(CartItem $cartItem): self
     {
         $this->cartItem = $cartItem;
+
+        return $this;
+    }
+
+    public function getTaxRate(): ?float
+    {
+        return $this->taxRate;
+    }
+
+    public function setTaxRate(float $taxRate): self
+    {
+        $this->taxRate = $taxRate;
+
+        return $this;
+    }
+
+    public function getInternalId(): ?string
+    {
+        return $this->internalId;
+    }
+
+    public function setInternalId(string $internalId): self
+    {
+        $this->internalId = $internalId;
 
         return $this;
     }
