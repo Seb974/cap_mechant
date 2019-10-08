@@ -56,7 +56,7 @@ class Order
     private $supplier;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255)
      */
     private $orderStatus;
 
