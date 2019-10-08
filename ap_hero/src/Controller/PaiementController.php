@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Orders;
 use App\Service\Cart\CartService;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Payplug;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/payment", name="payment")
+     * @Route("/checkout", name="checkout")
      */
-    public function index( ObjectManager $manager, CartService $cartService )
+    public function checkout( CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 		$user     = $this->getUser();
@@ -58,24 +60,28 @@ class PaiementController extends AbstractController
 			'notification_url' => "https://exemple/payment/notif?{$uniq_id}"
 		));
 
+		$OneCartItem = $user->getCart()->getCartItems()[0];
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
+		$itemOrder_exist = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $OneCartItem ] );
+		if ( !$itemOrder_exist ) {
+			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
+		} else {
 
-		$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug');
+		};
 
-        return $this->render('paiement/index.html.twig', [
+        return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
-			'payment'     => $payment
+			'payment'     => $payment,
         ]);
 	}
 
 	/**
      * @Route("/payment/success", name="payment_success")
      */
-	public function payement_success(Request $request): Response {
+	public function payement_success( Request $request ): Response {
 		return $this->render('paiement/success.html.twig', [
-			'payment_url' => 'toto',
-			'request'     => $request
+			'request' => $request
         ]);
 	}
 
@@ -83,10 +89,8 @@ class PaiementController extends AbstractController
      * @Route("/payment/fail", name="payment_fail")
      */
 	public function payement_fail(Request $request): Response {
-		dd($request);
-		return $this->render('paiement/index.html.twig', [
-			'controller_name' => 'PaiementController',
-			'payment_url' => 'toto'
+		return $this->render('paiement/fail.html.twig', [
+			'request' => $request
         ]);
 	}
 
@@ -94,10 +98,8 @@ class PaiementController extends AbstractController
      * @Route("/payment/notif", name="payment_notif")
      */
 	public function payement_notif(Request $request): Response {
-		dd($request);
-		return $this->render('paiement/index.html.twig', [
-			'controller_name' => 'PaiementController',
-			'payment_url' => 'toto'
+		return $this->render('paiement/notif.html.twig', [
+			'request' => $request
         ]);
 	}
 }
