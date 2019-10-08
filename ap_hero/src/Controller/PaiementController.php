@@ -21,6 +21,7 @@ class PaiementController extends AbstractController
 		$email      = 'john.watson@example.net';
 		$first_name = 'John'                   ;
 		$last_name  = 'Watson'                 ;
+		$uniq_id    = uniqid()                 ;
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'         => 3680,
@@ -49,23 +50,18 @@ class PaiementController extends AbstractController
 				'delivery_type' => 'BILLING'
 			),
 			'hosted_payment' => array(
-				'return_url' => 'http://localhost:8000/payment/success',
-				'cancel_url' => 'http://localhost:8000/payment/fail'
+				'return_url' => "http://localhost:8000/payment/success?{$uniq_id}",
+				'cancel_url' => "http://localhost:8000/payment/fail?{$uniq_id}"
 			),
-			'notification_url' => 'http://localhost:8000/payment/notif'
+			'notification_url' => "http://localhost:8000/payment/notif?{$uniq_id}"
 		));
 
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
 
-		$payment->hosted_payment->return_url = "http://localhost:8000/payment/success?{$payment_id}";
-		$payment->hosted_payment->cancel_url = "http://localhost:8000/payment/fail?{$payment_id}"   ;
-		$payment->hosted_payment->cancel_url = "http://localhost:8000/payment/notif?{$payment_id}"  ;
-
-		$my_payment = $payment;
         return $this->render('paiement/index.html.twig', [
 			'payment_url' => $payment_url,
-			'payment'     => $my_payment
+			'payment'     => $payment
         ]);
 	}
 

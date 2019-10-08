@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191007072310 extends AbstractMigration
+final class Version20191008090507 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,13 +22,16 @@ final class Version20191007072310 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE metadata CHANGE phone_number phone_number INT DEFAULT NULL, CHANGE field field VARCHAR(255) DEFAULT NULL, CHANGE facturation_address facturation_address VARCHAR(255) DEFAULT NULL, CHANGE delivery_address delivery_address VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE product CHANGE picture_id picture_id INT DEFAULT NULL, CHANGE nutritionals_id nutritionals_id INT DEFAULT NULL, CHANGE category_id category_id INT DEFAULT NULL, CHANGE tva_id tva_id INT DEFAULT NULL, CHANGE supplier_id supplier_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user CHANGE avatar_id avatar_id INT DEFAULT NULL, CHANGE roles roles JSON NOT NULL, CHANGE username username VARCHAR(60) DEFAULT NULL, CHANGE is_banned is_banned TINYINT(1) DEFAULT NULL');
         $this->addSql('ALTER TABLE variant CHANGE product_id product_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE cart_item CHANGE cart_id cart_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE metadata DROP INDEX UNIQ_4F143414A76ED395, ADD INDEX IDX_4F143414A76ED395 (user_id)');
+        $this->addSql('ALTER TABLE metadata DROP FOREIGN KEY FK_4F1434148BAC62AF');
+        $this->addSql('DROP INDEX IDX_4F1434148BAC62AF ON metadata');
+        $this->addSql('ALTER TABLE metadata ADD type VARCHAR(255) NOT NULL, ADD field VARCHAR(255) DEFAULT NULL, DROP city_id, DROP facturation_address, DROP delivery_address, DROP phone_number, CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE nutritionals CHANGE k_j k_j DOUBLE PRECISION DEFAULT NULL, CHANGE k_cal k_cal DOUBLE PRECISION DEFAULT NULL, CHANGE protein protein DOUBLE PRECISION DEFAULT NULL, CHANGE carbohydrates carbohydrates DOUBLE PRECISION DEFAULT NULL, CHANGE sugar sugar DOUBLE PRECISION DEFAULT NULL, CHANGE fat fat DOUBLE PRECISION DEFAULT NULL, CHANGE trans_ag trans_ag DOUBLE PRECISION DEFAULT NULL, CHANGE salt salt DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE product CHANGE picture_id picture_id INT DEFAULT NULL, CHANGE nutritionals_id nutritionals_id INT DEFAULT NULL, CHANGE category_id category_id INT DEFAULT NULL, CHANGE tva_id tva_id INT DEFAULT NULL, CHANGE supplier_id supplier_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user CHANGE avatar_id avatar_id INT DEFAULT NULL, CHANGE supplier_id supplier_id INT DEFAULT NULL, CHANGE roles roles JSON NOT NULL, CHANGE username username VARCHAR(60) DEFAULT NULL, CHANGE is_banned is_banned TINYINT(1) DEFAULT NULL');
         $this->addSql('ALTER TABLE cart CHANGE user_id user_id INT DEFAULT NULL, CHANGE total_tax total_tax DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE cart_item CHANGE cart_id cart_id INT DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -38,10 +41,13 @@ final class Version20191007072310 extends AbstractMigration
 
         $this->addSql('ALTER TABLE cart CHANGE user_id user_id INT DEFAULT NULL, CHANGE total_tax total_tax DOUBLE PRECISION DEFAULT \'NULL\'');
         $this->addSql('ALTER TABLE cart_item CHANGE cart_id cart_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE metadata CHANGE facturation_address facturation_address VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE delivery_address delivery_address VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE phone_number phone_number INT DEFAULT NULL, CHANGE field field VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
+        $this->addSql('ALTER TABLE metadata DROP INDEX IDX_4F143414A76ED395, ADD UNIQUE INDEX UNIQ_4F143414A76ED395 (user_id)');
+        $this->addSql('ALTER TABLE metadata ADD city_id INT NOT NULL, ADD facturation_address VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, ADD delivery_address VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, ADD phone_number INT DEFAULT NULL, DROP type, DROP field, CHANGE user_id user_id INT NOT NULL');
+        $this->addSql('ALTER TABLE metadata ADD CONSTRAINT FK_4F1434148BAC62AF FOREIGN KEY (city_id) REFERENCES city (id)');
+        $this->addSql('CREATE INDEX IDX_4F1434148BAC62AF ON metadata (city_id)');
         $this->addSql('ALTER TABLE nutritionals CHANGE k_j k_j DOUBLE PRECISION DEFAULT \'NULL\', CHANGE k_cal k_cal DOUBLE PRECISION DEFAULT \'NULL\', CHANGE protein protein DOUBLE PRECISION DEFAULT \'NULL\', CHANGE carbohydrates carbohydrates DOUBLE PRECISION DEFAULT \'NULL\', CHANGE sugar sugar DOUBLE PRECISION DEFAULT \'NULL\', CHANGE fat fat DOUBLE PRECISION DEFAULT \'NULL\', CHANGE trans_ag trans_ag DOUBLE PRECISION DEFAULT \'NULL\', CHANGE salt salt DOUBLE PRECISION DEFAULT \'NULL\'');
         $this->addSql('ALTER TABLE product CHANGE picture_id picture_id INT DEFAULT NULL, CHANGE nutritionals_id nutritionals_id INT DEFAULT NULL, CHANGE category_id category_id INT DEFAULT NULL, CHANGE tva_id tva_id INT DEFAULT NULL, CHANGE supplier_id supplier_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user CHANGE avatar_id avatar_id INT DEFAULT NULL, CHANGE roles roles LONGTEXT NOT NULL COLLATE utf8mb4_bin, CHANGE username username VARCHAR(60) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE is_banned is_banned TINYINT(1) DEFAULT \'NULL\'');
+        $this->addSql('ALTER TABLE user CHANGE avatar_id avatar_id INT DEFAULT NULL, CHANGE supplier_id supplier_id INT DEFAULT NULL, CHANGE roles roles LONGTEXT NOT NULL COLLATE utf8mb4_unicode_ci, CHANGE username username VARCHAR(60) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci, CHANGE is_banned is_banned TINYINT(1) DEFAULT \'NULL\'');
         $this->addSql('ALTER TABLE variant CHANGE product_id product_id INT DEFAULT NULL');
     }
 }
