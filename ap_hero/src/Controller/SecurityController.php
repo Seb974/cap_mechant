@@ -15,7 +15,6 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Repository\MetadataRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class SecurityController extends AbstractController
@@ -91,30 +90,37 @@ class SecurityController extends AbstractController
     /**
      * @Route("/account/edit", name="self_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, MetadataRepository $metadataRepository): Response
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
         $metadata = $user->getMetadata();
-        dump($metadata);
         $form = $this->createForm(EditSelfType::class, $user);
-        // if ($metadata) {
-        //     $form->get('phone_number')->setData($metadata->getPhoneNumber());
-        //     $form->get('line_1')->setData($metadata->getField());
-        //     $form->get('line_2')->setData($metadata->getType());
-        //     $form->get('city')->setData($metadata->getCity());
-        // }
+        $metadataTab = [];
+
+        foreach ($metadata as $data) {
+            $field = $data->getField();
+            $type = $data->getType();
+            $metadataTab += [$type => $field];
+        }
+
+        if ($metadataTab != []) {
+            $form->get('phone_number')->setData($metadataTab['phone_number']);
+            $form->get('line_1')->setData($metadataTab['line_1']);
+            $form->get('line_2')->setData($metadataTab['line_2']);
+            $form->get('city')->setData($metadataTab['city']);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->updateMetadata($form, $user, $metadataRepository);
+            $this->updateMetadata($form, $user);
 
             if (strlen($form->get('password')->getData()) > 0) {
                 $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
             }
             $this->getDoctrine()->getManager()->flush();
 
-            //  return $this->redirectToRoute('user_self_show');
+            return $this->redirectToRoute('user_self_show');
         }
 
         return $this->render('user/edit_self.html.twig', [
@@ -133,7 +139,7 @@ class SecurityController extends AbstractController
         $type2 = 'line_2';
         $type3 = 'phone_number';
         $type4 = 'city';
-        dump(gettype(strval($city)));
+
         if ($line_1) {
             $this->hydrateNewMetadata($line_1, $type1, $user);
         }
@@ -150,7 +156,7 @@ class SecurityController extends AbstractController
         }
     }
 
-    private function updateMetadata($form, User $user, MetadataRepository $metadataRepository)
+    private function updateMetadata($form, User $user)
     {
         $line_1 = $form->get('line_1')->getData();
         $line_2 = $form->get('line_2')->getData();
@@ -161,46 +167,24 @@ class SecurityController extends AbstractController
         $type3 = 'phone_number';
         $type4 = 'city';
 
-        dump($metadata);
-        if ($line_1) {
-            $metadata = $metadataRepository->findBy(['user' => $this->getUser()->getId()]);
-            dump($metadata[0]->getField());
-            // $metadata->setField($line_1);
-            // $metadata->setType($type1);
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($metadata);
-            // $user->addMetadata($metadata);
-            // $entityManager->flush();
-        }
-        // if ($line_2) {
-        //     $metadata = $user->getMetadata();
-        //     $metadata->setField($line_2);
-        //     $metadata->setType($type2);
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($metadata);
-        //     $user->addMetadata($metadata);
-        //     $entityManager->flush();
-        // }
-        // if ($phone) {
-        //     $metadata = $user->getMetadata();
-        //     $metadata->setField($phone);
-        //     $metadata->setType($type3);
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($metadata);
-        //     $user->addMetadata($metadata);
-        //     $entityManager->flush();
-        // }
-        // if ($city) {
-        //     $metadata = $user->getMetadata();
-        //     $metadata->setField($city);
-        //     $metadata->setType($type4);
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($metadata);
-        //     $user->addMetadata($metadata);
-        //     $entityManager->flush();
-        // }
-            return $metadata;
-        return null;
+            $metadata = $user->getMetadata()->unwrap();
+
+            foreach ($metadata as $data) { 
+                if ($data->getType() == $type1 && $line_1) {
+                    $data->setField($line_1);
+                };
+                if ($data->getType() == $type2 && $line_2) {
+                    $data->setField($line_2);
+                } else {
+                    $data->setField('None');
+                };
+                if ($data->getType() == $type3 && $line_1) {
+                    $data->setField($phone);
+                };
+                if ($data->getType() == $type4 && $line_1) {
+                    $data->setField($city);
+                };
+            }
     }
 
     public function hydrateNewMetadata(String $field, String $type, User $user)
@@ -217,11 +201,10 @@ class SecurityController extends AbstractController
     /**
      * @Route("/self", name="user_self_show", methods={"GET"})
      */
-    public function show(MetadataRepository $metadataRepository): Response
+    public function show(): Response
     {
         return $this->render('user/show_self.html.twig', [
             'user' => $this->getUser(),
-            'metadata' => $metadataRepository->findBy(['user' => $this->getUser()->getId()]),
         ]);
     }
  }
