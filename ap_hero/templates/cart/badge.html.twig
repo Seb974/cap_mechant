@@ -14,7 +14,7 @@
                 {% for item in cart %}
                     <li class="d-flex flex-row ml-auto">
                         <a href="#" class="d-flex flex-row ml-auto">
-                            x{{ item.quantity }} {{ item.product.name }} | {{ item.product.price }}€
+                            x{{ item.quantity }} {{ item.product.product.name }} {{ item.product.name }} | {{ item.product.price }}€
                         </a>
                         <button type="button" class="btn btn-link">
                             <i class="fa fa-trash"></i>
