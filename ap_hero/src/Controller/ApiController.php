@@ -25,7 +25,7 @@ class ApiController extends AbstractController
 	/**
      * @Route("/api/callback", name="api_callback")
      */
-    public function callback( Request $request, ClientRegistry $clientRegistry, EntityManagerInterface $em, UserManagerInterface $userManager ): Response
+    public function callback( ): Response
     {
 		// $parameters[] = $request->query->get("code");
 		// $parameters = array();
