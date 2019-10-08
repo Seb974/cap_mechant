@@ -73,11 +73,14 @@ class EditSelfType extends AbstractType
             ->add('delivery_city', EntityType::class, [
                 'class' => City::class,
                 'mapped' => false,
-                'choice_label' => function ($city) {
-                    if ($city->getIsDeliverable()) {
-                        return $city->getZipcode();
-                    }
-                }
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('m')
+                              ->where('m.isDeliverable = true')
+                              ->orderBy('m.zipCode', 'ASC');
+                },
+                'choice_label' => 'zipCode',
+                'multiple' => false,
+                'required' => true,
             ])
             ->add('billing_line_1', TextareaType::class, [
                 'mapped' => false,
