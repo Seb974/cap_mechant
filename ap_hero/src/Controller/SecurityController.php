@@ -200,7 +200,7 @@ class SecurityController extends AbstractController
                 };
                 if ($data->getType() == $type2_delivery && $delivery_line_2) {
                     $data->setField($delivery_line_2);
-                } else {
+                } else if (!$delivery_line_2) {
                     $data->setField('None');
                 };
                 if ($data->getType() == $type4_delivery && $delivery_city) {
@@ -212,7 +212,7 @@ class SecurityController extends AbstractController
                 };
                 if ($data->getType() == $type2_billing && $billing_line_2) {
                     $data->setField($billing_line_2);
-                } else {
+                } else if (!$billing_line_2) {
                     $data->setField('None');
                 };
                 if ($data->getType() == $type4_billing && $billing_city) {
