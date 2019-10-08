@@ -19,7 +19,7 @@ class Orders
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=60)
      */
     private $payment_id;
 
@@ -86,12 +86,12 @@ class Orders
         return $this->id;
     }
 
-    public function getPaymentId(): ?int
+    public function getPaymentId(): ?string
     {
         return $this->payment_id;
     }
 
-    public function setPaymentId(int $payment_id): self
+    public function setPaymentId(string $payment_id): self
     {
         $this->payment_id = $payment_id;
 

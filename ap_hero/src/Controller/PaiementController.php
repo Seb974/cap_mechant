@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Orders;
 use App\Service\Cart\CartService;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Payplug;
-use Payplug\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,42 +23,45 @@ class PaiementController extends AbstractController
 		$uniq_id  = uniqid();
 
 		$payment = \Payplug\Payment::create(array(
-			'amount'         => 3680,
-			'currency'       => 'EUR',
-			'billing'          => array(
-				'title'        => 'mr',
-				'first_name'   => 'John',
-				'last_name'    => 'Watson',
-				'email'        => "a@a.com",
-				'address1'     => '221B Baker Street',
-				'postcode'     => 'NW16XE',
-				'city'         => 'London',
-				'country'      => 'fr',
-				'language'     => 'fr'
+			'amount'   => 3680 ,
+			'currency' => 'EUR',
+			'billing'        => array(
+				'title'      => 'mr'               ,
+				'first_name' => 'John'             ,
+				'last_name'  => 'Watson'           ,
+				'email'      => "a@a.com"          ,
+				'address1'   => '221B Baker Street',
+				'postcode'   => 'NW16XE'           ,
+				'city'       => 'London'           ,
+				'country'    => 'FR'               ,
+				'language'   => 'fr'
 			),
+
 			'shipping'          => array(
-				'title'         => 'mr',
-				'first_name'    => 'John',
-				'last_name'     => 'Watson',
-				'email'         => "a@a.com",
+				'title'         => 'mr'               ,
+				'first_name'    => 'John'             ,
+				'last_name'     => 'Watson'           ,
+				'email'         => "a@a.com"          ,
 				'address1'      => '221B Baker Street',
-				'postcode'      => 'NW16XE',
-				'city'          => 'London',
-				'country'       => 'fr',
-				'language'      => 'fr',
+				'postcode'      => 'NW16XE'           ,
+				'city'          => 'London'           ,
+				'country'       => 'FR'               ,
+				'language'      => 'fr'               ,
 				'delivery_type' => 'BILLING'
 			),
+
 			'hosted_payment' => array(
 				'return_url' => "http://localhost:8000/payment/success",
 				'cancel_url' => "http://localhost:8000/payment/fail"
 			),
-			'notification_url' => "http://localhost:8000/payment/notif"
+
+			'notification_url' => "https://exemple/payment/notif"
 		));
 
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
 
-		// $cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug');
+		$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug');
 
         return $this->render('paiement/index.html.twig', [
 			'payment_url' => $payment_url,

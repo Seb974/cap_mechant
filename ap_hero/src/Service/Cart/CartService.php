@@ -4,7 +4,7 @@ namespace App\Service\Cart;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
-use App\Entity\Order;
+use App\Entity\Orders;
 use App\Entity\User;
 use App\Repository\CartItemRepository;
 use App\Entity\Variant;
@@ -115,10 +115,10 @@ class CartService
         return $cartEntity;
     }
 
-    public function convertCartToOrders(Cart $cartEntity, string $internalId, int $paymentId, string $paymentType) {
+    public function convertCartToOrders(Cart $cartEntity, string $internalId, string $paymentId, string $paymentType) {
 
         foreach ($cartEntity->getCartItems() as $cartItem) {
-            $order = new Order();
+            $order = new Orders();
             $order->setInternalId($internalId);
             $order->setPaymentId($paymentId);
             $order->setPaymentType($paymentType);
