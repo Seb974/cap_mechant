@@ -4,6 +4,7 @@ namespace App\Service\Cart;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Repository\CartItemRepository;
 use App\Entity\Variant;
@@ -112,6 +113,25 @@ class CartService
         $cartEntity->setTotalTax($this->getTotalTax($cartEntity));
         $this->entityManager->flush();
         return $cartEntity;
+    }
+
+    public function convertCartToOrders(Cart $cartEntity, string $internalId, int $paymentId, string $paymentType) : array {
+
+        foreach ($cartEntity->getCartItems() as $cartItem) {
+            $order = new Order();
+            $order->setInternalId($internalId);
+            $order->setPaymentId($paymentId);
+            $order->setPaymentType($paymentType);
+            $order->setUser($cartEntity->getUser());
+            $order->setCartItem($cartItem);
+            $order->setTaxRate($cartItem->getProduct()->getProduct()->getTva()->getTaux());
+            $order->setTotalToPayTTC($cartItem->getProduct()->getPrice());
+            $order->setTotalTax($order->getTotalToPayTTC()/(1 + $order->getTaxRate()));
+            $order->setTotalToPayHT($order->getTotalToPayTTC() - $order->getTotalTax());
+            $order->setSupplier($cartItem->getProduct()->getProduct()->getSupplier());
+            $order->setOrderStatus("PENDING");
+        }
+        return [];
     }
 
     private function clearCartItems(Cart $cartEntity) : ?Cart
