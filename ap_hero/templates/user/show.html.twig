@@ -9,26 +9,22 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
                 <th>Username</th>
-                <td>{{ user.username }}</td>
+                <th>Email</th>
+                {% for data in user.metadata %}
+                    <th>{{ data.type }}</th>
+                {% endfor %}
+                <th>Roles</th>
+                <th>IsBanned</th>
             </tr>
             <tr>
-                <th>IsBanned</th>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                {% for data in user.metadata %}
+                    <td>{{ data.field }}</td>
+                {% endfor %}
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
