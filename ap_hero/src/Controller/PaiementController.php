@@ -67,7 +67,12 @@ class PaiementController extends AbstractController
 		if ( !$itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
 		} else {
-
+			foreach ( $user->getCart()->getCartItems() as $key => $value ) {
+				$item = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $value ] );
+				$item->setPaymentId( $payment_id );
+				$item->setInternalId( $uniq_id );
+				$em->flush();
+			}
 		};
 
         return $this->render('paiement/checkout.html.twig', [
