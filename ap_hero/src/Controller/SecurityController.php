@@ -130,18 +130,18 @@ class SecurityController extends AbstractController
         $phone = strval($form->get('phone_number')->getData());
         $billing_line_1 = $form->get('billing_line_1')->getData();
         $billing_line_2 = $form->get('billing_line_2')->getData();
-        $city = strval($form->get('city')->getData()->getId());
+        $billing_city = strval($form->get('billing_city')->getData()->getId());
         $type1 = 'phone_number';
         $type1_billing = 'billing_line_1';
         $type2_billing = 'billing_line_2';
-        $type4_billing = 'city';
+        $type4_billing = 'billing_city';
 
         $delivery_line_1 = $form->get('delivery_line_1')->getData();
         $delivery_line_2 = $form->get('delivery_line_2')->getData();
-        $city = strval($form->get('city')->getData()->getId());
+        $delivery_city = strval($form->get('delivery_city')->getData()->getId());
         $type1_delivery = 'delivery_line_1';
         $type2_delivery = 'delivery_line_2';
-        $type4_delivery = 'city';
+        $type4_delivery = 'delivery_city';
 
         if ($phone) {
             $this->hydrateNewMetadata($phone, $type1, $user);
@@ -155,7 +155,7 @@ class SecurityController extends AbstractController
             $this->hydrateNewMetadata('None', $type2_billing, $user);
         }
         if ($billing_city) {
-            $this->hydrateNewMetadata($city, $type4_billing, $user);
+            $this->hydrateNewMetadata($billing_city, $type4_billing, $user);
         }
 
         if ($delivery_line_1) {
@@ -167,7 +167,7 @@ class SecurityController extends AbstractController
             $this->hydrateNewMetadata('None', $type2_delivery, $user);
         }
         if ($delivery_city) {
-            $this->hydrateNewMetadata($city, $type4_delivery, $user);
+            $this->hydrateNewMetadata($delivery_city, $type4_delivery, $user);
         }
     }
 
