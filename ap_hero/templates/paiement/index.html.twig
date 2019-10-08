@@ -9,8 +9,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
     Redirect user to <br /><a href="{{ payment_url }}" target="_blank">{{ payment_url }}</a> in order to proceed payment
 </div>
+{{ dump(payment) }}
 {% endblock %}
