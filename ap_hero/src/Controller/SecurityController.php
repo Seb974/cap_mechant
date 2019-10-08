@@ -105,9 +105,13 @@ class SecurityController extends AbstractController
 
         if ($metadataTab != []) {
             $form->get('phone_number')->setData($metadataTab['phone_number']);
-            $form->get('line_1')->setData($metadataTab['line_1']);
-            $form->get('line_2')->setData($metadataTab['line_2']);
-            $form->get('city')->setData($metadataTab['city']);
+            $form->get('delivery_line_1')->setData($metadataTab['delivery_line_1']);
+            $form->get('delivery_line_2')->setData($metadataTab['delivery_line_2']);
+            $form->get('delivery_city')->setData($metadataTab['delivery_city']);
+
+            $form->get('billing_line_1')->setData($metadataTab['billing_line_1']);
+            $form->get('billing_line_2')->setData($metadataTab['billing_line_2']);
+            $form->get('billing_city')->setData($metadataTab['billing_city']);
         }
         $form->handleRequest($request);
 
@@ -131,58 +135,96 @@ class SecurityController extends AbstractController
 
     private function createMetadata($form, User $user)
     {
-        $line_1 = $form->get('line_1')->getData();
-        $line_2 = $form->get('line_2')->getData();
         $phone = strval($form->get('phone_number')->getData());
+        $billing_line_1 = $form->get('billing_line_1')->getData();
+        $billing_line_2 = $form->get('billing_line_2')->getData();
         $city = strval($form->get('city')->getData()->getId());
-        $type1 = 'line_1';
-        $type2 = 'line_2';
-        $type3 = 'phone_number';
-        $type4 = 'city';
+        $type1 = 'phone_number';
+        $type1_billing = 'billing_line_1';
+        $type2_billing = 'billing_line_2';
+        $type4_billing = 'city';
 
-        if ($line_1) {
-            $this->hydrateNewMetadata($line_1, $type1, $user);
-        }
-        if ($line_2) {
-            $this->hydrateNewMetadata($line_2, $type2, $user);
-        } else {
-            $this->hydrateNewMetadata('None', $type2, $user);
-        }
+        $delivery_line_1 = $form->get('delivery_line_1')->getData();
+        $delivery_line_2 = $form->get('delivery_line_2')->getData();
+        $city = strval($form->get('city')->getData()->getId());
+        $type1_delivery = 'delivery_line_1';
+        $type2_delivery = 'delivery_line_2';
+        $type4_delivery = 'city';
+
         if ($phone) {
-            $this->hydrateNewMetadata($phone, $type3, $user);
+            $this->hydrateNewMetadata($phone, $type1, $user);
         }
-        if ($city) {
-            $this->hydrateNewMetadata($city, $type4, $user);
+        if ($billing_line_1) {
+            $this->hydrateNewMetadata($billing_line_1, $type1_billing, $user);
+        }
+        if ($billing_line_2) {
+            $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
+        } else {
+            $this->hydrateNewMetadata('None', $type2_billing, $user);
+        }
+        if ($billing_city) {
+            $this->hydrateNewMetadata($city, $type4_billing, $user);
+        }
+
+        if ($delivery_line_1) {
+            $this->hydrateNewMetadata($delivery_line_1, $type1_delivery, $user);
+        }
+        if ($delivery_line_2) {
+            $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
+        } else {
+            $this->hydrateNewMetadata('None', $type2_delivery, $user);
+        }
+        if ($delivery_city) {
+            $this->hydrateNewMetadata($city, $type4_delivery, $user);
         }
     }
 
     private function updateMetadata($form, User $user)
     {
-        $line_1 = $form->get('line_1')->getData();
-        $line_2 = $form->get('line_2')->getData();
         $phone = strval($form->get('phone_number')->getData());
-        $city = strval($form->get('city')->getData()->getId());
-        $type1 = 'line_1';
-        $type2 = 'line_2';
-        $type3 = 'phone_number';
-        $type4 = 'city';
+        $delivery_line_1 = $form->get('delivery_line_1')->getData();
+        $delivery_line_2 = $form->get('delivery_line_2')->getData();
+        $delivery_city = strval($form->get('delivery_city')->getData()->getId());
+        $type1 = 'phone_number';
+        $type1_delivery = 'delivery_line_1';
+        $type2_delivery = 'delivery_line_2';
+        $type4_delivery = 'delivery_city';
+
+        $billing_line_1 = $form->get('billing_line_1')->getData();
+        $billing_line_2 = $form->get('billing_line_2')->getData();
+        $billing_city = strval($form->get('billing_city')->getData()->getId());
+        $type1_billing = 'billing_line_1';
+        $type2_billing = 'billing_line_2';
+        $type4_billing = 'billing_city';
 
             $metadata = $user->getMetadata()->unwrap();
 
             foreach ($metadata as $data) { 
-                if ($data->getType() == $type1 && $line_1) {
-                    $data->setField($line_1);
+                if ($data->getType() == $type1 && $phone) {
+                    $data->setField($phone);
                 };
-                if ($data->getType() == $type2 && $line_2) {
-                    $data->setField($line_2);
+                if ($data->getType() == $type1_delivery && $delivery_line_1) {
+                    $data->setField($delivery_line_1);
+                };
+                if ($data->getType() == $type2_delivery && $delivery_line_2) {
+                    $data->setField($delivery_line_2);
                 } else {
                     $data->setField('None');
                 };
-                if ($data->getType() == $type3 && $line_1) {
-                    $data->setField($phone);
+                if ($data->getType() == $type4_delivery && $delivery_city) {
+                    $data->setField($delivery_city);
                 };
-                if ($data->getType() == $type4 && $line_1) {
-                    $data->setField($city);
+
+                if ($data->getType() == $type1_billing && $billing_line_1) {
+                    $data->setField($billing_line_1);
+                };
+                if ($data->getType() == $type2_billing && $billing_line_2) {
+                    $data->setField($billing_line_2);
+                } else {
+                    $data->setField('None');
+                };
+                if ($data->getType() == $type4_billing && $billing_city) {
+                    $data->setField($billing_city);
                 };
             }
     }

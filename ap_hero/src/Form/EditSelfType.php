@@ -62,19 +62,36 @@ class EditSelfType extends AbstractType
                 'mapped' => false,
                 'required' => true,
             ])
-            ->add('line_1', TextareaType::class, [
+            ->add('delivery_line_1', TextareaType::class, [
                 'mapped' => false,
                 'required' => true,
             ])
-            ->add('line_2', TextareaType::class, [
+            ->add('delivery_line_2', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('city', EntityType::class, [
+            ->add('delivery_city', EntityType::class, [
                 'class' => City::class,
                 'mapped' => false,
                 'choice_label' => function ($city) {
-                    return $city->getName();
+                    if ($city->getIsDeliverable()) {
+                        return $city->getZipcode();
+                    }
+                }
+            ])
+            ->add('billing_line_1', TextareaType::class, [
+                'mapped' => false,
+                'required' => true,
+            ])
+            ->add('billing_line_2', TextareaType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('billing_city', EntityType::class, [
+                'class' => City::class,
+                'mapped' => false,
+                'choice_label' => function ($city) {
+                    return $city->getZipCode();
                 }
             ])
             ->add('picture', FileType::class, [
