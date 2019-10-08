@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Orders;
+use App\Service\Cart\CartService;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Persistence\ObjectManager;
 use Payplug;
 use Payplug\Payment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,12 +18,12 @@ class PaiementController extends AbstractController
     /**
      * @Route("/payment", name="payment")
      */
-    public function index()
+    public function index( ObjectManager $manager, CartService $cartService )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 		$user     = $this->getUser();
-		$metadata = $user ->getMetadata();
-		$uniq_id  = uniqid( $user->getEmail(), true );
+		// $metadata = $user ->getMetadata();
+		$uniq_id  = uniqid();
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'         => 3680,
@@ -28,7 +32,7 @@ class PaiementController extends AbstractController
 				'title'        => 'mr',
 				'first_name'   => 'John',
 				'last_name'    => 'Watson',
-				'email'        => $user->getEmail(),
+				'email'        => "a@a.com",
 				'address1'     => '221B Baker Street',
 				'postcode'     => 'NW16XE',
 				'city'         => 'London',
@@ -39,7 +43,7 @@ class PaiementController extends AbstractController
 				'title'         => 'mr',
 				'first_name'    => 'John',
 				'last_name'     => 'Watson',
-				'email'         => $user->getEmail(),
+				'email'         => "a@a.com",
 				'address1'      => '221B Baker Street',
 				'postcode'      => 'NW16XE',
 				'city'          => 'London',
@@ -48,14 +52,16 @@ class PaiementController extends AbstractController
 				'delivery_type' => 'BILLING'
 			),
 			'hosted_payment' => array(
-				'return_url' => "http://localhost:8000/payment/success?{$uniq_id}",
-				'cancel_url' => "http://localhost:8000/payment/fail?{$uniq_id}"
+				'return_url' => "http://localhost:8000/payment/success",
+				'cancel_url' => "http://localhost:8000/payment/fail"
 			),
-			'notification_url' => "http://localhost:8000/payment/notif?{$uniq_id}"
+			'notification_url' => "http://localhost:8000/payment/notif"
 		));
 
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
+
+		// $cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug');
 
         return $this->render('paiement/index.html.twig', [
 			'payment_url' => $payment_url,

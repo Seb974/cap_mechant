@@ -115,7 +115,7 @@ class CartService
         return $cartEntity;
     }
 
-    public function convertCartToOrders(Cart $cartEntity, string $internalId, int $paymentId, string $paymentType) : array {
+    public function convertCartToOrders(Cart $cartEntity, string $internalId, int $paymentId, string $paymentType) {
 
         foreach ($cartEntity->getCartItems() as $cartItem) {
             $order = new Order();
@@ -130,8 +130,9 @@ class CartService
             $order->setTotalToPayHT($order->getTotalToPayTTC() - $order->getTotalTax());
             $order->setSupplier($cartItem->getProduct()->getProduct()->getSupplier());
             $order->setOrderStatus("PENDING");
-        }
-        return [];
+			$this->entityManager->persist($order);
+		}
+		$this->entityManager->flush();
     }
 
     private function clearCartItems(Cart $cartEntity) : ?Cart
@@ -144,7 +145,7 @@ class CartService
         return $cartEntity;
     }
 
-    private function getTotalToPay(Cart $cart) 
+    private function getTotalToPay(Cart $cart)
     {
         $totalToPay = 0;
         foreach($cart->getCartItems() as $cartItem) {
