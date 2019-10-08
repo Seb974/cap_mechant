@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PaiementController!{% endblock %}
+{% block title %}Vérification de votre commande{% endblock %}
 
 {% block body %}
 <style>
@@ -9,7 +9,20 @@
 </style>
 
 <div class="example-wrapper">
-    Redirect user to <br /><a href="{{ payment_url }}" target="_blank">{{ payment_url }}</a> in order to proceed payment
+	Insérer ici les infos user
 </div>
-{{ dump(payment) }}
+
+<div class="example-wrapper">
+	Insérer ici les adresses de facturation
+</div>
+
+<div class="example-wrapper">
+	Insérer ici les adresses de livraison
+</div>
+
+<div class="example-wrapper">
+	Insérer ici un récap du panier
+</div>
+
+<a href="{{ payment_url }}" target="_blank"><button>PAYER</button></a>
 {% endblock %}

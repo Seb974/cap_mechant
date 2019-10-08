@@ -91,7 +91,7 @@ class CartController extends AbstractController
         }
         // actions
         //$cartService->convertCartToOrders($user->getCart());
-        return $this->redirectToRoute('variant_index');
+        return $this->redirectToRoute('payment');
     }
 
     /**
