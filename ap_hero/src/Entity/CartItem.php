@@ -31,7 +31,13 @@ class CartItem
      * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="cartItems" , cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
-    private $cart;
+	private $cart;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Orders", inversedBy="cartItems" , cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $orders;
 
     public function getId(): ?int
     {

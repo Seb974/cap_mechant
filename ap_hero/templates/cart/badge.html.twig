@@ -16,9 +16,10 @@
                         <a href="#" class="d-flex flex-row ml-auto">
                             x{{ item.quantity }} {{ item.product.product.name }} {{ item.product.name }} | {{ item.product.price }}€
                         </a>
-                        <button type="button" class="btn btn-link">
-                            <i class="fa fa-trash"></i>
-                        </button>
+						<form method="post" action="{{ path( 'cart_item_delete', { 'id': item.product.id } ) }}">
+							<input type="hidden" name="_method" value="DELETE">
+							<button class="btn btn-link"><i class="fa fa-trash"></i></button>
+						</form>
                     </li>
                 {% endfor %}
             </ul>
