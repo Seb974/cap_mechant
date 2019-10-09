@@ -42,7 +42,7 @@
                                 {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
                                 <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
                                 {% if is_granted('ROLE_SUPPLIER') %}
-                                    <li><a href="#">Orders</a></li>
+                                    <li><a href="{{ path('order_index') }}">Orders</a></li>
                                     <li><a href="{{ path('stock_index') }}">Stocks</a></li>
                                 {% endif %}
 
