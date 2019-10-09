@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191009081502 extends AbstractMigration
+final class Version20191009083234 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -23,8 +23,8 @@ final class Version20191009081502 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE variant (id INT AUTO_INCREMENT NOT NULL, product_id INT DEFAULT NULL, name VARCHAR(60) NOT NULL, price DOUBLE PRECISION NOT NULL, INDEX IDX_F143BFAD4584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE orders (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, cart_item_id INT NOT NULL, supplier_id INT NOT NULL, payment_id VARCHAR(60) NOT NULL, payment_type VARCHAR(60) NOT NULL, total_to_pay_ttc DOUBLE PRECISION NOT NULL, total_to_pay_ht DOUBLE PRECISION NOT NULL, total_tax DOUBLE PRECISION NOT NULL, order_status VARCHAR(255) NOT NULL, tax_rate DOUBLE PRECISION NOT NULL, internal_id VARCHAR(64) NOT NULL, INDEX IDX_E52FFDEEA76ED395 (user_id), UNIQUE INDEX UNIQ_E52FFDEEE9B59A59 (cart_item_id), INDEX IDX_E52FFDEE2ADD6D8C (supplier_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE supplier (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(120) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE orders (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, cart_item_id INT NOT NULL, supplier_id INT NOT NULL, payment_id VARCHAR(60) NOT NULL, payment_type VARCHAR(60) NOT NULL, total_to_pay_ttc DOUBLE PRECISION NOT NULL, total_to_pay_ht DOUBLE PRECISION NOT NULL, total_tax DOUBLE PRECISION NOT NULL, order_status VARCHAR(255) NOT NULL, tax_rate DOUBLE PRECISION NOT NULL, internal_id VARCHAR(64) NOT NULL, cart_id INT NOT NULL, INDEX IDX_E52FFDEEA76ED395 (user_id), UNIQUE INDEX UNIQ_E52FFDEEE9B59A59 (cart_item_id), INDEX IDX_E52FFDEE2ADD6D8C (supplier_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE supplier (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(120) NOT NULL, address LONGTEXT NOT NULL, preparation_period TIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE allergen (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(60) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE metadata (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, type VARCHAR(255) NOT NULL, field VARCHAR(255) DEFAULT NULL, INDEX IDX_4F143414A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE city (id INT AUTO_INCREMENT NOT NULL, zip_code INT NOT NULL, name VARCHAR(255) NOT NULL, is_deliverable TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
