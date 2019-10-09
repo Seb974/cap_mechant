@@ -20,12 +20,12 @@ class PaiementController extends AbstractController
     public function checkout( CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		$user     = $this->getUser();
-		// $metadata = $user ->getMetadata();
-		$uniq_id  = uniqid( $user->getEmail() );
+		$user    = $this->getUser();
+		$uniq_id = uniqid( $user->getEmail() );
+		$cart    = $user->getCart();
 
 		$payment = \Payplug\Payment::create(array(
-			'amount'   => 3680 ,
+			'amount'   => $cart->getTotalToPay() * 100,
 			'currency' => 'EUR',
 			'billing'        => array(
 				'title'      => 'mr'               ,
@@ -63,6 +63,7 @@ class PaiementController extends AbstractController
 		$OneCartItem = $user->getCart()->getCartItems()[0];
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
+
 		$itemOrder_exist = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $OneCartItem ] );
 		if ( !$itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
