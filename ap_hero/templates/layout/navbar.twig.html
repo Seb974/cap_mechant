@@ -7,8 +7,8 @@
                 </a>
 
                 <a href="{{ path('index') }}" class="logo">
-					<img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
-				</a>
+                    <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
+                </a>
 
                 <div class="navbar-left">
                     <nav class="nav navbar-left">
@@ -16,7 +16,7 @@
                             <ul>
                                 <li class="dropdown">
                                     <a href="{{ path('login') }}" data-toggle="dropdown">
-										<img src="" alt="">
+                                        <img src="" alt="">
                                         <span>{{ app.user.username }}
                                             <i class="fas fa-chevron-down"></i>
                                         </span>
@@ -24,28 +24,33 @@
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="{{ path('user_self_show') }}">
                                             <i class="fas fa-user"></i>Mon profil
-										</a>
+                                        </a>
 
-										{% if is_granted('ROLE_ADMIN') %}
-											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="#">
-												<i class="fas fa-user"></i>Admin Panel
-											</a>
-										{% endif %}
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-user"></i>Admin Panel
+                                            </a>
+                                        {% endif %}
 
-										<div class="dropdown-divider"></div>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ path('disconnect') }}">
                                             <i class="fas fa-sign-out-alt"></i>Se déconnecter
-										</a>
+                                        </a>
                                     </div>
                                 </li>
-								{{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                                {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
                                 <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
+                                {% if is_granted('ROLE_SUPPLIER') %}
+                                    <li><a href="{{ path('get_order') }}">Orders</a></li>
+                                    <li><a href="{{ path('stock_index') }}">Stocks</a></li>
+                                {% endif %}
+
                             </ul>
                         {% else %}
                             <ul>
                                 <li><a href="{{ path('login')    }}">Se connecter / S'inscire</a></li>
-									{{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                                    {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
                                 <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
                             </ul>
                         {% endif %}
