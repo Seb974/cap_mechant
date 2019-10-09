@@ -33,6 +33,16 @@ class Supplier
      */
     private $products;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="time")
+     */
+    private $preparationPeriod;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -114,6 +124,30 @@ class Supplier
                 $product->setSuppliers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPreparationPeriod(): ?\DateTimeInterface
+    {
+        return $this->preparationPeriod;
+    }
+
+    public function setPreparationPeriod(\DateTimeInterface $preparationPeriod): self
+    {
+        $this->preparationPeriod = $preparationPeriod;
 
         return $this;
     }
