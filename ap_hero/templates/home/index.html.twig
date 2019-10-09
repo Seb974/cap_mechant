@@ -31,7 +31,7 @@
                                             <a href="{{ path('product_show', { id: product.id }) }}">
                                                 {{ product.name }}
                                                 <br/>
-												<i class="fas fa-truck"></i> 30mn @
+												<i class="fas fa-truck"></i> {{ product.supplier.preparationPeriod|date('i') }}mn @
                                                 {{ product.supplier.name }}
                                             </a>
                                         </li>
