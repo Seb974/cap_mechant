@@ -51,7 +51,15 @@ class SecurityController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
-            $this->createMetadata($form, $user);
+
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $user->setAvatar($picture);
+            }
+
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -109,7 +117,7 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->updateMetadata($form, $user);
+            $metadataTab != [] ? $this->updateMetadata($form, $user) : $this->createMetadata($form, $user);
 
             if (strlen($form->get('password')->getData()) > 0) {
                 $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
@@ -151,8 +159,6 @@ class SecurityController extends AbstractController
         }
         if ($billing_line_2) {
             $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
-        } else {
-            $this->hydrateNewMetadata('None', $type2_billing, $user);
         }
         if ($billing_city) {
             $this->hydrateNewMetadata($billing_city, $type4_billing, $user);
@@ -163,8 +169,6 @@ class SecurityController extends AbstractController
         }
         if ($delivery_line_2) {
             $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
-        } else {
-            $this->hydrateNewMetadata('None', $type2_delivery, $user);
         }
         if ($delivery_city) {
             $this->hydrateNewMetadata($delivery_city, $type4_delivery, $user);
@@ -200,9 +204,7 @@ class SecurityController extends AbstractController
                 };
                 if ($data->getType() == $type2_delivery && $delivery_line_2) {
                     $data->setField($delivery_line_2);
-                } else if (!$delivery_line_2) {
-                    $data->setField('None');
-                };
+                }
                 if ($data->getType() == $type4_delivery && $delivery_city) {
                     $data->setField($delivery_city);
                 };
@@ -212,9 +214,7 @@ class SecurityController extends AbstractController
                 };
                 if ($data->getType() == $type2_billing && $billing_line_2) {
                     $data->setField($billing_line_2);
-                } else if (!$billing_line_2) {
-                    $data->setField('None');
-                };
+                }
                 if ($data->getType() == $type4_billing && $billing_city) {
                     $data->setField($billing_city);
                 };
