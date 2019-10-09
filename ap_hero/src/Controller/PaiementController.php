@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Orders;
 use App\Service\Cart\CartService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,12 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/checkout", name="checkout")
+     * @Route("/checkout/{id}", name="checkout")
      */
-    public function checkout( CartService $cartService, EntityManagerInterface $em )
+    public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		$user     = $this->getUser();
+		//$user     = $this->getUser();
+		$user = $em->getRepository(User::class)->find($id);
 		// $metadata = $user ->getMetadata();
 		$uniq_id  = uniqid( $user->getEmail() );
 
