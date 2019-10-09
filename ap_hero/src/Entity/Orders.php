@@ -81,6 +81,11 @@ class Orders
      */
     private $cartId;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $PayDateTime;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
@@ -231,6 +236,18 @@ class Orders
     public function setCartId(int $cartId): self
     {
         $this->cartId = $cartId;
+
+        return $this;
+    }
+
+    public function getPayDateTime(): ?\DateTimeInterface
+    {
+        return $this->PayDateTime;
+    }
+
+    public function setPayDateTime(?\DateTimeInterface $PayDateTime): self
+    {
+        $this->PayDateTime = $PayDateTime;
 
         return $this;
     }
