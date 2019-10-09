@@ -6,11 +6,11 @@ use App\Security\FacebookAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\FacebookUser;
+use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use League\OAuth2\Client\Token\AccessToken;
 
 class ApiController extends AbstractController
 {
@@ -42,5 +42,29 @@ class ApiController extends AbstractController
 			'controller_name' => 'ApiController',
 			'request' => $parameters
         ]);
-    }
+	}
+
+	public function Print_point( $imprimante, $message ) {
+		// id customer Printer Point
+		$sid   = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+		$token = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+		$data = array(
+			'sid'    => $sid  ,
+			'token'  => $token,
+			'params' => array (
+				'printer_uid' => $imprimante,
+				'printer_msg' => $message
+			)
+		);
+
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, 'https://www.expedy.fr/api/print' );
+		curl_setopt( $ch, CURLOPT_POST, 1 );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $data ) );
+		$result = curl_exec( $ch );
+		curl_close( $ch );
+
+		return $result;
+	}
 }

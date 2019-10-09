@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Orders;
 use App\Service\Cart\CartService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,14 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/checkout", name="checkout")
+     * @Route("/checkout/{id}", name="checkout")
      */
-    public function checkout( CartService $cartService, EntityManagerInterface $em )
+    public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		$user    = $this->getUser();
-		$uniq_id = uniqid( $user->getEmail() );
-		$cart    = $user->getCart();
+		//$user     = $this->getUser();
+		$user = $em->getRepository(User::class)->find($id);
+		$cart = $user->getCart();
+		// $metadata = $user ->getMetadata();
+		$uniq_id  = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'   => $cart->getTotalToPay() * 100,
@@ -68,6 +71,12 @@ class PaiementController extends AbstractController
 		if ( !$itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
 		} else {
+
+			// Abort old payment
+			$old_payplug_id = $itemOrder_exist->getPaymentId();
+			$payment        = \Payplug\Payment::abort($old_payplug_id);
+
+			// Update Internal & External ID of new Payment
 			foreach ( $user->getCart()->getCartItems() as $key => $value ) {
 				$item = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $value ] );
 				$item->setPaymentId( $payment_id );
@@ -86,7 +95,7 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/success", name="payment_success")
      */
-	public function payement_success( Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
+	public function payement_success( Request $request, EntityManagerInterface $em ): Response {
 
 		$uniq_id = $request->query->get('id');
 		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
@@ -102,10 +111,16 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/fail", name="payment_fail")
      */
-	public function payement_fail(Request $request): Response {
-		return $this->render('paiement/fail.html.twig', [
-			'request' => $request
-        ]);
+	public function payement_fail( Request $request, EntityManagerInterface $em ): Response {
+		$uniq_id = $request->query->get('id');
+		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
+
+		foreach ( $orders as $key => $order ) {
+			$order->setOrderStatus('FAILED');
+			$em->flush();
+		}
+
+		return $this->redirectToRoute('index');
 	}
 
 	/**

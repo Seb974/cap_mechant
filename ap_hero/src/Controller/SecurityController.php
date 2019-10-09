@@ -11,6 +11,7 @@ use App\Controller\UserController;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
 use App\Service\Cart\CartService;
+use App\Service\Metadata\MetadataService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +40,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator, MetadataService $metadataService): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -61,7 +62,7 @@ class SecurityController extends AbstractController
                 $picture->setB64($newFilename);
                 $user->setAvatar($picture);
             }
-
+            $metadataService->createMetadata($form, $user);
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -92,7 +93,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/account/edit", name="self_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, MetadataService $metadataService): Response
     {
         $user = $this->getUser();
         $metadata = $user->getMetadata();
@@ -127,7 +128,8 @@ class SecurityController extends AbstractController
                 $user->setAvatar($picture);
             }
 
-            $metadataTab != [] ? $this->updateMetadata($form, $user) : $this->createMetadata($form, $user);
+            $metadataTab != [] ? $metadataService->updateMetadata($form, $user) : $metadataService->createMetadata($form, $user);
+            //$metadataService->updateMetadata($form, $user);
 
             if (strlen($form->get('password')->getData()) > 0) {
                 $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
@@ -143,104 +145,112 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    private function createMetadata($form, User $user)
-    {
-        $phone = strval($form->get('phone_number')->getData());
-        $billing_line_1 = $form->get('billing_line_1')->getData();
-        $billing_line_2 = $form->get('billing_line_2')->getData();
-        $billing_city = strval($form->get('billing_city')->getData()->getId());
-        $type1 = 'phone_number';
-        $type1_billing = 'billing_line_1';
-        $type2_billing = 'billing_line_2';
-        $type4_billing = 'billing_city';
+    // private function createMetadata($form, User $user)
+    // {
+    //     $phone = strval($form->get('phone_number')->getData());
+    //     $billing_line_1 = $form->get('billing_line_1')->getData();
+    //     $billing_line_2 = $form->get('billing_line_2')->getData();
+    //     $billing_city = strval($form->get('billing_city')->getData()->getId());
+    //     $type1 = 'phone_number';
+    //     $type1_billing = 'billing_line_1';
+    //     $type2_billing = 'billing_line_2';
+    //     $type4_billing = 'billing_city';
 
-        $delivery_line_1 = $form->get('delivery_line_1')->getData();
-        $delivery_line_2 = $form->get('delivery_line_2')->getData();
-        $delivery_city = strval($form->get('delivery_city')->getData()->getId());
-        $type1_delivery = 'delivery_line_1';
-        $type2_delivery = 'delivery_line_2';
-        $type4_delivery = 'delivery_city';
+    //     $delivery_line_1 = $form->get('delivery_line_1')->getData();
+    //     $delivery_line_2 = $form->get('delivery_line_2')->getData();
+    //     $delivery_city = strval($form->get('delivery_city')->getData()->getId());
+    //     $type1_delivery = 'delivery_line_1';
+    //     $type2_delivery = 'delivery_line_2';
+    //     $type4_delivery = 'delivery_city';
 
-        if ($phone) {
-            $this->hydrateNewMetadata($phone, $type1, $user);
-        }
-        if ($billing_line_1) {
-            $this->hydrateNewMetadata($billing_line_1, $type1_billing, $user);
-        }
-        if ($billing_line_2) {
-            $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
-        }
-        if ($billing_city) {
-            $this->hydrateNewMetadata($billing_city, $type4_billing, $user);
-        }
+    //     if ($phone) {
+    //         $this->hydrateNewMetadata($phone, $type1, $user);
+    //     }
+    //     if ($billing_line_1) {
+    //         $this->hydrateNewMetadata($billing_line_1, $type1_billing, $user);
+    //     }
+    //     if ($billing_line_2) {
+    //         $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
+    //     } else {
+    //         $this->hydrateNewMetadata('None', $type2_billing, $user);
+    //     }
+    //     if ($billing_city) {
+    //         $this->hydrateNewMetadata($billing_city, $type4_billing, $user);
+    //     }
 
-        if ($delivery_line_1) {
-            $this->hydrateNewMetadata($delivery_line_1, $type1_delivery, $user);
-        }
-        if ($delivery_line_2) {
-            $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
-        }
-        if ($delivery_city) {
-            $this->hydrateNewMetadata($delivery_city, $type4_delivery, $user);
-        }
-    }
+    //     if ($delivery_line_1) {
+    //         $this->hydrateNewMetadata($delivery_line_1, $type1_delivery, $user);
+    //     }
+    //     if ($delivery_line_2) {
+    //         $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
+    //     } else {
+    //         $this->hydrateNewMetadata('None', $type2_delivery, $user);
+    //     }
+    //     if ($delivery_city) {
+    //         $this->hydrateNewMetadata($delivery_city, $type4_delivery, $user);
+    //     }
+    // }
 
-    private function updateMetadata($form, User $user)
-    {
-        $phone = strval($form->get('phone_number')->getData());
-        $delivery_line_1 = $form->get('delivery_line_1')->getData();
-        $delivery_line_2 = $form->get('delivery_line_2')->getData();
-        $delivery_city = strval($form->get('delivery_city')->getData()->getId());
-        $type1 = 'phone_number';
-        $type1_delivery = 'delivery_line_1';
-        $type2_delivery = 'delivery_line_2';
-        $type4_delivery = 'delivery_city';
+    // private function updateMetadata($form, User $user)
+    // {
+    //     $phone = strval($form->get('phone_number')->getData());
+    //     $delivery_line_1 = $form->get('delivery_line_1')->getData();
+    //     $delivery_line_2 = $form->get('delivery_line_2')->getData();
+    //     $delivery_city = strval($form->get('delivery_city')->getData()->getId());
+    //     $type1 = 'phone_number';
+    //     $type1_delivery = 'delivery_line_1';
+    //     $type2_delivery = 'delivery_line_2';
+    //     $type4_delivery = 'delivery_city';
 
-        $billing_line_1 = $form->get('billing_line_1')->getData();
-        $billing_line_2 = $form->get('billing_line_2')->getData();
-        $billing_city = strval($form->get('billing_city')->getData()->getId());
-        $type1_billing = 'billing_line_1';
-        $type2_billing = 'billing_line_2';
-        $type4_billing = 'billing_city';
+    //     $billing_line_1 = $form->get('billing_line_1')->getData();
+    //     $billing_line_2 = $form->get('billing_line_2')->getData();
+    //     $billing_city = strval($form->get('billing_city')->getData()->getId());
+    //     $type1_billing = 'billing_line_1';
+    //     $type2_billing = 'billing_line_2';
+    //     $type4_billing = 'billing_city';
 
-            $metadata = $user->getMetadata()->unwrap();
+    //         $metadata = $user->getMetadata()->unwrap();
 
-            foreach ($metadata as $data) { 
-                if ($data->getType() == $type1 && $phone) {
-                    $data->setField($phone);
-                };
-                if ($data->getType() == $type1_delivery && $delivery_line_1) {
-                    $data->setField($delivery_line_1);
-                };
-                if ($data->getType() == $type2_delivery && $delivery_line_2) {
-                    $data->setField($delivery_line_2);
-                }
-                if ($data->getType() == $type4_delivery && $delivery_city) {
-                    $data->setField($delivery_city);
-                };
+    //         foreach ($metadata as $data) { 
+    //             if ($data->getType() == $type1 && $phone) {
+    //                 $data->setField($phone);
+    //             };
+    //             if ($data->getType() == $type1_delivery && $delivery_line_1) {
+    //                 $data->setField($delivery_line_1);
+    //             };
+    //             if ($data->getType() == $type2_delivery && $delivery_line_2) {
+    //                 $data->setField($delivery_line_2);
+    //             } else if (!$delivery_line_2) {
+    //                 $data->setField('None');
+    //             };
+    //             if ($data->getType() == $type4_delivery && $delivery_city) {
+    //                 $data->setField($delivery_city);
+    //             };
 
-                if ($data->getType() == $type1_billing && $billing_line_1) {
-                    $data->setField($billing_line_1);
-                };
-                if ($data->getType() == $type2_billing && $billing_line_2) {
-                    $data->setField($billing_line_2);
-                }
-                if ($data->getType() == $type4_billing && $billing_city) {
-                    $data->setField($billing_city);
-                };
-            }
-    }
+    //             if ($data->getType() == $type1_billing && $billing_line_1) {
+    //                 $data->setField($billing_line_1);
+    //             };
+    //             if ($data->getType() == $type2_billing && $billing_line_2) {
+    //                 $data->setField($billing_line_2);
+    //             } else if (!$billing_line_2) {
+    //                 $data->setField('None');
+    //             };
+    //             if ($data->getType() == $type4_billing && $billing_city) {
+    //                 $data->setField($billing_city);
+    //             };
+    //         }
+    // }
 
-    public function hydrateNewMetadata(String $field, String $type, User $user)
-    {
-        $metadata = new Metadata();
-        $metadata->setField($field);
-        $metadata->setType($type);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($metadata);
-        $user->addMetadata($metadata);
-        $entityManager->flush();
-    }
+    // public function hydrateNewMetadata(String $field, String $type, User $user)
+    // {
+    //     $metadata = new Metadata();
+    //     $metadata->setField($field);
+    //     $metadata->setType($type);
+    //     $entityManager = $this->getDoctrine()->getManager();
+    //     $entityManager->persist($metadata);
+    //     $user->addMetadata($metadata);
+    //     $entityManager->flush();
+    // }
 
     /**
      * @Route("/self", name="user_self_show", methods={"GET"})
