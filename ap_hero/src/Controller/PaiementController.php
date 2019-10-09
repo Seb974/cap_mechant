@@ -92,7 +92,7 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/success", name="payment_success")
      */
-	public function payement_success( Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
+	public function payement_success( Request $request, EntityManagerInterface $em ): Response {
 
 		$uniq_id = $request->query->get('id');
 		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
@@ -108,10 +108,16 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/fail", name="payment_fail")
      */
-	public function payement_fail(Request $request): Response {
-		return $this->render('paiement/fail.html.twig', [
-			'request' => $request
-        ]);
+	public function payement_fail( Request $request, EntityManagerInterface $em ): Response {
+		$uniq_id = $request->query->get('id');
+		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
+
+		foreach ( $orders as $key => $order ) {
+			$order->setOrderStatus('FAILED');
+			$em->flush();
+		}
+
+		return $this->redirectToRoute('index');
 	}
 
 	/**
