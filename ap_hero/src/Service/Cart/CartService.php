@@ -149,9 +149,6 @@ class CartService
     }
     
     public function initCart(Cart $cartEntity) {
-        // foreach($cartEntity->getCartItems() as $cartItem) {
-        //     $cartItem->setIsPaid(true);
-        // }
         $this->clearCartItems($cartEntity);
         $cartEntity->setTotalToPay(0);
         $cartEntity->setTotalTax(0);
@@ -163,13 +160,7 @@ class CartService
     private function clearCartItems(Cart $cartEntity) : ?Cart
     {
         foreach($cartEntity->getCartItems() as $cartItem) {
-            if (!$cartItem->getOrder()) {
                 $cartEntity->removeCartItem($cartItem);
-                $this->entityManager->remove($cartItem);
-            } 
-            else {
-                $cartItem->setIsPaid(true);
-            }
         }
         $this->entityManager->flush();
         return $cartEntity;
