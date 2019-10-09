@@ -81,7 +81,7 @@ class CartService
     public function generateCartEntity(User $user) : ?Cart
     {
         $cart = $this->session->get('cart', []);
-        $cartEntity = new Cart();
+        $cartEntity = $user->getCart() ? $user->getCart() : new Cart();
         foreach($cart as $id => $quantity) {
             $cartItem = new CartItem();
             $cartItem->setProduct($this->variantRepository->find($id));
@@ -134,6 +134,25 @@ class CartService
 			$this->entityManager->persist( $order );
 		}
 		$this->entityManager->flush();
+    }
+
+    public function decreaseStock(Cart $cart) {
+        foreach ($cart->getCartItems() as $cartItem) {
+            $stock = $cartItem->getProduct()->getStock();
+            $quantitySold = $cartItem->getQuantity();
+            $newQty = ($stock->getQuantity() - $quantitySold) > 0 ? ($stock->getQuantity() - $quantitySold) : 0;
+            $stock->setQuantity($newQty);
+            $this->entityManager->flush();
+        }
+    }
+    
+    public function initCart(Cart $cartEntity) {
+        $cartEntity = $this->clearCartItems($cartEntity);
+        $cartEntity->setTotalToPay(0);
+        $cartEntity->setTotalTax(0);
+        $cartEntity->setIsValidated(false);
+        $this->entityManager->flush();
+        $this->session->set('cart', []);
     }
 
     private function clearCartItems(Cart $cartEntity) : ?Cart
