@@ -26,7 +26,7 @@ class SupplierFixtures extends Fixture
 			$supplier = new Supplier();
 			$supplier->setName( $value['name'] );
 			$supplier->setAddress( $faker->address() );
-			$supplier->setPreparationPeriod(new \DateTime('2011-01-01T00:30:00.012345Z') );
+			$supplier->setPreparationPeriod( new \DateTime('2011-01-01T00:30:00.012345Z') );
 			$manager->persist( $supplier );
 		}
 
