@@ -73,7 +73,9 @@ class CartService
     {
         $cart = [];
         foreach ($cartEntity->getCartItems() as $cartItem) {
-            $cart[$cartItem->getProduct()->getId()] = $cartItem->getQuantity();
+            if (!$cartItem->getIsPaid()) {
+                $cart[$cartItem->getProduct()->getId()] = $cartItem->getQuantity();
+            }
         }
         $this->session->set('cart', $cart);
     }
@@ -161,6 +163,7 @@ class CartService
     {
         foreach($cartEntity->getCartItems() as $cartItem) {
                 $cartEntity->removeCartItem($cartItem);
+                $cartItem->setIsPaid(true);
         }
         $this->entityManager->flush();
         return $cartEntity;
