@@ -24,6 +24,7 @@ class PaiementController extends AbstractController
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 		$user = $em->getRepository(User::class)->find($id);
 		$cart = $user->getCart();
+		dump($cart);
 		$uniq_id  = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
@@ -61,7 +62,7 @@ class PaiementController extends AbstractController
 
 			'notification_url' => "https://exemple/payment/notif?id={$uniq_id}"
 		));
-
+		
 		$OneCartItem = $user->getCart()->getCartItems()[0];
 		$payment_url = $payment->hosted_payment->payment_url;
 		$payment_id  = $payment->id;
@@ -73,11 +74,13 @@ class PaiementController extends AbstractController
 
 			// Abort old payment
 			$old_payplug_id = $itemOrder_exist->getPaymentId();
-			$payment        = \Payplug\Payment::abort($old_payplug_id);
-
+			if (1 === 3) {
+				$payment        = \Payplug\Payment::abort($old_payplug_id);
+			}
 			// Update Internal & External ID of new Payment
 			foreach ( $user->getCart()->getCartItems() as $key => $value ) {
 				$item = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $value ] );
+				dump($item);
 				$item->setPaymentId( $payment_id );
 				$item->setInternalId( $uniq_id );
 				$em->flush();
