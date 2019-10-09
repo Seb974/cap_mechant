@@ -89,11 +89,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         // if (!empty($cart)) {
         //     return new RedirectResponse($this->urlGenerator->generate('get_cart'));
         // }
-<<<<<<< HEAD
         return new RedirectResponse($this->urlGenerator->generate('email', ["user" => "register"]));
-=======
-        return new RedirectResponse($this->urlGenerator->generate('email'));
->>>>>>> 67d7e8b59415e557317e3dcc28de4e8eed44e169
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
