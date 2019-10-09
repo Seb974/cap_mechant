@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\Cart\CartService;
+use App\Service\Metadata\MetadataService;
+use App\Form\UnknownUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/cart")
@@ -78,20 +82,38 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/validation", name="cart_validate", methods={"GET"})
+     * @Route("/validation", name="cart_validate", methods={"GET","POST"})
      */
-    public function validate(CartService $cartService): Response
+    public function validate(Request $request, CartService $cartService, MetadataService $metadataService, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
         if (!$user) {
+            $user = new User();
+            $form = $this->createForm(UnknownUserType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $identifier = $form->get('email')->getData();
+                $user->setUsername($identifier);
+                $user->setPassword($passwordEncoder->encodePassword($user, $identifier));
+                $user->setRoles(['ROLE_USER']);
+                $user->setIsBanned(false);
+                $metadataService->createMetadata($form, $user);
+                $cartService->generateCartEntity($user);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('checkout', ['id' => $user->getId()]);
+            }
+            return $this->render('user/unknownUser.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
             return $this->redirectToRoute('login');
         }
         if (!$user->getCart()) {
             $cartService->generateCartEntity($user);
         }
-        // actions
-        //$cartService->convertCartToOrders($user->getCart());
-        return $this->redirectToRoute('checkout');
+        return $this->redirectToRoute('checkout', ['id' => $user->getId()]);
     }
 
     /**
