@@ -39,6 +39,11 @@ class CartItem
      */
     private $orders;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPaid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +81,30 @@ class CartItem
     public function setCart(?Cart $cart): self
     {
         $this->cart = $cart;
+
+        return $this;
+    }
+
+    public function getIsPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): self
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function getOrder(): ?Orders
+    {
+        return $this->orders;
+    }
+
+    public function setOrder(?Cart $orders): self
+    {
+        $this->orders = $orders;
 
         return $this;
     }
