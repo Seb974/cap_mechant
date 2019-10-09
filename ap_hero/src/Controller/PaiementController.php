@@ -68,6 +68,12 @@ class PaiementController extends AbstractController
 		if ( !$itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
 		} else {
+
+			// Abort old payment
+			$old_payplug_id = $itemOrder_exist->getPaymentId();
+			$payment        = \Payplug\Payment::abort($old_payplug_id);
+
+			// Update Internal & External ID of new Payment
 			foreach ( $user->getCart()->getCartItems() as $key => $value ) {
 				$item = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $value ] );
 				$item->setPaymentId( $payment_id );
