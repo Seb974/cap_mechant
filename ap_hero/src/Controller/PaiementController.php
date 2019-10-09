@@ -78,6 +78,7 @@ class PaiementController extends AbstractController
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
 			'payment'     => $payment,
+			'cart'		  => $user->getCart(),
         ]);
 	}
 
