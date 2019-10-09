@@ -102,6 +102,7 @@ class PaiementController extends AbstractController
 
 		foreach ( $orders as $key => $order ) {
 			$order->setOrderStatus('ON_PREPARE');
+			$order->setPayDateTime(new \DateTime() );
 			$em->flush();
 		}
 
