@@ -54,11 +54,7 @@ class EmailController extends AbstractController
         // Send the message
         $result = $mailer->send( $message );
 
-<<<<<<< HEAD
         return $this->redirectToRoute('index');
 
-=======
-		return $this->redirectToRoute('index');
->>>>>>> 67d7e8b59415e557317e3dcc28de4e8eed44e169
     }
 }
