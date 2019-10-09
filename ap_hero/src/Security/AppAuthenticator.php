@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\EmailController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -88,7 +89,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         // if (!empty($cart)) {
         //     return new RedirectResponse($this->urlGenerator->generate('get_cart'));
         // }
-        return new RedirectResponse($this->urlGenerator->generate('index'));
+        return new RedirectResponse($this->urlGenerator->generate('email', ["user" => "register"]));
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
