@@ -62,7 +62,7 @@ class SecurityController extends AbstractController
                 $picture->setB64($newFilename);
                 $user->setAvatar($picture);
             }
-            $metadataService->createMetadata($form, $user);
+
             $user->setRoles(['ROLE_USER']);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
