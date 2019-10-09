@@ -33,14 +33,14 @@ class ApiController extends AbstractController
 		$parameters['state'] = $request->query->get("state");
 		$accessToken         = new AccessToken( array( 'access_token' => $parameters['code'] ) );
 		$facebookClient      = $clientRegistry->getClient('facebook');
-		$facebookUser        = $facebookClient->fetchUserFromToken( $accessToken );
+		// $facebookUser        = $facebookClient->fetchUserFromToken( $accessToken );
 
 		// $parameters = array();
 		// = = $facebookclient->fetchUserFromToken($accessToken);
 
         return $this->render('api/index.html.twig', [
 			'controller_name' => 'ApiController',
-			'request' => $facebookUser
+			'request' => $parameters
         ]);
     }
 }
