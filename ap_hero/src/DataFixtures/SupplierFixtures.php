@@ -23,10 +23,11 @@ class SupplierFixtures extends Fixture
 		  );
 
 		foreach ( $suppliers as $key => $value ) {
+			$rnd = random_int( 15, 45 );
 			$supplier = new Supplier();
 			$supplier->setName( $value['name'] );
 			$supplier->setAddress( $faker->address() );
-			$supplier->setPreparationPeriod( new \DateTime('2011-01-01T00:30:00.012345Z') );
+			$supplier->setPreparationPeriod( new \DateTime("2011-01-01T00:{$rnd}:00.012345Z") );
 			$manager->persist( $supplier );
 		}
 
