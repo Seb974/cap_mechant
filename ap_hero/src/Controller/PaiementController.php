@@ -23,6 +23,7 @@ class PaiementController extends AbstractController
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
 		//$user     = $this->getUser();
 		$user = $em->getRepository(User::class)->find($id);
+		$cart = $user->getCart();
 		// $metadata = $user ->getMetadata();
 		$uniq_id  = uniqid( $user->getEmail() );
 
