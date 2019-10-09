@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Metadata;
+use App\Entity\Pics;
+
 use App\Form\EditSelfType;
 use App\Controller\UserController;
 use App\Form\RegistrationFormType;
@@ -116,6 +118,14 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $user->setAvatar($picture);
+            }
 
             $metadataTab != [] ? $this->updateMetadata($form, $user) : $this->createMetadata($form, $user);
 
@@ -240,5 +250,23 @@ class SecurityController extends AbstractController
         return $this->render('user/show_self.html.twig', [
             'user' => $this->getUser(),
         ]);
+    }
+
+    private function savePicture($pictureFile)
+    {
+        $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+
+        try {
+            $pictureFile->move(
+                $this->getParameter('pics_directory'),
+                $newFilename
+            );
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
+
+        return $newFilename;
     }
  }
