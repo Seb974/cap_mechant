@@ -57,7 +57,7 @@ class UserController extends AbstractController
             }
 
             $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
-            //$this->updateMetadata($form, $user);
+
             $metadataService->createMetadata($form, $user);
             $user->setRoles([$form->get('roles')->getData()]);
             $entityManager = $this->getDoctrine()->getManager();
@@ -118,7 +118,6 @@ class UserController extends AbstractController
                 $user->setAvatar($picture);
             }
 
-            //$metadataTab == [] ? $this->createMetadata($form, $user) : $this->updateMetadata($form, $user);
             $metadataTab == [] ? $metadataService->createMetadata($form, $user) : $metadataService->updateMetadata($form, $user);
             $user->setRoles([$form->get('roles')->getData()]);
             $this->getDoctrine()->getManager()->flush();
