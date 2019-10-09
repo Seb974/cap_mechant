@@ -8,6 +8,9 @@
     <table class="table">
         <tbody>
             <tr>
+                {% if user.avatar is not null %}
+                    <img src="{{ asset('uploads/pictures/' ~ user.avatar.b64) }}" height="300" width="400"/>
+                {% endif %}
                 <th>Id</th>
                 <th>Username</th>
                 <th>Email</th>

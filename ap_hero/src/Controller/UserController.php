@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Metadata;
+use App\Entity\Pics;
+
 use App\Form\CreateUserType;
 use App\Form\UpdateUserType;
 use App\Repository\UserRepository;
@@ -44,8 +46,17 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $user->setAvatar($picture);
+            }
+
             $user->setPassword($passwordEncoder->encodePassword($user, $form->get('password')->getData()));
-            $this->updateMetadata($form, $user);
+            $this->createMetadata($form, $user);
             $user->setRoles([$form->get('roles')->getData()]);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -83,7 +94,7 @@ class UserController extends AbstractController
             $type = $data->getType();
             $metadataTab += [$type => $field];
         }
-        dump($metadataTab);
+
         if ($metadataTab != []) {
             dump($metadataTab['phone_number']);
             $form->get('phone_number')->setData(intval($metadataTab['phone_number']));
@@ -99,6 +110,15 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $picFile = $form->get('picture')->getData();
+            if ($picFile) {
+                $picture = new Pics();
+                $newFilename = $this->savePicture($picFile);
+                $picture->setB64($newFilename);
+                $user->setAvatar($picture);
+            }
+
             $metadataTab == [] ? $this->createMetadata($form, $user) : $this->updateMetadata($form, $user);
             
             $user->setRoles([$form->get('roles')->getData()]);
@@ -152,8 +172,6 @@ class UserController extends AbstractController
         }
         if ($billing_line_2) {
             $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
-        } else {
-            $this->hydrateNewMetadata('None', $type2_billing, $user);
         }
         if ($billing_city) {
             $this->hydrateNewMetadata($billing_city, $type3_billing, $user);
@@ -164,8 +182,6 @@ class UserController extends AbstractController
         }
         if ($delivery_line_2) {
             $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
-        } else {
-            $this->hydrateNewMetadata('None', $type2_delivery, $user);
         }
         if ($delivery_city) {
             $this->hydrateNewMetadata($delivery_city, $type3_delivery, $user);
@@ -203,9 +219,7 @@ class UserController extends AbstractController
                 };
                 if ($data->getType() == $type2_delivery && $delivery_line_2) {
                     $data->setField($delivery_line_2);
-                } else if (!$delivery_line_2) {
-                    $data->setField('None');
-                };
+                }
                 if ($data->getType() == $type3_delivery && $delivery_city) {
                     $data->setField($delivery_city);
                 };
@@ -215,9 +229,7 @@ class UserController extends AbstractController
                 };
                 if ($data->getType() == $type2_billing && $billing_line_2) {
                     $data->setField($billing_line_2);
-                } else if (!$billing_line_2) {
-                    $data->setField('None');
-                };
+                }
                 if ($data->getType() == $type3_billing && $billing_city) {
                     $data->setField($billing_city);
             };
@@ -247,5 +259,23 @@ class UserController extends AbstractController
         } else {
             return 'ROLE_USER';
         }
+    }
+
+    private function savePicture($pictureFile)
+    {
+        $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+
+        try {
+            $pictureFile->move(
+                $this->getParameter('pics_directory'),
+                $newFilename
+            );
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
+
+        return $newFilename;
     }
 }

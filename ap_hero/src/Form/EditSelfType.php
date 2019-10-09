@@ -61,11 +61,11 @@ class EditSelfType extends AbstractType
             ])
             ->add('phone_number', NumberType::class, [
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
             ])
             ->add('delivery_line_1', TextareaType::class, [
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
             ])
             ->add('delivery_line_2', TextareaType::class, [
                 'mapped' => false,
@@ -81,11 +81,11 @@ class EditSelfType extends AbstractType
                 },
                 'choice_label' => 'zipCode',
                 'multiple' => false,
-                'required' => true,
+                'required' => false,
             ])
             ->add('billing_line_1', TextareaType::class, [
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
             ])
             ->add('billing_line_2', TextareaType::class, [
                 'mapped' => false,
