@@ -26,6 +26,7 @@ class DelivererController extends AbstractController
     {
 		$now = new \DateTime();
 		$orders = $em->getRepository( Orders::class )->findAll();
+		$answer = "no orders";
 		foreach ($orders as $key => $order) {
 			$orderPayedTime = $order->getPayDateTime();
 
@@ -34,12 +35,15 @@ class DelivererController extends AbstractController
 			$timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
 			$checkDelay = $orderPayedTime->add( $timer );
 			if ( $checkDelay > $now ) {
-				dump( "allez livrer ");
+				$answer = "allez livrer";
+			} else {
+				$answer = "reste la case";
 			}
 		}
 
         return $this->render('deliverer/index.html.twig', [
 			'controller_name' => 'DelivererController',
+			'answer' => $answer
         ]);
     }
 }
