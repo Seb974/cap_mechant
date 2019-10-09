@@ -28,7 +28,7 @@ class CartItem
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="cartItems" , cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cart", inversedBy="cartItems" , cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
 	private $cart;

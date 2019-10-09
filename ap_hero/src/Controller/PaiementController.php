@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CartItem as CartItem;
 use App\Entity\User;
 use App\Entity\Orders;
 use App\Service\Cart\CartService;
@@ -21,10 +22,8 @@ class PaiementController extends AbstractController
     public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		//$user     = $this->getUser();
 		$user = $em->getRepository(User::class)->find($id);
 		$cart = $user->getCart();
-		// $metadata = $user ->getMetadata();
 		$uniq_id  = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
@@ -56,7 +55,7 @@ class PaiementController extends AbstractController
 			),
 
 			'hosted_payment' => array(
-				'return_url' => "http://localhost:8000/payment/success?id={$uniq_id}",
+				'return_url' => "http://localhost:8000/payment/success/{$id}?id={$uniq_id}",
 				'cancel_url' => "http://localhost:8000/payment/fail?id={$uniq_id}"
 			),
 
@@ -78,7 +77,6 @@ class PaiementController extends AbstractController
 				$em->flush();
 			}
 		};
-
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
 			'payment'     => $payment,
@@ -87,18 +85,21 @@ class PaiementController extends AbstractController
 	}
 
 	/**
-     * @Route("/payment/success", name="payment_success")
+     * @Route("/payment/success/{id}", name="payment_success")
      */
-	public function payement_success( Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
+	public function payement_success($id, Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
 
 		$uniq_id = $request->query->get('id');
 		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
+		$user = $em->getRepository(User::class)->find($id);
+		$cart = $user->getCart();
 
 		foreach ( $orders as $key => $order ) {
 			$order->setOrderStatus('ON_PREPARE');
 			$em->flush();
 		}
-
+		$cartService->decreaseStock($cart);
+		$cartService->initCart($cart);
 		return $this->redirectToRoute('index');
 	}
 
