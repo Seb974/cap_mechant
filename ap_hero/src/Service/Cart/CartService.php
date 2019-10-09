@@ -122,20 +122,22 @@ class CartService
     public function convertCartToOrders( Cart $cartEntity, string $internalId, string $paymentId, string $paymentType ) {
 
         foreach ($cartEntity->getCartItems() as $cartItem) {
-            $order = new Orders();
-            $order->setInternalId   ( $internalId                                                );
-            $order->setPaymentId    ( $paymentId                                                 );
-            $order->setPaymentType  ( $paymentType                                               );
-            $order->setUser         ( $cartEntity->getUser()                                     );
-            $order->setCartItem     ( $cartItem                                                  );
-            $order->setTaxRate      ( $cartItem->getProduct()->getProduct()->getTva()->getTaux() );
-            $order->setTotalToPayTTC( $cartItem->getProduct()->getPrice()                        );
-            $order->setTotalToPayHT ( $order->getTotalToPayTTC() / ( 1 + $order->getTaxRate() )  );
-            $order->setTotalTax     ( $order->getTotalToPayTTC() - $order->getTotalTax()         );
-            $order->setSupplier     ( $cartItem->getProduct()->getProduct()->getSupplier()       );
-            $order->setOrderStatus  ( "PENDING"                                                  );
-            $order->setCartId       ( $cartEntity->getId()                                       );
-			$this->entityManager->persist( $order );
+            if (!$cartItem->getIsPaid()) {
+                $order = new Orders();
+                $order->setInternalId   ( $internalId                                                );
+                $order->setPaymentId    ( $paymentId                                                 );
+                $order->setPaymentType  ( $paymentType                                               );
+                $order->setUser         ( $cartEntity->getUser()                                     );
+                $order->setCartItem     ( $cartItem                                                  );
+                $order->setTaxRate      ( $cartItem->getProduct()->getProduct()->getTva()->getTaux() );
+                $order->setTotalToPayTTC( $cartItem->getProduct()->getPrice()                        );
+                $order->setTotalToPayHT ( $order->getTotalToPayTTC() / ( 1 + $order->getTaxRate() )  );
+                $order->setTotalTax     ( $order->getTotalToPayTTC() - $order->getTotalTax()         );
+                $order->setSupplier     ( $cartItem->getProduct()->getProduct()->getSupplier()       );
+                $order->setOrderStatus  ( "PENDING"                                                  );
+                $order->setCartId       ( $cartEntity->getId()                                       );
+                $this->entityManager->persist( $order );
+            }
 		}
 		$this->entityManager->flush();
     }
