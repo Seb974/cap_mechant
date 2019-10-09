@@ -130,6 +130,7 @@ class CartService
             $order->setTotalTax     ( $order->getTotalToPayTTC() - $order->getTotalTax()         );
             $order->setSupplier     ( $cartItem->getProduct()->getProduct()->getSupplier()       );
             $order->setOrderStatus  ( "PENDING"                                                  );
+            $order->setCartId       ( $cartEntity->getId()                                       );
 			$this->entityManager->persist( $order );
 		}
 		$this->entityManager->flush();

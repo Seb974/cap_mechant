@@ -76,6 +76,11 @@ class Orders
      */
     private $supplier;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cartId;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
@@ -214,6 +219,18 @@ class Orders
     public function setSupplier(?Supplier $supplier): self
     {
         $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getCartId(): ?int
+    {
+        return $this->cartId;
+    }
+
+    public function setCartId(int $cartId): self
+    {
+        $this->cartId = $cartId;
 
         return $this;
     }
