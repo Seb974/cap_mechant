@@ -32,7 +32,10 @@ class DelivererController extends AbstractController
 			$supplierTimer_hr = $order->getSupplier()->getPreparationPeriod()->format('H');
 			$supplierTimer_mn = $order->getSupplier()->getPreparationPeriod()->format('i');
 			$timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
-			dump( $orderPayedTime->add( $timer ));
+			$checkDelay = $orderPayedTime->add( $timer );
+			if ( $checkDelay > $now ) {
+				dump( "allez livrer ");
+			}
 		}
 
         return $this->render('deliverer/index.html.twig', [
