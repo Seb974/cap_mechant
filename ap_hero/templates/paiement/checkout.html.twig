@@ -37,6 +37,8 @@
 
 			<tbody>
 				{% for item in cart.cartItems %}
+					{% if item.ispaid == false %}
+
 					{# <p>{{ item.type }} - {{ metadata.field }}</p> #}
 					<tr>
 						<td>{{ item.product.product.category.name }}</td>
@@ -45,6 +47,7 @@
 						<td>{{ item.quantity }}</td>
 						<td>{{ item.product.price }} €</td>
 					</tr>
+					{% endif %}
 				{% endfor %}
 			</tbody>
 
