@@ -53,11 +53,11 @@ class PaiementController extends AbstractController
 			),
 
 			'hosted_payment' => array(
-				'return_url' => "http://localhost:8000/payment/success?{$uniq_id}",
-				'cancel_url' => "http://localhost:8000/payment/fail?{$uniq_id}"
+				'return_url' => "http://localhost:8000/payment/success?id={$uniq_id}",
+				'cancel_url' => "http://localhost:8000/payment/fail?id={$uniq_id}"
 			),
 
-			'notification_url' => "https://exemple/payment/notif?{$uniq_id}"
+			'notification_url' => "https://exemple/payment/notif?id={$uniq_id}"
 		));
 
 		$OneCartItem = $user->getCart()->getCartItems()[0];
@@ -86,10 +86,17 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/success", name="payment_success")
      */
-	public function payement_success( Request $request ): Response {
-		return $this->render('paiement/success.html.twig', [
-			'request' => $request
-        ]);
+	public function payement_success( Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
+
+		$uniq_id = $request->query->get('id');
+		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
+
+		foreach ( $orders as $key => $order ) {
+			$order->setOrderStatus('ON_PREPARE');
+			$em->flush();
+		}
+
+		return $this->redirectToRoute('index');
 	}
 
 	/**
