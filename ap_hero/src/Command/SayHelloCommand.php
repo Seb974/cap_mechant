@@ -22,12 +22,12 @@ class SayHelloCommand extends Command
     }
 
     protected function execute( InputInterface $input, OutputInterface $output ) {
-		$url = $_ENV['SERVER_URL'];
+		$url = "{$_ENV['SERVER_URL']}{$_ENV['SERVER_DELIVERER_CRON_ROUTE']}";
 		$ch  = curl_init();
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		$result = curl_exec( $ch );
-		$output->writeln( $result );
+		$output->writeln( $url );
 	}
 
 }
