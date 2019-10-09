@@ -39,8 +39,6 @@ class EmailController extends AbstractController
         // Send the message
         $result = $mailer->send( $message );
 
-        return $this->render('email/index.html.twig', [
-            'controller_name' => 'EmailController',
-        ]);
+		return $this->redirectToRoute('index');
     }
 }
