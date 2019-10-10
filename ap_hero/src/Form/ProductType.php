@@ -36,6 +36,7 @@ class ProductType extends AbstractType
                     return $supplier->getName();
                 },
                 'disabled' => false,
+                'mapped' => true,
             ]);
         }
         $builder
