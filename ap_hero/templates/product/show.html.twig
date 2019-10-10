@@ -7,14 +7,10 @@
                 <div class="col-lg-8">
                     <div class="post">
                         <div class="post-header">
-                            <div>
-                                <a href="profile.html">
-                                    <img src="img/user/user-5.jpg" alt="">
-                                </a>
-                            </div>
+                            <div></div>
                             <div>
                                 <h2 class="post-title">
-                                    <a href="blog-post-video.html">{{ product.name }}</a>
+                                    {{ product.name }}
                                 </h2>
                                 <div class="post-meta">
                                     <span>
@@ -39,11 +35,10 @@
                                 </div>
                             {% endif %}
                         </div>
-
                         {% if product.variants is not null %}
-                            <ul class="d-flex flex-row">
-                                {% for variant in product.variants %}
-                                    <hr/>
+                            {% for variant in product.variants %}
+                                <hr/>
+                                <ul class="d-flex flex-row-reverse">
                                     <li>
                                         <form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
                                             <i class="fas fa-dolly"></i>
@@ -56,8 +51,8 @@
                                             </button>
                                         </form>
                                     </li>
-                                {% endfor %}
-                            </ul>
+                                </ul>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -98,10 +93,12 @@
                                     {{ product.nutritionals.salt }}</h5>
                             </div>
                         {% endif %}
-						<ul class="d-flex flex-row">
-                        <button class="btn btn-secondary btn-sm"><a href="{{ path('product_edit', {'id': product.id}) }}">edit</a></button>
-                        {{ include('product/_delete_form.html.twig') }}
-						</ul>
+                        <ul class="d-flex flex-row">
+                            <button class="btn btn-secondary btn-sm">
+                                <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                            </button>
+                            {{ include('product/_delete_form.html.twig') }}
+                        </ul>
                     </div>
                 </div>
             </div>
