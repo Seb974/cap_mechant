@@ -68,8 +68,9 @@ class PaiementController extends AbstractController
 				$OneCartItem = $value;
 			}
 		}
-		$payment_url = $payment->hosted_payment->payment_url;
-		$payment_id  = $payment->id;
+
+		$payment_url     = $payment->hosted_payment->payment_url;
+		$payment_id      = $payment->id;
 		$itemOrder_exist = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $OneCartItem ] );
 
 		if ( ! $itemOrder_exist ) {
@@ -105,16 +106,16 @@ class PaiementController extends AbstractController
 
 		$uniq_id = $request->query->get('id');
 		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
-		$user = $em->getRepository(User::class)->find($id);
-		$cart = $user->getCart();
+		$user    = $em->getRepository( User::class   )->find( $id );
+		$cart    = $user->getCart();
 
 		foreach ( $orders as $key => $order ) {
 			$order->setOrderStatus('ON_PREPARE');
-			$order->setPayDateTime(new \DateTime() );
+			$order->setPayDateTime( new \DateTime() );
 			$em->flush();
 		}
-		$cartService->decreaseStock($cart);
-		$cartService->initCart($cart);
+		$cartService->decreaseStock( $cart );
+		$cartService->initCart( $cart );
 		return $this->redirectToRoute('index');
 	}
 
@@ -136,7 +137,7 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/notif", name="payment_notif")
      */
-	public function payement_notif(Request $request): Response {
+	public function payement_notif( Request $request ): Response {
 		return $this->render('paiement/notif.html.twig', [
 			'request' => $request
         ]);
