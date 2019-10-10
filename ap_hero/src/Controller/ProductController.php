@@ -56,6 +56,7 @@ class ProductController extends AbstractController
             }
             $nutritionals = $this->hydrateNutritionals($form);
             $product->setNutritionals($nutritionals);
+            $product->setSupplier($form->get('supplier')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $this->addVariants($product, $entityManager);
             $entityManager->persist($product);

@@ -22,7 +22,10 @@
                             <div class="card card-lg">
                                 <div class="card-img">
                                     <a href="{{ path('product_show', { id: product.id }) }}">
-                                        <img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
+                                        {% if product.picture is not null %}
+                                            {# <img src="{{ asset('uploads/pictures/' ~ product.picture.b64) }}" class="card-img-top" alt="{{ product.picture.b64 }}"> #}
+                                            <img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
+                                        {% endif %}
                                     </a>
                                 </div>
                                 <div class="card-block">
