@@ -1,8 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register
-{% endblock %}
-
 {% block body %}
     {{ form_start(registrationForm) }}
         <div class="container" style="margin-top:50px">
@@ -29,7 +26,9 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary m-t-10 btn-block">S'ENREGISTRER</button>
-                            {{ form_end( registrationForm, { 'render_rest': false } ) }}
+							// SEB A VOIR CE QUE TU FAIS DE CES DEUX CHAMPS //
+                            {{ form_end( registrationForm ) }}
+
                         </div>
                     </div>
                 </div>
