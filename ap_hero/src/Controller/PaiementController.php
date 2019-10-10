@@ -68,8 +68,9 @@ class PaiementController extends AbstractController
 				$OneCartItem = $value;
 			}
 		}
-		$payment_url = $payment->hosted_payment->payment_url;
-		$payment_id  = $payment->id;
+
+		$payment_url     = $payment->hosted_payment->payment_url;
+		$payment_id      = $payment->id;
 		$itemOrder_exist = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $OneCartItem ] );
 
 		if ( ! $itemOrder_exist ) {
