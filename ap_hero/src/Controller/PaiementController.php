@@ -72,6 +72,7 @@ class PaiementController extends AbstractController
 		$payment_url     = $payment->hosted_payment->payment_url;
 		$payment_id      = $payment->id;
 		$itemOrder_exist = $em->getRepository( Orders::class )->findOneBy( [ 'cartItem' => $OneCartItem ] );
+		$count           = 0;
 
 		if ( ! $itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
@@ -89,6 +90,7 @@ class PaiementController extends AbstractController
 					$item->setPaymentId( $payment_id );
 					$item->setInternalId( $uniq_id );
 					$em->flush();
+					$count++;
 				}
 			}
 		};
@@ -96,6 +98,8 @@ class PaiementController extends AbstractController
 			'payment_url' => $payment_url,
 			'payment'     => $payment,
 			'cart'		  => $user->getCart(),
+			'user' 		  => $user,
+			'count'		  => $count
         ]);
 	}
 
