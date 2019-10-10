@@ -26,13 +26,13 @@ class EmailController extends AbstractController
 
             $to      = [$user->getEmail()];
             $subject = "Welcome to ClikEat";
-            $body    = "ok biche tu t'es register;\nYou need to confirm your address by clicking on the link below:\nhttps://www.clikeat.re/youhavejustregisteredandneedtoclikheretovalidateyouremailbitch/justdoit\nIf you didn't subscribe to a ClikEat account, just ignore this Email.\nThank You for your subscribtion\nLots of love <3 from the ClikEat team.";
+            $body    = "Bonjour,\nYou need to confirm your address by clicking on the link below:\nhttps://www.clikeat.re/youhavejustregisteredandneedtoclikheretovalidateyouremaildoit\nIf you didn't subscribe to a ClikEat account, just ignore this Email.\nThank You for your subscribtion\nLots of love <3 from the ClikEat team.";
 
         } else {
 
             $to      = [/* "yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", */"anne-marion.vitry@coding-academy.fr"];
             $subject = "Clikeat New Command";
-            $body    = "not ok biche tu es dans else;\nA new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
+            $body    = "A new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
         }
 
         // Create the Transport
