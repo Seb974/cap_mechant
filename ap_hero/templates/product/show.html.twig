@@ -5,12 +5,12 @@
 {% block body %}
     <h1>Product</h1>
     {% if product.picture is not null %}
-        <img src="{{ asset('uploads/pictures/' ~ product.picture.b64) }}" height="300" width="400"/>
+        <img src="{{ product.picture.b64 }}" height="300" width="400"/>
     {% endif %}
 
     <table class="table">
         <tbody>
-            
+
             {# <!--<tr>
                 <th>Stock</th>
                 {% if product.stock is not null %}
@@ -23,7 +23,7 @@
                     <td>En rupture de stock !</td>
                 {% endif %}
             </tr> -->#}
-            
+
             <tr>
                 <th>Category</th>
                 <td>{{ product.Category.name }}</td>
