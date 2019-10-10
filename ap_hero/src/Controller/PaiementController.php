@@ -94,12 +94,16 @@ class PaiementController extends AbstractController
 				}
 			}
 		};
+
+		$metadatas = $user->getMetadata();
+
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
 			'payment'     => $payment,
 			'cart'		  => $user->getCart(),
 			'user' 		  => $user,
-			'count'		  => $count
+			'count'		  => $count,
+			'metas'       => $metadatas
         ]);
 	}
 
