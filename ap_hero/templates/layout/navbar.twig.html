@@ -2,16 +2,13 @@
     <div class="container">
         <div class="navbar-backdrop">
             <div class="navbar">
-                <a class="navbar-toggle">
-                    <i class="fas fa-bars"></i>
-                </a>
-
+​
                 <a href="{{ path('index') }}" class="logo">
                     <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
                 </a>
-
-                <div class="navbar-left">
-                    <nav class="nav navbar-left">
+​
+                <div class="toright">
+                    <nav class="nav">
                         {% if app.user %}
                             <ul>
                                 <li class="dropdown">
@@ -32,21 +29,24 @@
                                                 <i class="fas fa-user"></i>Admin Panel
                                             </a>
                                         {% endif %}
-
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ path('disconnect') }}">
                                             <i class="fas fa-sign-out-alt"></i>Se déconnecter
                                         </a>
+                                        {% if is_granted('ROLE_SUPPLIER') %}
+                                        <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('get_order') }}"><i class="fas fa-cash-register"></i>Orders</a>
+                                        <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('stock_index') }}"><i class="fas fa-box-open"></i>Stocks</a>
+                                        
+                                        {% endif %}
                                     </div>
+                                   
                                 <li><a href="{{ path('index') }}"><i class="fas fa-home"></i></a></li>
                                 </li>
                                 {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
                                 <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                                {% if is_granted('ROLE_SUPPLIER') %}
-                                    <li><a href="{{ path('get_order') }}">Orders</a></li>
-                                    <li><a href="{{ path('stock_index') }}">Stocks</a></li>
-                                {% endif %}
-
+​
                             </ul>
                         {% else %}
                             <ul>
