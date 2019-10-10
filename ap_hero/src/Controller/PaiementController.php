@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\CartItem as CartItem;
+use App\Entity\Metadata;
 use App\Entity\User;
+use App\Entity\City;
 use App\Entity\Orders;
 use App\Service\Cart\CartService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -95,7 +97,18 @@ class PaiementController extends AbstractController
 			}
 		};
 
-		$metadatas = $user->getMetadata();
+		$billing_city  = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_city'  ] );
+		$delivery_city = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'delivery_city' ] );
+
+		$metas['billing1'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_1' ] );
+		$metas['billing2'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_2' ] );
+		$metas['billing_city'  ] = $em->getRepository( City    ::class )->find( $billing_city );
+
+		$metas['delivery1'     ] = $em->getRepository( Metadata ::class )->findOneBy( [ 'user' => $user , 'type' => 'delivery_line_1' ] );
+		$metas['delivery2'     ] = $em->getRepository( Metadata ::class )->findOneBy( [ 'user' => $user , 'type' => 'delivery_line_2' ] );
+		$metas['delivery_city' ] = $em->getRepository( City     ::class )->find( $delivery_city );
+
+		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
 
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
@@ -103,7 +116,7 @@ class PaiementController extends AbstractController
 			'cart'		  => $user->getCart(),
 			'user' 		  => $user,
 			'count'		  => $count,
-			'metas'       => $metadatas
+			'metas'       => $metas
         ]);
 	}
 

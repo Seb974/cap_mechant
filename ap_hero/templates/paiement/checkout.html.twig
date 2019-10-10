@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-{{ dump( metas ) }}
     <div class="container mt-3">
         <div
             class="row">
@@ -49,19 +48,27 @@
                         class="row">
 
                         {# User info #}
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="firstName">Nom</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="{{ user.username }}" value="" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+                            <input type="text" class="form-control" id="firstName" value="{{ user.username }}" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
                             <div class="invalid-feedback">
                                 Un prénom est nécessaire pour la livraison.
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="email">Email
                             </label>
-                            <input type="email" class="form-control" id="email" placeholder="{{ user.email }}">
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}">
                             <div class="invalid-feedback">
                                 Merci de renseigner un email afin d'être informé de étapes de votre commande.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="phone">Tel
+                            </label>
+                            <input type="text" class="form-control" id="phone" value="{{ metas.phone.field }}">
+                            <div class="invalid-feedback">
+                                Merci de renseigner un tel afin d'être informé de étapes de votre commande.
                             </div>
                         </div>
                     </div>
@@ -72,15 +79,15 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="address">Adresse</label>
-                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+                            <label for="deliv_address">Adresse</label>
+                            <input type="text" class="form-control" id="deliv_address" value="{{ metas.delivery1.field }}" required="">
                             <div class="invalid-feedback">
                                 Merci de saisir une adresse de livraison.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="zip">CP</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required="">
+                            <label for="deliv_zip">CP</label>
+                            <input type="text" class="form-control" id="deliv_zip" value="{{ metas.delivery_city.zipCode }}" required="">
                             <div class="invalid-feedback">
                                 Code Postal nécessaire.
                             </div>
@@ -89,20 +96,16 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="address2">Adresse 2
+                            <label for="deliv_address2">Adresse 2
                                 <span class="text-muted">(Optionel)</span>
                             </label>
-                            <input type="text" class="form-control" id="address2" placeholder="">
+                            <input type="text" class="form-control" id="deliv_address2" value="{{ metas.delivery2.field }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="state">Ville</label>
-                            <select class="custom-select d-block w-100" id="state" required="">
-                                <option value="">Choisir...</option>
-                                <option>Saint Paul</option>
-                                <option>Saint Denis</option>
-                            </select>
+                            <label for="deliv_city">CP</label>
+                            <input type="text" class="form-control" id="deliv_city" value="{{ metas.delivery_city.name }}" required="">
                             <div class="invalid-feedback">
-                                Merci de choisir une ville dans laquelle la livraison est possible.
+                                Code Postal nécessaire.
                             </div>
                         </div>
                     </div>
@@ -113,14 +116,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="address">Adresse</label>
-                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+                            <input type="text" class="form-control" id="address" value="{{ metas.billing1.field }}" required="">
                             <div class="invalid-feedback">
                                 Merci de saisir une adresse de livraison.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="zip">CP</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required="">
+                            <input type="text" class="form-control" id="zip" value="{{ metas.billing_city.zipCode }}" required="">
                             <div class="invalid-feedback">
                                 Code Postal nécessaire.
                             </div>
@@ -131,17 +134,13 @@
                             <label for="address2">Adresse 2
                                 <span class="text-muted">(Optionel)</span>
                             </label>
-                            <input type="text" class="form-control" id="address2" placeholder="">
+                            <input type="text" class="form-control" id="address2" value="{{ metas.billing2.field }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="state">Ville</label>
-                            <select class="custom-select d-block w-100" id="state" required="">
-                                <option value="">Choisir...</option>
-                                <option>Saint Paul</option>
-                                <option>Saint Denis</option>
-                            </select>
+                             <label for="billing_city">CP</label>
+                            <input type="text" class="form-control" id="billing_city" value="{{ metas.billing_city.name }}" required="">
                             <div class="invalid-feedback">
-                                Merci de choisir une ville dans laquelle la livraison est possible.
+                                Code Postal nécessaire.
                             </div>
                         </div>
                     </div>
