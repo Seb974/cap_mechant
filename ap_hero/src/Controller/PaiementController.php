@@ -22,7 +22,7 @@ class PaiementController extends AbstractController
     public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		$user = $em->getRepository(User::class)->find($id);
+		$user = $em->getRepository( User::class )->find( $id );
 		$cart = $user->getCart();
 		$uniq_id  = uniqid( $user->getEmail() );
 
@@ -55,11 +55,11 @@ class PaiementController extends AbstractController
 			),
 
 			'hosted_payment' => array(
-				'return_url' => "http://localhost:8000/payment/success/{$id}?id={$uniq_id}",
-				'cancel_url' => "http://localhost:8000/payment/fail?id={$uniq_id}"
-			),
+				'return_url' => "{$_ENV['SERVER_URL']}/payment/success/{$id}?id={$uniq_id}",
+				'cancel_url' => "{$_ENV['SERVER_URL']}/payment/fail?id={$uniq_id}"
+		),
 
-			'notification_url' => "https://exemple/payment/notif?id={$uniq_id}"
+			'notification_url' => "{$_ENV['SERVER_URL']}/payment/notif?id={$uniq_id}"
 		));
 
 		$cartItems = $user->getCart()->getCartItems();
@@ -78,7 +78,7 @@ class PaiementController extends AbstractController
 			// Abort old payment
 			$old_payplug_id = $itemOrder_exist->getPaymentId();
 			if ( 1 === 3 ) {
-				$payment = \Payplug\Payment::abort($old_payplug_id);
+				$payment = \Payplug\Payment::abort( $old_payplug_id );
 			}
 
 			// Update Internal & External ID of new Payment
