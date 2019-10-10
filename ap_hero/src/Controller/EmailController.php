@@ -30,7 +30,7 @@ class EmailController extends AbstractController
 
         } else {
 
-            $to      = [/* "yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", */"anne-marion.vitry@coding-academy.fr"];
+            $to      = ["yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", "anne-marion.vitry@coding-academy.fr"];
             $subject = "Clikeat New Command";
             $body    = "A new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
         }
