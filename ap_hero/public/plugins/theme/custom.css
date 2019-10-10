@@ -17,6 +17,11 @@ table.dataTable thead .sorting_desc_disabled:before {
 	border-top: #E74B3D 1px solid;
 }
 
+.toright {
+    position: absolute;
+   right: 0px;
+}
+
 .yen_red {
 	color: #E74B3D;
 }

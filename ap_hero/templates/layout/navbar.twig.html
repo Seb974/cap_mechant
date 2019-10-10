@@ -2,16 +2,13 @@
     <div class="container">
         <div class="navbar-backdrop">
             <div class="navbar">
-                <a class="navbar-toggle">
-                    <i class="fas fa-bars"></i>
-                </a>
-
+​
                 <a href="{{ path('index') }}" class="logo">
                     <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
                 </a>
-
-                <div class="navbar-left">
-                    <nav class="nav navbar-left">
+​
+                <div class="toright">
+                    <nav class="nav">
                         {% if app.user %}
                             <ul>
                                 <li class="dropdown">
@@ -25,14 +22,14 @@
                                         <a class="dropdown-item" href="{{ path('user_self_show') }}">
                                             <i class="fas fa-user"></i>Mon profil
                                         </a>
-
+​
                                         {% if is_granted('ROLE_ADMIN') %}
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">
                                                 <i class="fas fa-user"></i>Admin Panel
                                             </a>
                                         {% endif %}
-
+​
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ path('disconnect') }}">
                                             <i class="fas fa-sign-out-alt"></i>Se déconnecter
@@ -46,7 +43,7 @@
                                     <li><a href="{{ path('get_order') }}">Orders</a></li>
                                     <li><a href="{{ path('stock_index') }}">Stocks</a></li>
                                 {% endif %}
-
+​
                             </ul>
                         {% else %}
                             <ul>
