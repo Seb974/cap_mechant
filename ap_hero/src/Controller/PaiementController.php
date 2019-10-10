@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CartItem as CartItem;
 use App\Entity\User;
 use App\Entity\Orders;
+use App\Service\Anonymize\AnonymizeService;
 use App\Service\Cart\CartService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -110,7 +111,7 @@ class PaiementController extends AbstractController
 	/**
      * @Route("/payment/success/{id}", name="payment_success")
      */
-	public function payement_success($id, Request $request, CartService $cartService, EntityManagerInterface $em ): Response {
+	public function payement_success($id, Request $request, CartService $cartService, AnonymizeService $anonymizeService, EntityManagerInterface $em ): Response {
 
 		$uniq_id = $request->query->get('id');
 		$orders  = $em->getRepository( Orders::class )->findBy( [ 'internalId' => $uniq_id ] );
@@ -122,8 +123,11 @@ class PaiementController extends AbstractController
 			$order->setPayDateTime( new \DateTime() );
 			$em->flush();
 		}
-		$cartService->decreaseStock( $cart );
-		$cartService->initCart( $cart );
+		$cartService->decreaseStock($cart);
+		$cartService->initCart($cart);
+		if (in_array('ROLE_GUEST', $user->getRoles())) {
+			$anonymizeService->anonymize($user);
+		}
 		return $this->redirectToRoute('index');
 	}
 

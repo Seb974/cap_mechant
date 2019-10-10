@@ -95,7 +95,7 @@ class CartController extends AbstractController
                 $identifier = $form->get('email')->getData();
                 $user->setUsername($identifier);
                 $user->setPassword($passwordEncoder->encodePassword($user, $identifier));
-                $user->setRoles(['ROLE_USER']);
+                $user->setRoles(['ROLE_GUEST']);
                 $user->setIsBanned(false);
                 $metadataService->createMetadata($form, $user);
                 $cartService->generateCartEntity($user);
