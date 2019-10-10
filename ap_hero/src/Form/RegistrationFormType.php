@@ -2,21 +2,20 @@
 
 namespace App\Form;
 
-
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
@@ -24,35 +23,39 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'constraints' => [
+				'label' => 'Identifiant',
+				'attr' => ['class' => 'form-control form-control-secondary'],
+				'constraints' => [
                     new NotBlank( ['message' => 'Please enter a pseudo'] ),
                     new Length( [
                         'min'        => 3,
                         'max'        => 16,
-                        'minMessage' => 'Your username should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your username should be at most {{ limit }} characters',
+                        'minMessage' => "Votre nom d'utilisateur doit être composé d'au moins {{ limit }} caractères",
+                        'maxMessage' => "Votre nom d'utilisateur doit être au maximum de {{ limit }} caractères",
                     ] )
                 ]
             ])
             ->add('email', EmailType::class, [
-                'constraints' => [ 
-                    new NotBlank( ['message' => 'Please enter an email address'] )
+				'attr' => ['class' => 'form-control form-control-secondary'],
+                'constraints' => [
+                    new NotBlank( ['message' => 'Veuillez entrer une adresse email'] )
                 ]
             ])
             ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'The entered password are different.',
+				'type' => PasswordType::class,
+				'attr' => ['class' => 'form-control form-control-secondary'],
+                'invalid_message' => 'Les mots de passe saisis sont différents.',
                 'options'         => [ 'attr' => [ 'class' => 'password-field']],
                 'mapped'          => false,
                 'required'        => false,
-                'first_options'   => [ 'label' => 'password' ],
-                'second_options'  => [ 'label' => 'confirm pasword'],
-                'constraints'     => [ 
+                'first_options'   => [ 'label' => 'mot de passe' ],
+                'second_options'  => [ 'label' => 'confirmation'],
+                'constraints'     => [
                     new Length([
                         'min'        => 6,
                         'max'        => 20,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your password should be at most {{ limit }} characters',
+                        'minMessage' => "Votre mot de passe doit être composé d'au moins {{ limit }} caractères",
+                        'maxMessage' => "Votre mot de passe doit être au maximum de {{ limit }} caractères",
                     ])
                 ]
             ])

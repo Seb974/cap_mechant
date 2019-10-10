@@ -2,11 +2,9 @@
     <div class="container">
         <div class="navbar-backdrop">
             <div class="navbar">
-​
                 <a href="{{ path('index') }}" class="logo">
                     <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
                 </a>
-​
                 <div class="toright">
                     <nav class="nav">
                         {% if app.user %}
@@ -34,38 +32,56 @@
                                             <i class="fas fa-sign-out-alt"></i>Se déconnecter
                                         </a>
                                         {% if is_granted('ROLE_SUPPLIER') %}
-                                        <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="{{ path('get_order') }}"><i class="fas fa-cash-register"></i>Orders</a>
-                                        <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="{{ path('stock_index') }}"><i class="fas fa-box-open"></i>Stocks</a>
-                                        
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('get_order') }}">
+                                                <i class="fas fa-cash-register"></i>Orders</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('stock_index') }}">
+                                                <i class="fas fa-box-open"></i>Stocks</a>
                                         {% endif %}
                                     </div>
-                                   
-                                <li><a href="{{ path('index') }}"><i class="fas fa-home"></i></a></li>
                                 </li>
-                                {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
-                                <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-​
-                            </ul>
-                        {% else %}
-                            <ul>
-                                <li><a href="{{ path('login')    }}">Se connecter</a></li>
-                                <li><a href="{{ path('index') }}"><i class="fas fa-home"></i></a></li>
-                                    {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
-                                <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                            </ul>
-                        {% endif %}
-                    </nav>
-                </div>
-            </div>
-            <div class="navbar-search">
-                <div class="container">
-                    <form method="post">
-                        <input type="text" class="form-control" placeholder="Rechercher...">
-                        <i class="fas fa-times close"></i>
-                    </form>
-                </div>
+                                <li>
+                                    <a href="{{ path('index') }}">
+                                        <i class="fas fa-home"></i>
+                                    </a>
+                                </li>
+                            </li>
+                            {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                            <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul>
+                            <li>
+                                <a href="{{ path('login') }}">Se connecter</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('index') }}">
+                                    <i class="fas fa-home"></i>
+                                </a>
+                            </li>
+                            {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                            <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </nav>
             </div>
         </div>
-    </header>
+        <div class="navbar-search">
+            <div class="container">
+                <form method="post">
+                    <input type="text" class="form-control" placeholder="Rechercher...">
+                    <i class="fas fa-times close"></i>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
