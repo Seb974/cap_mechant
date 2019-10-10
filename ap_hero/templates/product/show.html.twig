@@ -1,98 +1,110 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
-
 {% block body %}
-    <h1>Product</h1>
-    {% if product.picture is not null %}
-    {# <img src="{{ asset('uploads/pictures/' ~ product.picture.b64) }}" class="card-img-top" alt="{{ product.picture.b64 }}" height="300" width="400"> #}
-        <img src="{{ product.picture.b64 }}" height="300" width="400"/>
-    {% endif %}
+    <section class="p-t-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="post">
+                        <div class="post-header">
+                            <div>
+                                <a href="profile.html">
+                                    <img src="img/user/user-5.jpg" alt="">
+                                </a>
+                            </div>
+                            <div>
+                                <h2 class="post-title">
+                                    <a href="blog-post-video.html">{{ product.name }}</a>
+                                </h2>
+                                <div class="post-meta">
+                                    <span>
+                                        <i class="fas fa-utensils"></i>
+                                        {{ product.Category.name }}
+                                    </span>
+                                    <p>
+                                        {% for allergen in product.allergens %}
+                                            Allergènes :
+                                            {{ allergen.name }}
+                                        {% else %}
+                                            {{ "Ne contient pas de produits allergènes." }}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-thumbnail">
+                            {% if product.picture is not null %}
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <img class="embed-responsive-item" src="{{ product.picture.b64 }}">
+                                </div>
+                            {% endif %}
+                        </div>
 
-    <table class="table">
-        <tbody>
-
-            {# <!--<tr>
-                <th>Stock</th>
-                {% if product.stock is not null %}
-                    {% if product.stock.quantity > 0 %}
-                        <td>{{ product.stock.quantity }} U </td>
-                    {% else %}
-                        <td>En rupture de stock !</td>
-                    {% endif %}
-                {% else %}
-                    <td>En rupture de stock !</td>
-                {% endif %}
-            </tr> -->#}
-
-            <tr>
-                <th>Category</th>
-                <td>{{ product.Category.name }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.name }}</td>
-            </tr>
-            {# <!-- <tr>
-                <th>Price</th>
-                <td>{{ product.price }} €</td>
-            </tr>
-            <tr>
-                <th>dont TVA</th>
-                <td>{{ product.tva.taux * product.price }} €</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ product.description }}</td>
-            </tr>  -->#}
-            <tr>
-                <th>Allergens</th>
-                <td>
-                    {% for allergen in product.allergens %}
-                        {{ allergen.name }}
-                    {% else %}
-                        {{ "Ne contient pas de produits allergènes." }}
-                    {% endfor %}
-                </td>
-            </tr>
-            {% if product.nutritionals is not null %}
-            <tr>
-                <th>Nutrition Facts</th>
-                <td>
-                    <th>Energie (KJ)</th>
-                    <td>{{ product.nutritionals.kJ }}</td>
-                    <th>Energie (KCal)</th>
-                    <td>{{ product.nutritionals.KCal }}</td>
-                    <th>Proteins</th>
-                    <td>{{ product.nutritionals.protein }}</td>
-                    <th>Carbohydrates</th>
-                    <td>{{ product.nutritionals.carbohydrates }}</td>
-                    <th>Sugar</th>
-                    <td>{{ product.nutritionals.sugar }}</td>
-                    <th>Fat</th>
-                    <td>{{ product.nutritionals.fat }}</td>
-                    <th>Saturated Fat</th>
-                    <td>{{ product.nutritionals.transAG }}</td>
-                    <th>Sodium</th>
-                    <td>{{ product.nutritionals.salt }}</td>
-                </td>
-            </tr>
-            {% endif %}
-            {% if product.variants is not null %}
-                <th>Variants</th>
-                <td>
-                    {% for variant in product.variants %}
-                        <th>{{ variant.name }}</th>
-                        <td>{{ variant.price }} €</td>
-                    {% endfor %}
-                </td>
-            {% endif %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('product_index') }}">back to list</a>
-
-    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+                        {% if product.variants is not null %}
+                            <ul class="d-flex flex-row">
+                                {% for variant in product.variants %}
+                                    <hr/>
+                                    <li>
+                                        <form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
+                                            <i class="fas fa-dolly"></i>
+                                            {{ variant.stock.quantity }}
+                                            <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                {{ variant.name }}
+                                                à
+                                                {{ variant.price }}€
+                                            </button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        {% if product.nutritionals is not null %}
+                            <h4>valeurs nutriotionnelles moyennes pour 100g</h4>
+                            <div class="widget">
+                                <h5 class="widget-title">Energie (KJ) :
+                                    {{ product.nutritionals.kJ }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Energie (KCal) :
+                                    {{ product.nutritionals.KCal }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Proteines :
+                                    {{ product.nutritionals.protein }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Carbohydrates :
+                                    {{ product.nutritionals.carbohydrates }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Sucre :
+                                    {{ product.nutritionals.sugar }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Matière grasse :
+                                    {{ product.nutritionals.fat }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">dont acides gras saturés :
+                                    {{ product.nutritionals.transAG }}</h5>
+                            </div>
+                            <div class="widget">
+                                <h5 class="widget-title">Sel :
+                                    {{ product.nutritionals.salt }}</h5>
+                            </div>
+                        {% endif %}
+						<ul class="d-flex flex-row">
+                        <button class="btn btn-secondary btn-sm"><a href="{{ path('product_edit', {'id': product.id}) }}">edit</a></button>
+                        {{ include('product/_delete_form.html.twig') }}
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
