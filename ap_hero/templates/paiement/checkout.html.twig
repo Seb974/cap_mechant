@@ -216,21 +216,11 @@
 						removeMarker( marker );
 					}
 				} );
+				document.querySelector('#gps').value = e.suggestion.latlng.lat + ',' + e.suggestion.latlng.lng;
+			}
 
-				var api_key     = 'AIzaSyDeS05cwMMj0ccyz66luKpUYOjtJq7qID4';
-				var origins     = '-20.9658,55.6589';
-				var destination = e.suggestion.latlng.lat + ',' + e.suggestion.latlng.lng;
-				var url         = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destination}&departure_time=now&key=${api_key}`
-
-				var xhttp = new XMLHttpRequest();
-				xhttp.open("GET", url, true);
-				xhttp.setRequestHeader("Content-Type", "application/json");
-				xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-				xhttp.send();
-
-				xhttp.onreadystatechange = function() {
-					document.querySelector('#gps').value = this.responseText.destination_addresses;
-				};
+			function callback(response, status) {
+				console.log(response);
 			}
 
 			function handleOnClear() {
