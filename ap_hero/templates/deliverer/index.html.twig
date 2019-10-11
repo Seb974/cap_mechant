@@ -1,3 +1,11 @@
+{% extends 'base.html.twig' %}
+
 {% block body %}
-{{ answer }}
+    <h1>Deliverer</h1>
+    {% for deliverer in deliverers %}
+        {{ dump(deliverer) }}
+        {{ deliverer.id }}
+        {{ deliverer.username }}
+        {{ deliverer.email }}
+    {% endfor %}
 {% endblock %}
