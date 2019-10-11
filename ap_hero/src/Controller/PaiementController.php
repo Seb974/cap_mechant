@@ -107,7 +107,7 @@ class PaiementController extends AbstractController
 		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
 
 		if ( null == $metas['phone'] ) {
-			$metas['phone'] = "";
+			$metas['phone']["field"] = "";
 		}
 
 		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID'];
