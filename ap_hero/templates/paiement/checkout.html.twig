@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block css %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css" />
 {% endblock %}
 
 {% block body %}
     <style>
         #map-example-container
-        {
-            height: 300px
-        };
+        { height: 300px };
     </style>
 
     <div class="container mt-3">
@@ -192,10 +190,10 @@
 			map.setView( new L.LatLng( -21.329519, 55.471617 ), 1 );
 			map.addLayer( osmLayer );
 
-			placesAutocomplete.on( 'suggestions', handleOnSuggestions );
+			placesAutocomplete.on( 'suggestions'  , handleOnSuggestions   );
 			placesAutocomplete.on( 'cursorchanged', handleOnCursorchanged );
-			placesAutocomplete.on( 'change', handleOnChange );
-			placesAutocomplete.on( 'clear', handleOnClear );
+			placesAutocomplete.on( 'change'       , handleOnChange        );
+			placesAutocomplete.on( 'clear'        , handleOnClear         );
 
 			function handleOnSuggestions( e ) {
 				markers.forEach( removeMarker );
@@ -218,18 +216,21 @@
 						removeMarker( marker );
 					}
 				} );
-				var api_key = 'AIzaSyDeS05cwMMj0ccyz66luKpUYOjtJq7qID4';
-				var origins = '-20.9658,55.6589';
+
+				var api_key     = 'AIzaSyDeS05cwMMj0ccyz66luKpUYOjtJq7qID4';
+				var origins     = '-20.9658,55.6589';
 				var destination = e.suggestion.latlng.lat + ',' + e.suggestion.latlng.lng;
-				var url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destination}&departure_time=now&key=${api_key}`
+				var url         = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destination}&departure_time=now&key=${api_key}`
 
 				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					document.querySelector('#gps').value = this.responseText;
-				};
-
 				xhttp.open("GET", url, true);
+				xhttp.setRequestHeader("Content-Type", "application/json");
+				xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
 				xhttp.send();
+
+				xhttp.onreadystatechange = function() {
+					document.querySelector('#gps').value = this.responseText.destination_addresses;
+				};
 			}
 
 			function handleOnClear() {

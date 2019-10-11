@@ -121,7 +121,7 @@ class PaiementController extends AbstractController
 			'count'		  => $count,
 			'metas'       => $metas,
 			'api'         => $api
-        ]);
+		]);
 	}
 
 	/**
