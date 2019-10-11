@@ -111,13 +111,17 @@ class PaiementController extends AbstractController
 
 		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
 
+		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID'];
+		$api['ALGOLIA_APIKEY'] = $_ENV['ALGOLIA_APIKEY'];
+
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
 			'payment'     => $payment,
 			'cart'		  => $user->getCart(),
 			'user' 		  => $user,
 			'count'		  => $count,
-			'metas'       => $metas
+			'metas'       => $metas,
+			'api'         => $api
         ]);
 	}
 

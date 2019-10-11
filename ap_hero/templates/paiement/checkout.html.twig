@@ -1,9 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vérification de votre commande
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css"/>
 {% endblock %}
 
 {% block body %}
+    <div id="map-example-container"></div>
+    <input type="search" id="input-map" class="form-control" placeholder="Where are we going?"/>
+
+    <style>
+        #map-example-container
+        {
+            height: 300px
+        };
+    </style>
+
     <div class="container mt-3">
         <div
             class="row">
@@ -137,7 +148,7 @@
                             <input type="text" class="form-control" id="address2" value="{{ metas.billing2.field }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                             <label for="billing_city">CP</label>
+                            <label for="billing_city">CP</label>
                             <input type="text" class="form-control" id="billing_city" value="{{ metas.billing_city.name }}" required="">
                             <div class="invalid-feedback">
                                 Code Postal nécessaire.
@@ -149,3 +160,159 @@
         </div>
     </form>
 </div>{% endblock %}
+{% block js %}
+
+<script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.6"></script>
+<script>
+    ( function ()
+    {
+
+        var placesAutocomplete = places( {
+
+            appId: '{{ api.ALGOLIA_APPID }}',
+            apiKey: '{{ api.ALGOLIA_APIKEY }}',
+            container: document.querySelector( '#input-map' )
+
+        } );
+
+        var map = L.map( 'map-example-container',
+        {
+
+            scrollWheelZoom: true,
+            zoomControl: true
+
+        } );
+
+        var osmLayer = new L.TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+
+            minZoom: 1,
+            maxZoom: 19,
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+
+        } );
+
+        var markers = [];
+
+        map.setView( new L.LatLng( 0, 0 ), 1 );
+        map.addLayer( osmLayer );
+
+        placesAutocomplete.on( 'suggestions', handleOnSuggestions );
+        placesAutocomplete.on( 'cursorchanged', handleOnCursorchanged );
+        placesAutocomplete.on( 'change', handleOnChange );
+        placesAutocomplete.on( 'clear', handleOnClear );
+
+        function handleOnSuggestions( e )
+        {
+
+            markers.forEach( removeMarker );
+            markers = [];
+
+            if ( e.suggestions.length === 0 )
+            {
+
+                map.setView( new L.LatLng( 0, 0 ), 1 );
+                return;
+
+            }
+
+            e.suggestions.forEach( addMarker );
+            findBestZoom();
+
+        }
+
+        function handleOnChange( e )
+        {
+
+            markers.forEach( function ( marker, markerIndex )
+            {
+
+                if ( markerIndex === e.suggestionIndex )
+                {
+
+                    markers = [marker];
+                    marker.setOpacity( 1 );
+                    findBestZoom();
+
+                }
+                else
+                {
+
+                    removeMarker( marker );
+
+                }
+
+            } );
+
+        }
+
+        function handleOnClear()
+        {
+
+            map.setView( new L.LatLng( 0, 0 ), 1 );
+            markers.forEach( removeMarker );
+
+        }
+
+        function handleOnCursorchanged( e )
+        {
+
+            markers.forEach( function ( marker, markerIndex )
+            {
+
+                if ( markerIndex === e.suggestionIndex )
+                {
+
+                    marker.setOpacity( 1 );
+                    marker.setZIndexOffset( 1000 );
+
+                }
+                else
+                {
+
+                    marker.setZIndexOffset( 0 );
+                    marker.setOpacity( 0.5 );
+
+                }
+
+            } );
+
+        }
+
+        function addMarker( suggestion )
+        {
+
+            var marker = L.marker( suggestion.latlng,
+            {
+
+                opacity: .4
+
+            } );
+            marker.addTo( map );
+            markers.push( marker );
+
+        }
+
+        function removeMarker( marker )
+        {
+
+            map.removeLayer( marker );
+
+        }
+
+        function findBestZoom()
+        {
+
+            var featureGroup = L.featureGroup( markers );
+            map.fitBounds( featureGroup.getBounds().pad( 0.5 ),
+            {
+
+                animate: false
+
+            } );
+
+        }
+
+    } )();
+</script>{% endblock %}
