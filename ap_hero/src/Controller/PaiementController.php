@@ -106,9 +106,10 @@ class PaiementController extends AbstractController
 		$metas['billing_city'  ] = $em->getRepository( City    ::class )->find( $billing_city );
 		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
 
-		if ( !$metas['phone'] ) {
-			$metas['phone'] = ""
+		if ( null == $metas['phone'] ) {
+			$metas['phone'] = "";
 		}
+
 		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID'];
 		$api['ALGOLIA_APIKEY'] = $_ENV['ALGOLIA_APIKEY'];
 
