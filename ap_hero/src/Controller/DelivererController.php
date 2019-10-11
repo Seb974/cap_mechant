@@ -4,38 +4,30 @@ namespace App\Controller;
 
 use App\Entity\Orders;
 
+use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * @IsGranted("ROLE_DELIVERER")
+ */
 class DelivererController extends AbstractController
 {
     /**
      * @Route("/deliverer", name="deliverer")
      */
-    public function index(UserRepository $userRepository)
+    public function index(OrderRepository $orderRepository, UserRepository $userRepository)
     {
-		$user = $this->getUser();
-		$deliverers = [];
-        foreach ($userRepository->findAll() as $del) {
-            $deliverRole = (in_array('ROLE_DELIVERER', $del->getRoles())) ? 'ROLE_DELIVERER' : false;
-            if ($deliverRole) {
-                array_push($deliverers, $del);
-			}
-			dump($deliverers);
-        }
-
-        // if ($deliverer === 'ROLE_ADMIN') {
-        //     return $this->render('stock/index.html.twig', [
-        //         'stocks' => $allStock,
-        //     ]);
-        // }
+		$del_order = $orderRepository->findAll();
+		dump($del_order);
 
         return $this->render('deliverer/index.html.twig', [
-            'deliverers' => $deliverers,
-        ]);
-    }
+			'del_order' => $del_order,
+		]);
+	}
 
     /**
      * @Route("/deliverer/cron", name="deliverer_cron")

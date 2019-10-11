@@ -59,6 +59,11 @@ table.dataTable thead .sorting_desc_disabled:before {
 	margin-left: 200px !important;
 }
 
+#pad_my_order li {
+	padding: 20px;
+	
+}
+
 @media screen and (max-height: 450px) {
 	.sidenav {
 		padding-top: 15px;
@@ -68,3 +73,4 @@ table.dataTable thead .sorting_desc_disabled:before {
 		font-size: 18px;
 	}
 }
+
