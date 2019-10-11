@@ -38,9 +38,9 @@
                 <td>(¬◡¬)</td>
                 <td>{{ user.username }}</td>
 
-                {% for data in user.metadata %}
-                    <td>{{ data.field }} {# {{ data.type }}#}</td> 
-                {% endfor %}
+                    {% for data in user.metadata %}
+                        <td>{{ data.field }}</td> 
+                    {% endfor %}
 
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
                 <td>
