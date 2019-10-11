@@ -5,9 +5,6 @@
 {% endblock %}
 
 {% block body %}
-    <div id="map-example-container"></div>
-    <input type="search" id="input-map" class="form-control" placeholder="Where are we going?"/>
-
     <style>
         #map-example-container
         {
@@ -89,42 +86,37 @@
                     <h4 class="mb-3">Adresse de livraison</h4>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="deliv_address">Adresse</label>
-                            <input type="text" class="form-control" id="deliv_address" value="{{ metas.delivery1.field }}" required="">
-                            <div class="invalid-feedback">
-                                Merci de saisir une adresse de livraison.
-                            </div>
+                        <div class="col-md-12">
+							<div id="map-example-container"></div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="deliv_zip">CP</label>
-                            <input type="text" class="form-control" id="deliv_zip" value="{{ metas.delivery_city.zipCode }}" required="">
-                            <div class="invalid-feedback">
-                                Code Postal nécessaire.
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="deliv_address2">Adresse 2
-                                <span class="text-muted">(Optionel)</span>
-                            </label>
-                            <input type="text" class="form-control" id="deliv_address2" value="{{ metas.delivery2.field }}">
+						<div class="col-md-6 mt-3">
+						 <label for="input-map">Rue</label>
+                            <input type="search" id="input-map" class="form-control" placeholder="Saisir nom d'une rue :"/>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="deliv_city">CP</label>
-                            <input type="text" class="form-control" id="deliv_city" value="{{ metas.delivery_city.name }}" required="">
-                            <div class="invalid-feedback">
-                                Code Postal nécessaire.
-                            </div>
+
+						<div class="col-md-6 mt-3">
+						 <label for="complément">Complement d'adresse</label>
+                            <input type="textarea" class="form-control" id="complément" value="" required="" placeholder="Appt, Immeuble, Digicode, etc" />
                         </div>
                     </div>
 
                     {# Billing address #}
                     <hr class="mb-4">
-                    <h4 class="mb-3">Adresse de facturation</h4>
-                    <div class="row">
+					<div class="row">
+					<div class="col-md-6 mb-3">
+                    	<h4 class="mb-3">Adresse de facturation</h4>
+					</div>
+
+					<div class="col-md-6 mb-3">
+						<label class="custom-control custom-checkbox custom-checkbox-primary">
+							<input type="checkbox" class="custom-control-input" checked>
+							<span class="custom-control-indicator"></span>
+							<span class="custom-control-description">Identique à adresse de livraison</span>
+						</label>
+					</div>
+
+					<div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="address">Adresse</label>
                             <input type="text" class="form-control" id="address" value="{{ metas.billing1.field }}" required="">
@@ -140,6 +132,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="address2">Adresse 2
@@ -159,160 +152,124 @@
             </div>
         </div>
     </form>
-</div>{% endblock %}
+</div>
+{% endblock %}
+
 {% block js %}
+	<script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.6"></script>
+	<script>
+		( function ()
+		{
+			var placesAutocomplete = places( {
+				appId  : '{{ api.ALGOLIA_APPID  }}',
+				apiKey : '{{ api.ALGOLIA_APIKEY }}',
+				container: document.querySelector( '#input-map' ),
+			} ).configure( {
+				countries: ['fr'],
+				useDeviceLocation : true
+			} );
 
-<script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.6"></script>
-<script>
-    ( function ()
-    {
+			var map = L.map( 'map-example-container',
+			{
+				scrollWheelZoom: true,
+				zoomControl: true
+			} );
 
-        var placesAutocomplete = places( {
+			var osmLayer = new L.TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			{
+				minZoom: 1,
+				maxZoom: 19,
+				attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+			} );
 
-            appId: '{{ api.ALGOLIA_APPID }}',
-            apiKey: '{{ api.ALGOLIA_APIKEY }}',
-            container: document.querySelector( '#input-map' )
+			var markers = [];
 
-        } );
+			map.setView( new L.LatLng( -21.329519, 55.471617 ), 1 );
+			map.addLayer( osmLayer );
 
-        var map = L.map( 'map-example-container',
-        {
+			placesAutocomplete.on( 'suggestions', handleOnSuggestions );
+			placesAutocomplete.on( 'cursorchanged', handleOnCursorchanged );
+			placesAutocomplete.on( 'change', handleOnChange );
+			placesAutocomplete.on( 'clear', handleOnClear );
 
-            scrollWheelZoom: true,
-            zoomControl: true
+			function handleOnSuggestions( e )
+			{
+				markers.forEach( removeMarker );
+				markers = [];
+				if ( e.suggestions.length === 0 )
+				{
+					map.setView( new L.LatLng( 0, 0 ), 1 );
+					return;
+				}
+				e.suggestions.forEach( addMarker );
+				findBestZoom();
+			}
 
-        } );
+			function handleOnChange( e )
+			{
+				markers.forEach( function ( marker, markerIndex )
+				{
+					if ( markerIndex === e.suggestionIndex )
+					{
+						markers = [marker];
+						marker.setOpacity( 1 );
+						findBestZoom();
+					}
+					else
+					{
+						removeMarker( marker );
+					}
+				} );
 
-        var osmLayer = new L.TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
+			}
 
-            minZoom: 1,
-            maxZoom: 19,
-            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+			function handleOnClear()
+			{
+				map.setView( new L.LatLng( 0, 0 ), 1 );
+				markers.forEach( removeMarker );
+			}
 
-        } );
+			function handleOnCursorchanged( e )
+			{
+				markers.forEach( function ( marker, markerIndex )
+				{
+					if ( markerIndex === e.suggestionIndex )
+					{
+						marker.setOpacity( 1 );
+						marker.setZIndexOffset( 1000 );
+					}
+					else
+					{
+						marker.setZIndexOffset( 0 );
+						marker.setOpacity( 0.5 );
+					}
+				} );
+			}
 
-        var markers = [];
+			function addMarker( suggestion )
+			{
+				var marker = L.marker( suggestion.latlng,
+				{
+					opacity: .4
+				} );
+				marker.addTo( map );
+				markers.push( marker );
+			}
 
-        map.setView( new L.LatLng( 0, 0 ), 1 );
-        map.addLayer( osmLayer );
+			function removeMarker( marker )
+			{
+				map.removeLayer( marker );
+			}
 
-        placesAutocomplete.on( 'suggestions', handleOnSuggestions );
-        placesAutocomplete.on( 'cursorchanged', handleOnCursorchanged );
-        placesAutocomplete.on( 'change', handleOnChange );
-        placesAutocomplete.on( 'clear', handleOnClear );
-
-        function handleOnSuggestions( e )
-        {
-
-            markers.forEach( removeMarker );
-            markers = [];
-
-            if ( e.suggestions.length === 0 )
-            {
-
-                map.setView( new L.LatLng( 0, 0 ), 1 );
-                return;
-
-            }
-
-            e.suggestions.forEach( addMarker );
-            findBestZoom();
-
-        }
-
-        function handleOnChange( e )
-        {
-
-            markers.forEach( function ( marker, markerIndex )
-            {
-
-                if ( markerIndex === e.suggestionIndex )
-                {
-
-                    markers = [marker];
-                    marker.setOpacity( 1 );
-                    findBestZoom();
-
-                }
-                else
-                {
-
-                    removeMarker( marker );
-
-                }
-
-            } );
-
-        }
-
-        function handleOnClear()
-        {
-
-            map.setView( new L.LatLng( 0, 0 ), 1 );
-            markers.forEach( removeMarker );
-
-        }
-
-        function handleOnCursorchanged( e )
-        {
-
-            markers.forEach( function ( marker, markerIndex )
-            {
-
-                if ( markerIndex === e.suggestionIndex )
-                {
-
-                    marker.setOpacity( 1 );
-                    marker.setZIndexOffset( 1000 );
-
-                }
-                else
-                {
-
-                    marker.setZIndexOffset( 0 );
-                    marker.setOpacity( 0.5 );
-
-                }
-
-            } );
-
-        }
-
-        function addMarker( suggestion )
-        {
-
-            var marker = L.marker( suggestion.latlng,
-            {
-
-                opacity: .4
-
-            } );
-            marker.addTo( map );
-            markers.push( marker );
-
-        }
-
-        function removeMarker( marker )
-        {
-
-            map.removeLayer( marker );
-
-        }
-
-        function findBestZoom()
-        {
-
-            var featureGroup = L.featureGroup( markers );
-            map.fitBounds( featureGroup.getBounds().pad( 0.5 ),
-            {
-
-                animate: false
-
-            } );
-
-        }
-
-    } )();
-</script>{% endblock %}
+			function findBestZoom()
+			{
+				var featureGroup = L.featureGroup( markers );
+				map.fitBounds( featureGroup.getBounds().pad( 0.5 ),
+				{
+					animate: false
+				} );
+			}
+		} )();
+	</script>
+{% endblock %}
