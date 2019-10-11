@@ -90,14 +90,21 @@
 							<div id="map-example-container"></div>
                         </div>
 
-						<div class="col-md-6 mt-3">
+						<div class="col-md-5 mt-3">
 						 <label for="input-map">Rue</label>
                             <input type="search" id="input-map" class="form-control" placeholder="Saisir nom d'une rue :"/>
                         </div>
 
-						<div class="col-md-6 mt-3">
+						<div class="col-md-5 mt-3">
 						 <label for="complément">Complement d'adresse</label>
                             <input type="textarea" class="form-control" id="complément" value="" required="" placeholder="Appt, Immeuble, Digicode, etc" />
+                        </div>
+
+                        <div class="col-md-2 mt-3">
+                            <small>
+                            <label for="complément">GPS</label>
+                                <input type="input" class="form-control" id="gps" value="" required="" placeholder="" />
+                            </small>
                         </div>
                     </div>
 
@@ -159,28 +166,25 @@
 	<script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/places.js@1.16.6"></script>
 	<script>
-		( function ()
-		{
+		( function () {
 			var placesAutocomplete = places( {
-				appId  : '{{ api.ALGOLIA_APPID  }}',
-				apiKey : '{{ api.ALGOLIA_APIKEY }}',
-				container: document.querySelector( '#input-map' ),
+				appId     : '{{ api.ALGOLIA_APPID  }}',
+				apiKey    : '{{ api.ALGOLIA_APIKEY }}',
+				container : document.querySelector( '#input-map' ),
 			} ).configure( {
-				countries: ['fr'],
+				countries         : ['fr'],
 				useDeviceLocation : false
 			} );
 
-			var map = L.map( 'map-example-container',
-			{
-				scrollWheelZoom: true,
-				zoomControl: true
+			var map = L.map( 'map-example-container', {
+				scrollWheelZoom : true,
+				zoomControl     : true
 			} );
 
-			var osmLayer = new L.TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-			{
-				minZoom: 1,
-				maxZoom: 19,
-				attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+			var osmLayer = new L.TileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				minZoom     : 8,
+				maxZoom     : 19,
+				attribution : 'Map © <a href="https://openstreetmap.org">OpenStreetMap</a>'
 			} );
 
 			var markers = [];
@@ -193,12 +197,10 @@
 			placesAutocomplete.on( 'change', handleOnChange );
 			placesAutocomplete.on( 'clear', handleOnClear );
 
-			function handleOnSuggestions( e )
-			{
+			function handleOnSuggestions( e ) {
 				markers.forEach( removeMarker );
 				markers = [];
-				if ( e.suggestions.length === 0 )
-				{
+				if ( e.suggestions.length === 0 ) {
 					map.setView( new L.LatLng( 0, 0 ), 1 );
 					return;
 				}
@@ -206,67 +208,65 @@
 				findBestZoom();
 			}
 
-			function handleOnChange( e )
-			{
-				markers.forEach( function ( marker, markerIndex )
-				{
-					if ( markerIndex === e.suggestionIndex )
-					{
+			function handleOnChange( e ) {
+				markers.forEach( function ( marker, markerIndex ) {
+					if ( markerIndex === e.suggestionIndex ) {
 						markers = [marker];
 						marker.setOpacity( 1 );
 						findBestZoom();
-					}
-					else
-					{
+					} else {
 						removeMarker( marker );
 					}
 				} );
+				var api_key = 'AIzaSyDeS05cwMMj0ccyz66luKpUYOjtJq7qID4';
+				var origins = '-20.9658,55.6589';
+				var destination = e.suggestion.latlng.lat + ',' + e.suggestion.latlng.lng;
+				var url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destination}&departure_time=now&key=${api_key}`
 
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					document.querySelector('#gps').value = this.responseText;
+				};
+
+				xhttp.open("GET", url, true);
+				xhttp.send();
 			}
 
-			function handleOnClear()
-			{
+			function handleOnClear() {
 				map.setView( new L.LatLng( 0, 0 ), 1 );
 				markers.forEach( removeMarker );
 			}
 
-			function handleOnCursorchanged( e )
-			{
-				markers.forEach( function ( marker, markerIndex )
-				{
-					if ( markerIndex === e.suggestionIndex )
-					{
+			function handleOnCursorchanged( e ) {
+				markers.forEach( function ( marker, markerIndex ) {
+					if ( markerIndex === e.suggestionIndex ) {
 						marker.setOpacity( 1 );
 						marker.setZIndexOffset( 1000 );
-					}
-					else
-					{
+					} else {
 						marker.setZIndexOffset( 0 );
 						marker.setOpacity( 0.5 );
 					}
 				} );
 			}
 
-			function addMarker( suggestion )
-			{
-				var marker = L.marker( suggestion.latlng,
-				{
+			function addMarker( suggestion ) {
+				var marker = L.marker( suggestion.latlng, {
 					opacity: .4
 				} );
 				marker.addTo( map );
 				markers.push( marker );
 			}
 
-			function removeMarker( marker )
-			{
+			function removeMarker( marker ) {
 				map.removeLayer( marker );
 			}
 
-			function findBestZoom()
-			{
+			function getDistance() {
+			}
+
+			function findBestZoom() {
 				var featureGroup = L.featureGroup( markers );
-				map.fitBounds( featureGroup.getBounds().pad( 0.5 ),
-				{
+				map.fitBounds( featureGroup.getBounds().pad( 0.5 ), {
 					animate: false
 				} );
 			}
