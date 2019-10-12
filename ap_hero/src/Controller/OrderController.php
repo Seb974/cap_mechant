@@ -42,7 +42,7 @@ class OrderController extends AbstractController
     public function getOrdersToDeliver(OrderRepository $orderRepository)
     {
         $user = $this->getUser();
-        $orders = $orderRepository->findBy(['orderStatus' => 'ON_DELIVERY']);
+        $orders = $orderRepository->findBy(['orderStatus' => 'FOR_DELIVERY']);
 
         return $this->render('order/index.html.twig', [
             'orders' => $orders,

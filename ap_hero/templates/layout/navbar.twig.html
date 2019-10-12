@@ -44,6 +44,10 @@
                                             <a class="dropdown-item" href="{{ path('allergen_index') }}">
                                                 <i class="fas fa-exclamation-triangle"></i>Allergènes</a>
                                         {% endif %}
+                                        {% if is_granted('ROLE_DELIVERER') %}
+                                           <a class="dropdown-item" href="{{ path('deliverer') }}">
+                                               <i class="fas fa-truck"></i>Livraisons</a>
+                                        {% endif %}
                                         {% if is_granted('ROLE_SUPPLIER') %}
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="{{ path('get_order') }}">
