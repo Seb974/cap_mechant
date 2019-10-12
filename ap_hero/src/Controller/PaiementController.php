@@ -25,9 +25,9 @@ class PaiementController extends AbstractController
     public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
 		Payplug\Payplug::setSecretKey( $_ENV['PAYPLUG_KEY'] );
-		$user = $em->getRepository( User::class )->find( $id );
-		$cart = $user->getCart();
-		$uniq_id  = uniqid( $user->getEmail() );
+		$user    = $em->getRepository( User::class )->find( $id );
+		$cart    = $user->getCart();
+		$uniq_id = uniqid( $user->getEmail() );
 
 		$payment = \Payplug\Payment::create(array(
 			'amount'   => $cart->getTotalToPay() * 100,
@@ -80,6 +80,7 @@ class PaiementController extends AbstractController
 		if ( ! $itemOrder_exist ) {
 			$cartService->convertCartToOrders( $user->getCart(), $uniq_id, $payment_id, 'payplug' );
 		} else {
+			//! Must resolve this to not have 2 existing payment at same time during 15mn
 			// Abort old payment
 			$old_payplug_id = $itemOrder_exist->getPaymentId();
 			if ( 1 === 3 ) {
@@ -98,19 +99,24 @@ class PaiementController extends AbstractController
 			}
 		};
 
-		$billing_city  = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_city'  ] );
-		$delivery_city = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'delivery_city' ] );
+		$metas['billing1'    ]["field"  ] = "";
+		$metas['billing2'    ]["field"  ] = "";
+		$metas['billing_city']["zipCode"] = "";
+		$metas['billing_city']["name"   ] = "";
 
-		$metas['billing1'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_1' ] );
-		$metas['billing2'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_2' ] );
-		$metas['billing_city'  ] = $em->getRepository( City    ::class )->find( $billing_city );
-		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
+		$billing_city = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_city'  ] );
+		if ( $billing_city ) {
+			$metas['billing1'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_1' ] );
+			$metas['billing2'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_2' ] );
+			$metas['billing_city'  ] = $em->getRepository( City    ::class )->find( $billing_city );
+		}
 
-		if ( null == $metas['phone'] ) {
+		$metas['phone'] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
+		if ( ! $metas['phone'] ) {
 			$metas['phone']["field"] = "";
 		}
 
-		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID'];
+		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID' ];
 		$api['ALGOLIA_APIKEY'] = $_ENV['ALGOLIA_APIKEY'];
 
         return $this->render('paiement/checkout.html.twig', [
@@ -139,8 +145,8 @@ class PaiementController extends AbstractController
 			$order->setPayDateTime( new \DateTime() );
 			$em->flush();
 		}
-		$cartService->decreaseStock($cart);
-		$cartService->initCart($cart);
+		$cartService->decreaseStock( $cart );
+		$cartService->initCart( $cart );
 		if (in_array('ROLE_GUEST', $user->getRoles())) {
 			$anonymizeService->anonymize($user);
 		}
