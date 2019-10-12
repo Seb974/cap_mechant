@@ -44,7 +44,7 @@ class DelivererController extends AbstractController
             $supplierTimer_mn = $order->getSupplier()->getPreparationPeriod()->format('i');
             $timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
             $checkDelay = $orderPayedTime->add( $timer );
-            if ( $checkDelay > $now && $orderStatus="ON_PREPARE" ) {
+            if ( $checkDelay > $now && $orderStatus === "ON_PREPARE" ) {
                 $order->setOrderStatus('FOR_DELIVERY');
             } else {
                 $answer = "reste la case";
