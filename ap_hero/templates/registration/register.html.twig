@@ -26,8 +26,10 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary m-t-10 btn-block">S'ENREGISTRER</button>
-
-							// SEB A VOIR CE QUE TU FAIS DE CES DEUX CHAMPS //
+							<div class="d-none">
+							{{ form_row( registrationForm.picture ) }}
+							{{ form_row( registrationForm.agreeTerms ) }}
+							</div>
                             {{ form_end( registrationForm ) }}
 
                         </div>
