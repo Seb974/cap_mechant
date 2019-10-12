@@ -11,9 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * @IsGranted("ROLE_DELIVERER")
- */
 class DelivererController extends AbstractController
 {
     /**
@@ -34,26 +31,30 @@ class DelivererController extends AbstractController
      */
     public function cronUpdate( EntityManagerInterface $em )
     {
-        $now = new \DateTime();
+        $now    = new \DateTime();
         $orders = $em->getRepository( Orders::class )->findAll();
-        $answer = "no orders";
+		$answer = "no orders";
+
         foreach ($orders as $key => $order) {
-            $orderPayedTime = $order->getPayDateTime();
-			$orderStatus    = $order->getOrderStatus();
-            $supplierTimer_hr = $order->getSupplier()->getPreparationPeriod()->format('H');
-            $supplierTimer_mn = $order->getSupplier()->getPreparationPeriod()->format('i');
-            $timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
-            $checkDelay = $orderPayedTime->add( $timer );
-            if ( $checkDelay > $now && $orderStatus === "ON_PREPARE" ) {
-                $order->setOrderStatus('FOR_DELIVERY');
-            } else {
-                $answer = "reste la case";
-            }
+			if ( $order->getOrderStatus() === 'ON_PREPARE') {
+				$orderPayedTime   = $order->getPayDateTime()                                     ;
+				$orderStatus      = $order->getOrderStatus()                                     ;
+				$supplierTimer_hr = $order->getSupplier   ()->getPreparationPeriod()->format('H');
+				$supplierTimer_mn = $order->getSupplier   ()->getPreparationPeriod()->format('i');
+
+				$timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
+				$checkDelay = $orderPayedTime->add( $timer );
+				dump( $checkDelay, $now );
+
+				if ( $checkDelay < $now ) {
+					$order->setOrderStatus('FOR_DELIVERY');
+					$em->flush();
+				} else {
+					$answer = "reste la case";
+				}
+			}
         }
 
-        return $this->render('deliverer/index.html.twig', [
-            'controller_name' => 'DelivererController',
-            'answer' => $answer
-        ]);
+		return $this->redirectToRoute('index');
     }
 }
