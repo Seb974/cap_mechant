@@ -26,7 +26,7 @@ class RegistrationFormType extends AbstractType
 				'label' => 'Identifiant',
 				'attr' => ['class' => 'form-control form-control-secondary'],
 				'constraints' => [
-                    new NotBlank( ['message' => 'Please enter a pseudo'] ),
+                    new NotBlank( ['message' => 'Merci de saisir un nom utilisateur'] ),
                     new Length( [
                         'min'        => 3,
                         'max'        => 16,
@@ -62,7 +62,8 @@ class RegistrationFormType extends AbstractType
             ->add('picture', FileType::class, [
                 'label' => 'Illustration',
                 'required' => false,
-                'mapped' => false,
+				'mapped' => false,
+				'attr' => ['class' => 'd-none'],
                 'constraints' => [
                     new File([
                         'maxSize' => '5242880',
@@ -77,7 +78,8 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
+				'mapped' => false,
+				'attr'   => array('checked'   => 'checked', 'class' => 'd-none'),
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
