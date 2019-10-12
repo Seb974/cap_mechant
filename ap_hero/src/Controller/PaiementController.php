@@ -104,12 +104,14 @@ class PaiementController extends AbstractController
 		$metas['billing1'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_1' ] );
 		$metas['billing2'      ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'billing_line_2' ] );
 		$metas['billing_city'  ] = $em->getRepository( City    ::class )->find( $billing_city );
-
-		$metas['delivery1'     ] = $em->getRepository( Metadata ::class )->findOneBy( [ 'user' => $user , 'type' => 'delivery_line_1' ] );
-		$metas['delivery2'     ] = $em->getRepository( Metadata ::class )->findOneBy( [ 'user' => $user , 'type' => 'delivery_line_2' ] );
-		$metas['delivery_city' ] = $em->getRepository( City     ::class )->find( $delivery_city );
-
 		$metas['phone'         ] = $em->getRepository( Metadata::class )->findOneBy( [ 'user' => $user, 'type' => 'phone_number' ] );
+
+		if ( null == $metas['phone'] ) {
+			$metas['phone']["field"] = "";
+		}
+
+		$api['ALGOLIA_APPID']  = $_ENV['ALGOLIA_APPID'];
+		$api['ALGOLIA_APIKEY'] = $_ENV['ALGOLIA_APIKEY'];
 
         return $this->render('paiement/checkout.html.twig', [
 			'payment_url' => $payment_url,
@@ -117,8 +119,9 @@ class PaiementController extends AbstractController
 			'cart'		  => $user->getCart(),
 			'user' 		  => $user,
 			'count'		  => $count,
-			'metas'       => $metas
-        ]);
+			'metas'       => $metas,
+			'api'         => $api
+		]);
 	}
 
 	/**
