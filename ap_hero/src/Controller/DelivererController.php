@@ -39,13 +39,13 @@ class DelivererController extends AbstractController
         $answer = "no orders";
         foreach ($orders as $key => $order) {
             $orderPayedTime = $order->getPayDateTime();
-
+			$orderStatus    = $order->getOrderStatus();
             $supplierTimer_hr = $order->getSupplier()->getPreparationPeriod()->format('H');
             $supplierTimer_mn = $order->getSupplier()->getPreparationPeriod()->format('i');
             $timer = new \DateInterval( "PT{$supplierTimer_hr}H{$supplierTimer_mn}M" );
             $checkDelay = $orderPayedTime->add( $timer );
-            if ( $checkDelay > $now ) {
-                $answer = "allez livrer";
+            if ( $checkDelay > $now && $orderStatus="ON_PREPARE" ) {
+                $order->setOrderStatus('FOR_DELIVERY');
             } else {
                 $answer = "reste la case";
             }
