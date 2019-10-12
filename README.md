@@ -72,21 +72,9 @@ php bin/console server:dump
 ```
 ---
 
-# Illustrations
----
-
-# Scope of functionalities
----
-
-# Examples of use
----
-
 # Project status
 Work in progress.
 
----
-
-# Sources
 ---
 
 # Contributing
@@ -97,21 +85,3 @@ Contributions are what make the open source community such an amazing place to b
 - Commit your Changes (git commit -m 'Add some AmazingFeature')
 - Push to the Branch (git push origin feature/AmazingFeature)
 - Open a Pull Request
-
----
-
-# After Project ToDoList
-
-- [ ] GFM task list 1
-- [ ] GFM task list 2
-- [ ] GFM task list 3
-    - [ ] GFM task list 3-1
-    - [ ] GFM task list 3-2
-    - [ ] GFM task list 3-3
-- [ ] GFM task list 4
-    - [ ] GFM task list 4-1
-    - [ ] GFM task list 4-2
-
-
-PATH=/opt/plesk/php/7.3/bin/:$PATH
-echo $PATH
