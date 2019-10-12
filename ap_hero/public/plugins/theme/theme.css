@@ -7259,6 +7259,10 @@ figure {
   width: 95%;
 }
 
+.d-none {
+	display:none;
+}
+
 .widget-games a .widget-block h5 {
   line-height: 22px;
   color: #fff;
