@@ -4,8 +4,11 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\EmailController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+// use Symfony\Component\HttpFoundation\ParameterBag;
+
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -68,7 +71,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException("Erreur lors de la connexion.");
         }
 
         return $user;
@@ -84,6 +87,15 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
+        // $cart = $request->getSession()->get('cart');
+        // if (!empty($cart)) {
+        //     return new RedirectResponse($this->urlGenerator->generate('get_cart'));
+        // }
+
+        if ($request->getPathInfo() == "/register") {
+            return new RedirectResponse($this->urlGenerator->generate('email', ["user" => "register"]));
+        }
+
         return new RedirectResponse($this->urlGenerator->generate('index'));
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));

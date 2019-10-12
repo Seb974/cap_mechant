@@ -37,7 +37,13 @@ class ProductController extends AbstractController
     public function new(Request $request): Response
     {
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+        $user = $this->getUser();
+        $greaterRole = (in_array('ROLE_ADMIN', $user->getRoles())) ? 'ROLE_ADMIN' : 'ROLE_SUPPLIER';
+        $form = $this->createForm(ProductType::class, $product, ['role' => $greaterRole]);
+        if ($greaterRole === 'ROLE_SUPPLIER') {
+            $supplier = $user->getSupplier();
+            $form->get('supplier')->setData($supplier);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,6 +56,7 @@ class ProductController extends AbstractController
             }
             $nutritionals = $this->hydrateNutritionals($form);
             $product->setNutritionals($nutritionals);
+            $product->setSupplier($form->get('supplier')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $this->addVariants($product, $entityManager);
             $entityManager->persist($product);
@@ -77,7 +84,8 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $greaterRole = (in_array('ROLE_ADMIN', $this->getUser()->getRoles())) ? 'ROLE_ADMIN' : 'ROLE_SUPPLIER';
+        $form = $this->createForm(ProductType::class, $product, ['role' => $greaterRole]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

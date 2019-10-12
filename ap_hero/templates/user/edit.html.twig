@@ -4,7 +4,9 @@
 
 {% block body %}
     <h1>Edit User</h1>
-
+    {% if user.avatar is not null %}
+        <img src="{{ asset('uploads/pictures/' ~ user.avatar.b64) }}" height="300" width="400"/>
+    {% endif %}
     {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('user_index') }}">back to list</a>

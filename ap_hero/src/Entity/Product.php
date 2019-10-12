@@ -59,7 +59,7 @@ class Product
     private $variants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="products")
      */
     private $supplier;
 
@@ -172,8 +172,6 @@ class Product
         return $this;
     }
 
-   
-
     /**
      * @return Collection|Variant[]
      */
@@ -205,12 +203,12 @@ class Product
         return $this;
     }
 
-    public function getSupplier(): ?User
+    public function getSupplier(): ?Supplier
     {
         return $this->supplier;
     }
 
-    public function setSupplier(?User $supplier): self
+    public function setSupplier(?Supplier $supplier): self
     {
         $this->supplier = $supplier;
 

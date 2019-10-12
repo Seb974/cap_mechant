@@ -6,6 +6,7 @@ use App\Entity\Stock;
 use App\Entity\Product;
 use App\Form\StockType;
 use App\Repository\StockRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +26,27 @@ class StockController extends AbstractController
      */
     public function index(StockRepository $stockRepository): Response
     {
-        return $this->render('stock/index.html.twig', [
-            'stocks' => $stockRepository->findAll(),
-        ]);
+        $user = $this->getUser();
+        $greaterRole = (in_array('ROLE_ADMIN', $user->getRoles())) ? 'ROLE_ADMIN' : 'ROLE_SUPPLIER';
+        $allStock = $stockRepository->findAll();
+
+        if ($greaterRole === 'ROLE_ADMIN') {
+            return $this->render('stock/index.html.twig', [
+                'stocks' => $allStock,
+            ]);
+        } else {
+            $supplierStock = [];
+
+            foreach ($allStock as $detailStock) {
+                if ($detailStock->getProduct()->getProduct()->getSupplier()->getId() == $user->getSupplier()->getId()) {
+                    array_push($supplierStock, $detailStock);
+                }
+            }
+
+            return $this->render('stock/index.html.twig', [
+                'stocks' => $supplierStock,
+            ]);
+        }
     }
 
     /**

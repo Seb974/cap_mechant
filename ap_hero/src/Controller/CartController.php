@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Cart;
-use App\Form\CartType;
-use App\Repository\CartRepository;
+use App\Entity\User;
+use App\Service\Cart\CartService;
+use App\Service\Metadata\MetadataService;
+use App\Form\UnknownUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/cart")
@@ -16,79 +18,149 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     /**
-     * @Route("/", name="cart_index", methods={"GET"})
+     * @Route("/add", name="cart_item_add", methods={"GET","POST"})
      */
-    public function index(CartRepository $cartRepository): Response
+    public function add(Request $request, CartService $cartService): Response
     {
-        return $this->render('cart/index.html.twig', [
-            'carts' => $cartRepository->findAll(),
+        //$variant = $variantRepository->find($request->query->get('id'));
+		// $quantity = $request->request->get($request->query->get('id'));
+
+		$id  = $request->query->get('id'      );
+		$qty = $request->query->get('quantity');
+        $cartService->add($id, $qty);
+        $this->updateCartEntityIfExists( $cartService );
+
+        return $this->redirectToRoute('index');
+    }
+
+    /**
+     * @Route("/current", name="get_cart", methods={"GET"})
+     */
+    public function getCurrentCart(CartService $cartService)
+    {
+        $totalToPay = 0;
+        $totalTax   = 0;
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
+            $totalToPay += $item['product']->getPrice() * $item['quantity'];
+            $totalTax   += $totalToPay - ( $totalToPay / ( 1 + $item['product']->getProduct()->getTva()->getTaux()) );
+		}
+
+        return $this->render('cart_item/showCurrent.html.twig', [
+            'currentCart' => $cart      ,
+            'totalToPay'  => $totalToPay,
+            'totalTax'    => $totalTax  ,
+        ]);
+    }
+
+
+    /**
+     * @Route("/badge", name="get_badge_cart", methods={"GET"})
+     */
+    public function getBadgeCurrentCart( CartService $cartService, Request $request )
+    {
+		$cart_count = 0;
+		$totalToPay = 0;
+        $totalTax   = 0;
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart       = $cartService->getCart();
+
+        foreach ( $cart as $item ) {
+            $totalToPay += $item['product']->getPrice() * $item['quantity'];
+		}
+
+		foreach ( $cart_items as $id => $qty) {
+			$cart_count += $qty;
+		}
+        return $this->render('cart/badge.html.twig', [
+			'count'      => $cart_count,
+			'items'      => $cart_items,
+			'cart'       => $cart      ,
+			'totalToPay' => $totalToPay
         ]);
     }
 
     /**
-     * @Route("/new", name="cart_new", methods={"GET","POST"})
+     * @Route("/validation", name="cart_validate", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function validate(Request $request, CartService $cartService, MetadataService $metadataService, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $cart = new Cart();
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($cart);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('cart_index');
+        $user = $this->getUser();
+        if (!$user) {
+            $user = new User();
+            $form = $this->createForm(UnknownUserType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $identifier = $form->get('email')->getData();
+                $user->setUsername($identifier);
+                $user->setPassword($passwordEncoder->encodePassword($user, $identifier));
+                $user->setRoles(['ROLE_GUEST']);
+                $user->setIsBanned(false);
+                $metadataService->createMetadata($form, $user);
+                $cartService->generateCartEntity($user);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('checkout', ['id' => $user->getId()]);
+            }
+            return $this->render('user/unknownUser.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+            ]);
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('cart/new.html.twig', [
-            'cart' => $cart,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="cart_show", methods={"GET"})
-     */
-    public function show(Cart $cart): Response
-    {
-        return $this->render('cart/show.html.twig', [
-            'cart' => $cart,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="cart_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Cart $cart): Response
-    {
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('cart_index');
+        if (!$user->getCart()) {
+            $cartService->generateCartEntity($user);
         }
-
-        return $this->render('cart/edit.html.twig', [
-            'cart' => $cart,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('checkout', ['id' => $user->getId()]);
     }
 
     /**
-     * @Route("/{id}", name="cart_delete", methods={"DELETE"})
+     * @Route("/{id}/edit", name="cart_item_edit", methods={"GET","POST"})
      */
-    public function delete(Request $request, Cart $cart): Response
+    public function edit($id, Request $request, CartService $cartService) : Response
     {
-        if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($cart);
-            $entityManager->flush();
-        }
+        $newQty = $request->request->get($id);
+        $cartService->update($id, $newQty);
+        $this->updateCartEntityIfExists($cartService);
 
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('get_cart');
+    }
+
+    /**
+     * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
+     */
+    public function delete($id, CartService $cartService): Response
+    {
+        $cartService->remove($id);
+        $this->updateCartEntityIfExists($cartService);
+
+        return $this->redirectToRoute('get_cart');
+    }
+
+    private function updateCartEntityIfExists(CartService $cartService)
+    {
+        $user = $this->getUser();
+        if ($user) {
+            if ($user->getCart()) {
+                $cartService->updateCartEntity($user->getCart());
+            }
+        }
+    }
+
+    /**
+     * @Route("/disconnect", name="disconnect")
+     */
+    public function disconnect(CartService $cartService)
+    {
+        $cart = $cartService->getCart();
+        $user = $this->getUser();
+        if (!empty($cart)) {
+            if (!$user->getCart()) {
+                $cartService->generateCartEntity($user);
+            }
+        }
+        return $this->redirectToRoute('logout');
     }
 }

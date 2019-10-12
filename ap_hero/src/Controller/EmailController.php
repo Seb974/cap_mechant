@@ -2,23 +2,38 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
+use App\Controller\UserController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EmailController extends AbstractController
 {
     /**
-     * @Route("/email", name="email")
+     * @Route("/email", name="email", methods={"GET"})
      */
-    public function index()
+    public function index(Request $request)
     {
+        $circumstance = $request->get('user');
+        if ($circumstance == "register") {
 
-        $to      = [ "yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", "anne-marion.vitry@coding-academy.fr" ];
-        $subject = "Clikeat New Command";
-        $body    = "A new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
+            $user = $this->getUser();
+
+            $to      = [$user->getEmail()];
+            $subject = "Welcome to ClikEat";
+            $body    = "Bonjour,\nYou need to confirm your address by clicking on the link below:\nhttps://www.clikeat.re/youhavejustregisteredandneedtoclikheretovalidateyouremaildoit\nIf you didn't subscribe to a ClikEat account, just ignore this Email.\nThank You for your subscribtion\nLots of love <3 from the ClikEat team.";
+
+        } else {
+
+            $to      = ["yen.linkwang@nigao.re", "sebastien.maillot@coding-academy.fr", "anne-marion.vitry@coding-academy.fr"];
+            $subject = "Clikeat New Command";
+            $body    = "A new command has been passed on ClikEat\nx30 burger saumon\nx05 Rhum Chatel Cahuète";
+        }
 
         // Create the Transport
         $transport = (new Swift_SmtpTransport( $_ENV['MAILER_SMTP'], 25 ) )
@@ -39,8 +54,6 @@ class EmailController extends AbstractController
         // Send the message
         $result = $mailer->send( $message );
 
-        return $this->render('email/index.html.twig', [
-            'controller_name' => 'EmailController',
-        ]);
+		return $this->redirectToRoute('index');
     }
 }

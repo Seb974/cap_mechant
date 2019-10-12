@@ -13,9 +13,13 @@
                 <th>Roles</th>
                 <th>Password</th>
                 <th>Username</th>
-                <th>Adresse de Facturation</th>
-                <th>Adresse de Livraison</th>
-                <th>Téléphone</th>
+                <th>Phone</th>
+                <th>Billing address line 1</th>
+                <th>Billing address line 2</th>
+                <th>Billing address city</th>
+                <th>Delivery address line 1</th>
+                <th>Delivery address line 2</th>
+                <th>Delivery address city</th>
                 <th>IsBanned</th>
                 <th>actions</th>
             </tr>
@@ -25,23 +29,18 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>凸(¬◡¬)凸</td>
+                {# <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
+                <td>
+                    {% for role in user.roles %}
+                        {{ role }} 
+                    {% endfor %}
+                </td>
+                <td>(¬◡¬)</td>
                 <td>{{ user.username }}</td>
-                
-                {% if user.metadata is not null %}
 
-                    <td>{{ user.metadata.facturationAddress }}</td>
-                    <td>{{ user.metadata.deliveryAddress }}</td>
-                    <td>{{ user.metadata.phoneNumber }}</td> 
-
-                {% else %}
-
-                    <td>None</td>
-                    <td>None</td>
-                    <td>None</td>
-
-                {% endif %}
+                    {% for data in user.metadata %}
+                        <td>{{ data.field }}</td> 
+                    {% endfor %}
 
                 <td>{{ user.isBanned ? 'Yes' : 'No' }}</td>
                 <td>

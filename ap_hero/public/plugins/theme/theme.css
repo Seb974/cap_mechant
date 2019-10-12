@@ -275,7 +275,7 @@ img {
 
 #header .nav > ul > li > a,
 #header .nav > ul > li > a {
-  color: #B1B1B1;
+  color: #FFD710;
   font-size: 15px;
   font-weight: 500;
   padding: 0 10px;
@@ -340,7 +340,7 @@ img {
 
 #header .nav > ul > li.dropdown-notification > .dropdown-menu .dropdown-block,
 #header .nav > ul > li.dropdown-notification > .dropdown-menu .dropdown-block {
-  max-height: 200px;
+  max-height: 40%;
   overflow-y: scroll;
 }
 
@@ -595,11 +595,11 @@ img {
 }
 
 #header .navbar-backdrop {
-  background-color: #242629;
+  background-color: #b5067f;
 }
 
 .navbar-search {
-  background-color: #242629;
+  background-color: #b5067f;
   padding: 5px 15px 15px 15px;
   position: absolute;
   width: 100%;
@@ -658,7 +658,7 @@ img {
 }
 
 #footer {
-  background-color: #ffd710;
+  background-color: #B5067F;
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.4);
   padding: 65px 0 20px 0;
@@ -1713,8 +1713,8 @@ section.error-404 form {
 
 .btn-primary {
   color: #fff;
-  background-color: #2575dc;
-  border-color: #2575dc;
+  background-color: #B5067F;
+  border-color: #B5067F;
 }
 
 .btn-primary:focus, .btn-primary:hover,
@@ -1722,8 +1722,8 @@ section.error-404 form {
 .show > .btn-primary.dropdown-toggle:hover,
 .show > .btn-primary.dropdown-toggle:focus {
   color: #fff;
-  background-color: #327dde;
-  border-color: #327dde;
+  background-color: #FFD710;
+  border-color: #FFD710;
   outline: 0;
 }
 
@@ -2869,7 +2869,7 @@ fieldset[disabled]
 }
 
 .dropdown-notification > .dropdown-menu .dropdown-block {
-  max-height: 200px;
+  max-height: 40%;
   overflow-y: scroll;
 }
 
@@ -3990,6 +3990,10 @@ input[type="file"] {
 .badge-primary[href]:focus,
 .badge-primary[href]:hover {
   background-color: #327dde;
+}
+
+.badge-cart {
+  background-color: #222222;
 }
 
 .badge-xbox-one,
@@ -6787,7 +6791,7 @@ figure {
 }
 
 .widget {
-  margin-bottom: 45px;
+  margin-bottom: 10px;
 }
 
 .widget:last-child {
@@ -7253,6 +7257,10 @@ figure {
   padding-left: 14px;
   text-align: left;
   width: 95%;
+}
+
+.d-none {
+	display:none;
 }
 
 .widget-games a .widget-block h5 {
@@ -10284,10 +10292,10 @@ figure {
     left: 0;
     right: 0;
     display: inline-block;
-    text-align: center;
+    padding-left: 5px;
   }
   #header .logo img {
-    width: auto;
+    height: 30px;
   }
   .nav-responsive > ul > li.mega-menu .col {
     max-width: 100%;
@@ -10378,10 +10386,20 @@ figure {
   .lightbox .lightbox-block .lightbox-video {
     max-width: 400px;
   }
-  .dropdown-notification {
-    display: none !important;
-  }
+
 }
+
+@media (min-width: 576px) {
+  #header .logo {
+    margin: 0 auto;
+    float: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: inline-block;
+    text-align: center;
+  }
+ }
 
 @media (max-width: 500px) {
   .post-md > div {

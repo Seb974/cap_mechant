@@ -32,20 +32,10 @@
 <body>
     {% include 'layout/navbar.twig.html' %}
 
-    {% if is_granted("ROLE_ADMIN") %}
-      {% include 'layout/navbar_admin.twig.html' %}
-      <div id="main">
-    {% endif %}
-
         <div id="page-container">
           <div id="content-wrap">
             {% block body %}{% endblock %}
            </div>
-
-    {% if is_granted("ROLE_ADMIN") %}
-    </div>
-    {% endif %}
-
         </div>
     {% include 'layout/footer.twig.html' %}
 

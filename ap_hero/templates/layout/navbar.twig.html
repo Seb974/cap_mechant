@@ -2,90 +2,98 @@
     <div class="container">
         <div class="navbar-backdrop">
             <div class="navbar">
-                <div class="navbar-left">
-                    <a class="navbar-toggle"><i class="fas fa-bars"></i></a>
-                    <a href="{{ path('index') }}" class="logo"><img src="{{ asset('uploads/logos/clikEat.png') }}"
-                            alt="Clik Eat Logo"></a>
+                <a href="{{ path('index') }}" class="logo">
+                    <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px">
+                </a>
+                <div class="toright">
                     <nav class="nav">
+                        {% if app.user %}
+                            <ul>
+                                <li class="dropdown">
+                                    <a href="{{ path('login') }}" data-toggle="dropdown">
+                                        <img src="" alt="">
+                                        <span>{{ app.user.username }}
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ path('user_self_show') }}">
+                                            <i class="fas fa-user"></i>Mon profil
+                                        </a>
+
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('user_index') }}">
+                                                <i class="fas fa-users"></i>Users</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('city_index') }}">
+                                                <i class="fas fa-city"></i>City</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('product_index') }}">
+                                                <i class="fas fa-utensils"></i>Produits</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('variant_index') }}">
+                                                    <i class="fas fa-sort"></i>Variantes</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('category_index') }}">
+                                                <i class="fas fa-columns"></i>Catégories</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('tva_index') }}">
+                                                <i class="fas fa-calculator"></i>Taxes</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('allergen_index') }}">
+                                                <i class="fas fa-exclamation-triangle"></i>Allergènes</a>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_DELIVERER') %}
+                                           <a class="dropdown-item" href="{{ path('deliverer') }}">
+                                               <i class="fas fa-truck"></i>Livraisons</a>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_SUPPLIER') %}
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('get_order') }}">
+                                                <i class="fas fa-cash-register"></i>Orders</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('stock_index') }}">
+                                                <i class="fas fa-box-open"></i>Stocks</a>
+                                        {% endif %}
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ path('disconnect') }}">
+                                            <i class="fas fa-sign-out-alt"></i>Se déconnecter
+                                        </a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="{{ path('index') }}">
+                                        <i class="fas fa-home"></i>
+                                    </a>
+                                </li>
+                            </li>
+                            {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                            {# <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li> #}
+                        </ul>
+                    {% else %}
                         <ul>
                             <li>
-                                <a href="{{ path('product_index') }}">Produits </a>
+                                <a href="{{ path('login') }}">Se connecter</a>
                             </li>
                             <li>
-                                <a href="{{ path('get_cart_item') }}"><i class="fas fa-shopping-cart"></i> Panier</a>
+                                <a href="{{ path('index') }}">
+                                    <i class="fas fa-home"></i>
+                                </a>
                             </li>
+                            {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }}
+                            {# <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li> #}
                         </ul>
-                    </nav>
-                </div>
-                <div class="nav navbar-right">{% if app.user %}
-                    <ul>
-                        <li class="dropdown">
-                            <a href="login.html" data-toggle="dropdown"><img src="" alt="">
-                                <span>{{ app.user.username }} <i class="fas fa-chevron-down"></i></span></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ path('user_self_show') }}"><i class="fas fa-user"></i>Mon profil</a>
-                                <div class="dropdown-divider"></div>
-                                {% if is_granted('ROLE_ADMIN') %}
-                                <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-user"></i>Admin Panel</a>
-                                <div class="dropdown-divider"></div>
-                                {% endif %}
-                                <a class="dropdown-item" href="{{ path('logout') }}"><i
-                                        class="fas fa-sign-out-alt"></i>Se
-                                    déconnecter</a>
-                            </div>
-                        </li>
-                        <li class="dropdown dropdown-notification">
-                            <a href="register.html" data-toggle="dropdown">
-                                <i class="fas fa-bell"></i>
-                                <span class="badge badge-danger">2</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <h5 class="dropdown-header"><i class="fas fa-bell"></i>Notifications</h5>
-                                <div class="dropdown-block">
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-info"><i class="fas fa-envelope-open"></i></span>new
-                                        email
-                                        <span class="date">just now</span>
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-danger"><i class="fas fa-thumbs-up"></i></span>liked
-                                        your post
-                                        <span class="date">5 mins</span>
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-primary"><i class="fas fa-user-plus"></i></span>
-                                        friend request
-                                        <span class="date">2 hours</span>
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-info"><i class="fas fa-envelope"></i></span> new
-                                        email
-                                        <span class="date">3 days</span>
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-info"><i class="fas fa-video-camera"></i></span> sent
-                                        a video
-                                        <span class="date">5 days</span>
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <span class="badge badge-danger"><i class="fas fa-thumbs-up"></i></span> liked
-                                        your post
-                                        <span class="date">8 days</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                    </ul>
-                    {% else %}
-                    <ul>
-                        <li class="hidden-xs-down"><a href="{{ path('login') }}">Se connecter</a></li>
-                        <li class="hidden-xs-down"><a href="{{ path('register') }}">S'inscrire</a></li>
-                        <li><a data-toggle="search"><i class="fas fa-search"></i></a></li>
-                    </ul>
                     {% endif %}
-                </div>
+                </nav>
             </div>
         </div>
         <div class="navbar-search">

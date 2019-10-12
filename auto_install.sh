@@ -20,5 +20,7 @@ yes | php bin/console doctrine:fixtures:load
 php bin/console server:stop
 php bin/console server:start
 
+php bin/console cron:start
+
 #launch a debugger server; in your controller use ```dump( $var );``` to obtain a var_dump
 php bin/console server:dump

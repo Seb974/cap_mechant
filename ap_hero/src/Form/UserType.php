@@ -29,21 +29,6 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('facturation_address', TextareaType::class, [
-                'mapped' => false,
-                'required' => false,
-            ])
-            ->add('delivery_address', TextareaType::class, [
-                'mapped' => false,
-                'required' => false,
-            ])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'mapped' => false,
-                'choice_label' => function ($city) {
-                    return $city->getName();
-                }
-            ])
             ->add('isBanned')
             ->add('picture', FileType::class, [
                 'label' => 'Illustration',

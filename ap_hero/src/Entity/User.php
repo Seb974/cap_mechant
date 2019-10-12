@@ -52,25 +52,32 @@ class User implements UserInterface
      */
     private $avatar;
 
+    /*
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", orphanRemoval=true)
+     */
+    //private $cart;
+
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CartItem", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", mappedBy="user", cascade={"persist", "remove"})
      */
     private $cart;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Metadata", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Metadata", mappedBy="user")
      */
     private $metadata;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="supplier")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="users")
      */
-    private $products;
+    private $supplier;
 
     public function __construct()
     {
         $this->datetime = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->metadata = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,7 +114,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_ADMIN';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -182,81 +189,62 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|CartItem[]
-     */
-    public function getCart(): Collection
+    public function getCart(): ?Cart
     {
         return $this->cart;
     }
 
-    public function addToCart(CartItem $cartItem): self
+    public function setCart(?Cart $cart): self
     {
-        if (!$this->cart->contains($cartItem)) {
-            $this->cart[] = $cartItem;
-            $cartItem->setUser($this);
+        $this->cart = $cart;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = $cart === null ? null : $this;
+        if ($newUser !== $cart->getUser()) {
+            $cart->setUser($newUser);
         }
 
         return $this;
     }
 
-    public function removeCartItem(CartItem $cartItem): self
-    {
-        if ($this->cart->contains($cartItem)) {
-            $this->cart->removeElement($cartItem);
-            // set the owning side to null (unless already changed)
-            if ($cartItem->getUser() === $this) {
-                $cartItem->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getMetadata(): ?Metadata
+    /**
+     * @return Collection|Metadata[]
+     */
+    public function getMetadata(): Collection
     {
         return $this->metadata;
     }
 
-    public function setMetadata(Metadata $metadata): self
+    public function addMetadata(Metadata $metadata): self
     {
-        $this->metadata = $metadata;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $metadata->getUser()) {
+        if (!$this->metadata->contains($metadata)) {
+            $this->metadata[] = $metadata;
             $metadata->setUser($this);
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
+    public function removeMetadata(Metadata $metadata): self
     {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setSupplier($this);
+        if ($this->metadata->contains($metadata)) {
+            $this->metadata->removeElement($metadata);
+            // set the owning side to null (unless already changed)
+            if ($metadata->getUser() === $this) {
+                $metadata->setUser(null);
+            }
         }
-
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function getSupplier(): ?Supplier
     {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            // set the owning side to null (unless already changed)
-            if ($product->getSupplier() === $this) {
-                $product->setSupplier(null);
-            }
-        }
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }

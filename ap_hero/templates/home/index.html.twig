@@ -1,30 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}ClikEat - l'apéro à domicile
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .product-wrapper
+        {
+            margin: 0.5em auto;
+            width: 100%;
+            font: 18px / 1.5 sans-serif;
+        }
+    </style>
 
-<div class="example-wrapper">
-    <header>
-        {% if( is_granted('ROLE_USER')) %}
-            <a href="{{ path('get_cart_item') }}" >My cart</a>
-        {% endif %}
-    </header>
-    {% if( is_granted('ROLE_ADMIN')) %}
-        <h1>Hello Admin {{ app.user.email }}! ✅</h1>
-    {% elseif( is_granted('ROLE_USER')) %}
-        <h1>Hello {{ app.user.email }}! ✅</h1>
-    {% else %}
-        <h1>Hello jeune inconnu(e) ! ✅</h1>
-    {% endif %}
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/sebastienmaillot/Sites/gitHub/codac-pff/ap_hero/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/sebastienmaillot/Sites/gitHub/codac-pff/ap_hero/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="product-wrapper">
+        <section class="p-t-30">
+            <div class="container">
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <div class="card card-lg">
+                                <div class="card-img">
+                                    <a href="{{ path('product_show', { id: product.id }) }}">
+                                        {% if product.picture is not null %}
+                                            {# <img src="{{ asset('uploads/pictures/' ~ product.picture.b64) }}" class="card-img-top" alt="{{ product.picture.b64 }}"> #}
+                                            <img src="{{ product.picture.b64 }}" class="card-img-top" alt="{{ product.picture.b64 }}">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="card-block">
+                                    <ul>
+                                        <li>
+                                            <a href="{{ path('product_show', { id: product.id }) }}">
+                                                {{ product.name }}
+                                                <br/>
+                                                <i class="fas fa-truck"></i>
+                                                {{ product.supplier.preparationPeriod|date('i') }}mn @
+                                                {{ product.supplier.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    {% for variant in product.variants %}
+                                        <hr/>
+                                        <ul class="d-flex flex-row-reverse">
+                                            <li>
+                                                <form action="{{ path('cart_item_add', {'id': variant.id, 'quantity': 1.0}) }}" method="post">
+                                                    <i class="fas fa-dolly"></i>
+                                                    {{ variant.stock.quantity }}
+                                                    <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        {{ variant.name }}
+                                                        à
+                                                        {{ variant.price }}€
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+
 {% endblock %}
