@@ -15,7 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmailController extends AbstractController
 {
     /**
+     * index
      * @Route("/email", name="email", methods={"GET"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return redirection
      */
     public function index(Request $request)
     {
