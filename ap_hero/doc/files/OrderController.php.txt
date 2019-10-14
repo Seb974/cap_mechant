@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 { 
     /**
+     * getOrdersToPrepare
      * @Route("/preparations", name="get_order", methods={"GET"})
+     * @param  App\Repository\OrderRepository $orderRepository
+     * @return void
      */
     public function getOrdersToPrepare(OrderRepository $orderRepository)
     {
@@ -37,12 +40,15 @@ class OrderController extends AbstractController
     }
 
     /**
+     * getOrdersToDeliver
      * @Route("/deliveries", name="get_deliveries", methods={"GET"})
+     * @param  App\Repository\OrderRepository $orderRepository
+     * @return void
      */
     public function getOrdersToDeliver(OrderRepository $orderRepository)
     {
         $user = $this->getUser();
-        $orders = $orderRepository->findBy(['orderStatus' => 'ON_DELIVERY']);
+        $orders = $orderRepository->findBy(['orderStatus' => 'FOR_DELIVERY']);
 
         return $this->render('order/index.html.twig', [
             'orders' => $orders,

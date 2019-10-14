@@ -114,7 +114,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">110</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">30</span>
                                 </a>
                             </li>
                             <li>
@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1761171198"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-547060440"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1761171198" class="accordion-body collapse in">
+            <div id="namespace-547060440" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1011177253"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1658875374"></a>
                                 <a href="../namespaces/App.html" style="margin-left: 30px; padding-left: 0">App</a>
             </div>
-            <div id="namespace-1011177253" class="accordion-body collapse ">
+            <div id="namespace-1658875374" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1968697452"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-242960868"></a>
                                 <a href="../namespaces/App.Controller.html" style="margin-left: 30px; padding-left: 0">Controller</a>
             </div>
-            <div id="namespace-1968697452" class="accordion-body collapse ">
+            <div id="namespace-242960868" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -309,24 +309,24 @@
             <article class="method">
                 <h3 class="public ">checkout()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">checkout(  <span class="argument">$id</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>, \Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">checkout(integer  <span class="argument">$id</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Controller\Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) : void</pre>
+                <p><em>checkout</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$id </td>
-                                <td></td>
+                                <td><p>corresponding to the id of the current user</p></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Doctrine\ORM\EntityManagerInterface</td>
+                                <td>\App\Controller\Doctrine\ORM\EntityManagerInterface</td>
                                 <td>$em </td>
                                 <td></td>
                             </tr>
@@ -360,41 +360,43 @@
             <article class="method">
                 <h3 class="public ">payement_success()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">payement_success(  <span class="argument">$id</span>, \Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Service\Anonymize\AnonymizeService  <span class="argument">$anonymizeService</span>, \Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">payement_success(integer  <span class="argument">$id</span>, \App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Controller\App\Service\Anonymize\AnonymizeService  <span class="argument">$anonymizeService</span>, \App\Controller\Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>payement_success</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$id </td>
-                                <td></td>
+                                <td><p>corresponding to the id of the current user</p></td>
                             </tr>
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Anonymize\AnonymizeService</td>
+                                <td>\App\Controller\App\Service\Anonymize\AnonymizeService</td>
                                 <td>$anonymizeService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Doctrine\ORM\EntityManagerInterface</td>
+                                <td>\App\Controller\Doctrine\ORM\EntityManagerInterface</td>
                                 <td>$em </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -421,26 +423,28 @@
             <article class="method">
                 <h3 class="public ">payement_fail()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">payement_fail(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">payement_fail(\App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Controller\Doctrine\ORM\EntityManagerInterface  <span class="argument">$em</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>payement_fail</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Doctrine\ORM\EntityManagerInterface</td>
+                                <td>\App\Controller\Doctrine\ORM\EntityManagerInterface</td>
                                 <td>$em </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -467,21 +471,23 @@
             <article class="method">
                 <h3 class="public ">payement_notif()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">payement_notif(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">payement_notif(\App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>payement_notif</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -552,7 +558,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on October 13th, 2019 at 12:57.
+                    on October 14th, 2019 at 11:43.
                 </section>
             </section>
         </section>

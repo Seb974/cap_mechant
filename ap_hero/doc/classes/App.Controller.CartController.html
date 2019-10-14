@@ -114,7 +114,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">110</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">30</span>
                                 </a>
                             </li>
                             <li>
@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-910673072"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1716443101"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-910673072" class="accordion-body collapse in">
+            <div id="namespace-1716443101" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-630140444"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2067200089"></a>
                                 <a href="../namespaces/App.html" style="margin-left: 30px; padding-left: 0">App</a>
             </div>
-            <div id="namespace-630140444" class="accordion-body collapse ">
+            <div id="namespace-2067200089" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1897282016"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1909789291"></a>
                                 <a href="../namespaces/App.Controller.html" style="margin-left: 30px; padding-left: 0">Controller</a>
             </div>
-            <div id="namespace-1897282016" class="accordion-body collapse ">
+            <div id="namespace-1909789291" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -233,13 +233,11 @@
                         <section class="row-fluid public">
                             <section class="span4">
                                                                     <a href="../classes/App.Controller.CartController.html#method_add" class="">add()</a><br />
-                                                                    <a href="../classes/App.Controller.CartController.html#method_addByApi" class="">addByApi()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_getCurrentCart" class="">getCurrentCart()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_getBadgeCurrentCart" class="">getBadgeCurrentCart()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_validate" class="">validate()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_edit" class="">edit()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_delete" class="">delete()</a><br />
-                                                                    <a href="../classes/App.Controller.CartController.html#method_deleteByApi" class="">deleteByApi()</a><br />
                                                                     <a href="../classes/App.Controller.CartController.html#method_disconnect" class="">disconnect()</a><br />
                                                             </section>
                             <section class="span4">
@@ -321,26 +319,28 @@
             <article class="method">
                 <h3 class="public ">add()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">add(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">add(\App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>add</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -363,71 +363,27 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_addByApi" name="method_addByApi" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">addByApi()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">addByApi(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
-                                <td>$request </td>
-                                <td></td>
-                            </tr>
-                                                    <tr>
-                                <td>\App\Service\Cart\CartService</td>
-                                <td>$cartService </td>
-                                <td></td>
-                            </tr>
-                                            </table>
-                
-                
-                				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            Route
-                        </th>
-                        <td>
-                                                                                            <p>(&quot;/api/add&quot;, name=&quot;cart_item_addApi&quot;, options={&quot;expose&quot;=true}, methods={&quot;POST&quot;})</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
             <a id="method_getCurrentCart" name="method_getCurrentCart" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">getCurrentCart()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getCurrentCart(\App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">getCurrentCart(\App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>getCurrentCart</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -454,26 +410,28 @@
             <article class="method">
                 <h3 class="public ">getBadgeCurrentCart()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getBadgeCurrentCart(\App\Service\Cart\CartService  <span class="argument">$cartService</span>, \Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">getBadgeCurrentCart(\App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>getBadgeCurrentCart</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -500,36 +458,38 @@
             <article class="method">
                 <h3 class="public ">validate()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">validate(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Service\Metadata\MetadataService  <span class="argument">$metadataService</span>, \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface  <span class="argument">$passwordEncoder</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">validate(\App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>, \App\Controller\App\Service\Metadata\MetadataService  <span class="argument">$metadataService</span>, \App\Controller\Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface  <span class="argument">$passwordEncoder</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>validate</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Metadata\MetadataService</td>
+                                <td>\App\Controller\App\Service\Metadata\MetadataService</td>
                                 <td>$metadataService </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface</td>
+                                <td>\App\Controller\Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface</td>
                                 <td>$passwordEncoder </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -556,31 +516,33 @@
             <article class="method">
                 <h3 class="public ">edit()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">edit(  <span class="argument">$id</span>, \Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">edit(integer  <span class="argument">$id</span>, \App\Controller\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>edit</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$id </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
+                                <td>\App\Controller\Symfony\Component\HttpFoundation\Request</td>
                                 <td>$request </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -607,26 +569,28 @@
             <article class="method">
                 <h3 class="public ">delete()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">delete(  <span class="argument">$id</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">delete(integer  <span class="argument">$id</span>, \App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>) : \App\Controller\Symfony\Component\HttpFoundation\Response</pre>
+                <p><em>delete</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$id </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\Symfony\Component\HttpFoundation\Response
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -649,71 +613,27 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_deleteByApi" name="method_deleteByApi" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">deleteByApi()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">deleteByApi(\Symfony\Component\HttpFoundation\Request  <span class="argument">$request</span>, \App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>\Symfony\Component\HttpFoundation\Request</td>
-                                <td>$request </td>
-                                <td></td>
-                            </tr>
-                                                    <tr>
-                                <td>\App\Service\Cart\CartService</td>
-                                <td>$cartService </td>
-                                <td></td>
-                            </tr>
-                                            </table>
-                
-                
-                				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            Route
-                        </th>
-                        <td>
-                                                                                            <p>(&quot;/api/delete&quot;, name=&quot;cart_item_deleteApi&quot;, methods={&quot;POST&quot;})</p>
-                                                    </td>
-                    </tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
             <a id="method_disconnect" name="method_disconnect" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">disconnect()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">disconnect(\App\Service\Cart\CartService  <span class="argument">$cartService</span>) </pre>
-                <p><em></em></p>
+                <pre class="signature" style="margin-right: 54px;">disconnect(\App\Controller\App\Service\Cart\CartService  <span class="argument">$cartService</span>) : \App\Controller\redirection</pre>
+                <p><em>disconnect</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\App\Service\Cart\CartService</td>
+                                <td>\App\Controller\App\Service\Cart\CartService</td>
                                 <td>$cartService </td>
                                 <td></td>
                             </tr>
                                             </table>
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    \App\Controller\redirection
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -818,7 +738,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on October 13th, 2019 at 12:57.
+                    on October 14th, 2019 at 11:43.
                 </section>
             </section>
         </section>

@@ -18,9 +18,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class CityController extends AbstractController
 {
     /**
+     * index
      * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/", name="city_index", methods={"GET"})
+     *
+     * @param  App\Repository\CityRepository $cityRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(CityRepository $cityRepository): Response
     {
@@ -30,9 +35,14 @@ class CityController extends AbstractController
     }
 
     /**
+     * new
      * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/new", name="city_new", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -56,7 +66,12 @@ class CityController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="city_show", methods={"GET"})
+     *
+     * @param  App\Entity\City $city
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(City $city): Response
     {
@@ -66,7 +81,13 @@ class CityController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="city_edit", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\City $city
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, City $city): Response
     {
@@ -86,7 +107,13 @@ class CityController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="city_delete", methods={"DELETE"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\City $city
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, City $city): Response
     {

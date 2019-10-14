@@ -18,10 +18,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CartController extends AbstractController
 {
     /**
+     * add
      * @Route("/add", name="cart_item_add", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function add(Request $request, CartService $cartService): Response
     {
+        //$variant = $variantRepository->find($request->query->get('id'));
+		// $quantity = $request->request->get($request->query->get('id'));
+
 		$id  = $request->query->get('id'      );
 		$qty = $request->query->get('quantity');
         $cartService->add($id, $qty);
@@ -31,20 +40,12 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/api/add", name="cart_item_addApi", options={"expose"=true}, methods={"POST"})
-     */
-    public function addByApi(Request $request, CartService $cartService)
-    {   
-        $id  = $request->request->get('id');
-		$qty = $request->request->get('quantity');
-        $cartService->add($id, $qty);
-        $this->updateCartEntityIfExists( $cartService );
-
-        return $this->json(['code' => 200, 'id' => $id, 'quantity' => $qty], 200);
-    }
-
-    /**
+     * getCurrentCart
      * @Route("/current", name="get_cart", methods={"GET"})
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function getCurrentCart(CartService $cartService)
     {
@@ -66,7 +67,13 @@ class CartController extends AbstractController
 
 
     /**
+     * getBadgeCurrentCart
      * @Route("/badge", name="get_badge_cart", methods={"GET"})
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function getBadgeCurrentCart( CartService $cartService, Request $request )
     {
@@ -92,7 +99,15 @@ class CartController extends AbstractController
     }
 
     /**
+     * validate
      * @Route("/validation", name="cart_validate", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     * @param  App\Service\Metadata\MetadataService $metadataService
+     * @param  Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function validate(Request $request, CartService $cartService, MetadataService $metadataService, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -127,7 +142,14 @@ class CartController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="cart_item_edit", methods={"GET","POST"})
+     *
+     * @param  int $id
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit($id, Request $request, CartService $cartService) : Response
     {
@@ -139,7 +161,13 @@ class CartController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
+     *
+     * @param  int $id
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete($id, CartService $cartService): Response
     {
@@ -147,18 +175,6 @@ class CartController extends AbstractController
         $this->updateCartEntityIfExists($cartService);
 
         return $this->redirectToRoute('get_cart');
-    }
-
-    /**
-     * @Route("/api/delete", name="cart_item_deleteApi", methods={"POST"})
-     */
-    public function deleteByApi(Request $request, CartService $cartService): Response
-    {
-        $id  = $request->request->get('id');
-        $cartService->remove($id);
-        $this->updateCartEntityIfExists($cartService);
-
-        return $this->json(['code' => 200, 'id' => $id, 'message' => 'Deleted successfully'], 200);
     }
 
     private function updateCartEntityIfExists(CartService $cartService)
@@ -172,7 +188,12 @@ class CartController extends AbstractController
     }
 
     /**
+     * disconnect
      * @Route("/disconnect", name="disconnect")
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return redirection
      */
     public function disconnect(CartService $cartService)
     {
