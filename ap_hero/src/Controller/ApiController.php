@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Security\FacebookAuthenticator;
@@ -15,7 +24,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     /**
+     * index
      * @Route("/api", name="api")
+     *
+     * @return void
      */
     public function index()
     {
@@ -25,7 +37,13 @@ class ApiController extends AbstractController
 	}
 
 	/**
+     * callback
      * @Route("/api/callback", name="api_callback")
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param KnpU\OAuth2ClientBundle\Client\ClientRegistry $clientRegistry
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function callback( Request $request, ClientRegistry $clientRegistry ): Response
     {
@@ -44,6 +62,14 @@ class ApiController extends AbstractController
         ]);
 	}
 
+	/**
+	 * Print_point
+	 *
+	 * @param  string $imprimante
+	 * @param  string $message
+	 *
+	 * @return json
+	 */
 	public function Print_point( $imprimante, $message ) {
 		// id customer Printer Point
 		$sid   = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';

@@ -5,7 +5,10 @@
 
 # The project's aim
 
-Ap'Hero is a project written in symfony. Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using sylius.
+ClikEat is a project written in symfony. Ap'Hero is a Proof Of Concept of a eCommerce in Symfony4 without using sylius.
+You can view all commits history and insight in GitHub via https://github.com/YenByNigao/codac-pff.
+We make only a final push to Marvin@epitech, so no history will be available.
+
 
 ---
 

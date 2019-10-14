@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Metadata;
@@ -18,7 +27,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class MetadataController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="metadata_index", methods={"GET"})
+     *
+     * @param  App\Repository\MetadataRepository $metadataRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(MetadataRepository $metadataRepository): Response
     {
@@ -28,7 +42,12 @@ class MetadataController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="metadata_new", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -51,7 +70,12 @@ class MetadataController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="metadata_show", methods={"GET"})
+     *
+     * @param  App\Entity\Metadata; $metadata
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Metadata $metadata): Response
     {
@@ -61,7 +85,13 @@ class MetadataController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="metadata_edit", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Metadata; $metadata
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Metadata $metadata): Response
     {
@@ -81,7 +111,13 @@ class MetadataController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="metadata_delete", methods={"DELETE"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Metadata; $metadata
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Metadata $metadata): Response
     {

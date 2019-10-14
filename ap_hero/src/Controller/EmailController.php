@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -15,7 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmailController extends AbstractController
 {
     /**
+     * index
      * @Route("/email", name="email", methods={"GET"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return redirection
      */
     public function index(Request $request)
     {

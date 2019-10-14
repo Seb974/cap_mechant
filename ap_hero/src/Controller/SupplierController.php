@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Supplier;
@@ -16,7 +25,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class SupplierController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="supplier_index", methods={"GET"})
+     * @param  App\Repository\SupplierRepository $supplierRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(SupplierRepository $supplierRepository): Response
     {
@@ -26,7 +39,11 @@ class SupplierController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="supplier_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -62,7 +79,11 @@ class SupplierController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="supplier_show", methods={"GET"})
+     * @param  App\Entity\Supplier $supplier
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Supplier $supplier): Response
     {
@@ -72,7 +93,12 @@ class SupplierController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="supplier_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Supplier $supplier
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Supplier $supplier): Response
     {
@@ -92,7 +118,12 @@ class SupplierController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="supplier_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Supplier $supplier
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Supplier $supplier): Response
     {

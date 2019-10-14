@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Tva;
@@ -16,13 +25,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  * Will throw a normal AccessDeniedException:
  *
  * @IsGranted("ROLE_ADMIN", message="No access! Get out!")
- * 
+ *
  * @Route("/tva")
  */
 class TvaController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="tva_index", methods={"GET"})
+     * @param  App\Repository\TvaRepository $tvaRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(TvaRepository $tvaRepository): Response
     {
@@ -32,7 +45,11 @@ class TvaController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="tva_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -55,7 +72,11 @@ class TvaController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="tva_show", methods={"GET"})
+     * @param  App\Entity\Tva $tva
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Tva $tva): Response
     {
@@ -65,7 +86,12 @@ class TvaController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="tva_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Tva $tva
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Tva $tva): Response
     {
@@ -85,7 +111,12 @@ class TvaController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="tva_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Tva $tva
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Tva $tva): Response
     {

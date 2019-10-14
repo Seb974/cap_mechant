@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Stock;
@@ -16,13 +25,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @IsGranted("ROLE_SUPPLIER", message="No access! Get out!")
- * 
+ *
  * @Route("/stock")
  */
 class StockController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="stock_index", methods={"GET"})
+     * @param  App\Repository\StockRepository $stockRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(StockRepository $stockRepository): Response
     {
@@ -50,7 +63,11 @@ class StockController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="stock_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -73,7 +90,11 @@ class StockController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="stock_show", methods={"GET"})
+     * @param  App\Entity\Stock $stock
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Stock $stock): Response
     {
@@ -83,7 +104,12 @@ class StockController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="stock_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Stock $stock
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Stock $stock): Response
     {
@@ -104,7 +130,12 @@ class StockController extends AbstractController
 
 
     /**
+     * editStock
      * @Route("/{id}/editstock", name="stock_update", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Stock $stock
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function editStock(Request $request, Stock $stock): Response
     {
@@ -116,12 +147,13 @@ class StockController extends AbstractController
         return $this->redirectToRoute('stock_index');
     }
 
-
-
-
-
     /**
+     * delete
      * @Route("/{id}", name="stock_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Stock $stock
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Stock $stock): Response
     {

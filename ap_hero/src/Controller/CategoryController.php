@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Category;
@@ -16,13 +25,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  * Will throw a normal AccessDeniedException:
  *
  * @IsGranted("ROLE_ADMIN", message="No access! Get out!")
- * 
+ *
  * @Route("/category")
  */
 class CategoryController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="category_index", methods={"GET"})
+     *
+     * @param  App\Repository\CategoryRepository $categoryRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(CategoryRepository $categoryRepository): Response
     {
@@ -32,7 +46,12 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="category_new", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -55,7 +74,12 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="category_show", methods={"GET"})
+     *
+     * @param  App\Entity\Category $category
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Category $category): Response
     {
@@ -65,7 +89,13 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="category_edit", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Category $category
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Category $category): Response
     {
@@ -85,7 +115,13 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="category_delete", methods={"DELETE"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Category $category
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Category $category): Response
     {

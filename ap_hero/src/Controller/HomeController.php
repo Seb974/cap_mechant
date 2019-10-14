@@ -1,4 +1,14 @@
 <?php
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 
 namespace App\Controller;
 
@@ -11,11 +21,20 @@ use App\Repository\ProductRepository;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 
-
+/**
+ * This controller is about homepage
+ */
 class HomeController extends AbstractController
 {
     /**
+     * Page d'accueil du site donnant une vue globale de tous les produits et leur variantes.
      * @Route("/", name="index")
+     *
+     * @param  App\Repository\ProductRepository $productRepository
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index( ProductRepository $productRepository, Request $request , CartService $cartService): Response
     {

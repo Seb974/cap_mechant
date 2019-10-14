@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Allergen;
@@ -16,13 +25,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  * Will throw a normal AccessDeniedException:
  *
  * @IsGranted("ROLE_ADMIN", message="No access! Get out!")
- * 
+ *
  * @Route("/allergen")
  */
 class AllergenController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="allergen_index", methods={"GET"})
+     *
+     * @param  App\Repository\AllergenRepository $allergenRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(AllergenRepository $allergenRepository): Response
     {
@@ -32,7 +46,12 @@ class AllergenController extends AbstractController
     }
 
     /**
+	 * new
      * @Route("/new", name="allergen_new", methods={"GET","POST"})
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -55,7 +74,12 @@ class AllergenController extends AbstractController
     }
 
     /**
+	 * show
      * @Route("/{id}", name="allergen_show", methods={"GET"})
+     *
+     * @param App\Entity\Allergen $allergen
+     *
+     * @return Response
      */
     public function show(Allergen $allergen): Response
     {
@@ -65,7 +89,13 @@ class AllergenController extends AbstractController
     }
 
     /**
+	 * edit
      * @Route("/{id}/edit", name="allergen_edit", methods={"GET","POST"})
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param App\Entity\Allergen $allergen
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Allergen $allergen): Response
     {
@@ -85,7 +115,13 @@ class AllergenController extends AbstractController
     }
 
     /**
+	 * delete
      * @Route("/{id}", name="allergen_delete", methods={"DELETE"})
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param App\Entity\Allergen $allergen
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Allergen $allergen): Response
     {

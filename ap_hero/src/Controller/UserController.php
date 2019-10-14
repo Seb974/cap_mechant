@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -27,7 +36,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="user_index", methods={"GET"})
+     * @param  App\Repository\UserRepository $userRepository
+     * @param  App\Repository\MetadataRepository $metadataRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(UserRepository $userRepository, MetadataRepository $metadataRepository): Response
     {
@@ -38,7 +52,13 @@ class UserController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="user_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
+     * @param  App\Service\Metadata\MetadataService $metadataService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder, MetadataService $metadataService): Response
     {
@@ -73,7 +93,11 @@ class UserController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="user_show", methods={"GET"})
+     * @param  App\Entity\User $user
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(User $user): Response
     {
@@ -83,7 +107,13 @@ class UserController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\User $user
+     * @param  App\Service\Metadata\MetadataService $metadataService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, User $user, MetaDataService $metadataService): Response
     {
@@ -131,7 +161,12 @@ class UserController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\User $user
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, User $user): Response
     {
@@ -143,115 +178,12 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index');
     }
 
-    // private function createMetadata($form, User $user)
-    // {
-    //     $phone = strval($form->get('phone_number')->getData());
-    //     $billing_line_1 = $form->get('billing_line_1')->getData();
-    //     $billing_line_2 = $form->get('billing_line_2')->getData();
-    //     $billing_city = strval($form->get('billing_city')->getData()->getId());
-    //     $type1 = 'phone_number';
-    //     $type1_billing = 'billing_line_1';
-    //     $type2_billing = 'billing_line_2';
-    //     $type3_billing = 'billing_city';
-
-    //     $delivery_line_1 = $form->get('delivery_line_1')->getData();
-    //     $delivery_line_2 = $form->get('delivery_line_2')->getData();
-    //     $delivery_city = strval($form->get('delivery_city')->getData()->getId());
-    //     $type1_delivery = 'delivery_line_1';
-    //     $type2_delivery = 'delivery_line_2';
-    //     $type3_delivery = 'delivery_city';
-
-    //     if ($phone) {
-    //         $this->hydrateNewMetadata($phone, $type1, $user);
-    //     }
-    //     if ($billing_line_1) {
-    //         $this->hydrateNewMetadata($billing_line_1, $type1_billing, $user);
-    //     }
-    //     if ($billing_line_2) {
-    //         $this->hydrateNewMetadata($billing_line_2, $type2_billing, $user);
-    //     } else {
-    //         $this->hydrateNewMetadata('None', $type2_billing, $user);
-    //     }
-    //     if ($billing_city) {
-    //         $this->hydrateNewMetadata($billing_city, $type3_billing, $user);
-    //     }
-
-    //     if ($delivery_line_1) {
-    //         $this->hydrateNewMetadata($delivery_line_1, $type1_delivery, $user);
-    //     }
-    //     if ($delivery_line_2) {
-    //         $this->hydrateNewMetadata($delivery_line_2, $type2_delivery, $user);
-    //     } else {
-    //         $this->hydrateNewMetadata('None', $type2_delivery, $user);
-    //     }
-    //     if ($delivery_city) {
-    //         $this->hydrateNewMetadata($delivery_city, $type3_delivery, $user);
-    //     }
-    // }
-
-    // private function updateMetadata($form, User $user)
-    // {
-    //     $phone = strval($form->get('phone_number')->getData());
-    //     $delivery_line_1 = $form->get('delivery_line_1')->getData();
-    //     $delivery_line_2 = $form->get('delivery_line_2')->getData();
-    //     $delivery_city = strval($form->get('delivery_city')->getData()->getId());
-    //     $type1 = 'phone_number';
-    //     $type1_delivery = 'delivery_line_1';
-    //     $type2_delivery = 'delivery_line_2';
-    //     $type3_delivery = 'delivery_city';
-
-    //     $billing_line_1 = $form->get('billing_line_1')->getData();
-    //     $billing_line_2 = $form->get('billing_line_2')->getData();
-    //     $billing_city = strval($form->get('billing_city')->getData()->getId());
-    //     $type1_billing = 'billing_line_1';
-    //     $type2_billing = 'billing_line_2';
-    //     $type3_billing = 'billing_city';
-
-    //         $metadata = $user->getMetadata()->unwrap();
-    //         dump($phone);
-
-    //         foreach ($metadata as $data) { 
-                
-    //             if ($data->getType() == $type1 && $phone) {
-    //                 $data->setField($phone);
-    //             };
-    //             if ($data->getType() == $type1_delivery && $delivery_line_1) {
-    //                 $data->setField($delivery_line_1);
-    //             };
-    //             if ($data->getType() == $type2_delivery && $delivery_line_2) {
-    //                 $data->setField($delivery_line_2);
-    //             } else if (!$delivery_line_2) {
-    //                 $data->setField('None');
-    //             };
-    //             if ($data->getType() == $type3_delivery && $delivery_city) {
-    //                 $data->setField($delivery_city);
-    //             };
-
-    //             if ($data->getType() == $type1_billing && $billing_line_1) {
-    //                 $data->setField($billing_line_1);
-    //             };
-    //             if ($data->getType() == $type2_billing && $billing_line_2) {
-    //                 $data->setField($billing_line_2);
-    //             } else if (!$billing_line_2) {
-    //                 $data->setField('None');
-    //             };
-    //             if ($data->getType() == $type3_billing && $billing_city) {
-    //                 $data->setField($billing_city);
-    //         };
-    //         }
-    // }
-
-    // public function hydrateNewMetadata(String $field, String $type, User $user)
-    // {
-    //     $metadata = new Metadata();
-    //     $metadata->setField($field);
-    //     $metadata->setType($type);
-    //     $entityManager = $this->getDoctrine()->getManager();
-    //     $entityManager->persist($metadata);
-    //     $user->addMetadata($metadata);
-    //     $entityManager->flush();
-    // }
-
+    /**
+     * convertRoleToField
+     * @param  App\Entity\User $user
+     *
+     * @return void
+     */
     private function convertRoleToField($user)
     {
         $roles = $user->getRoles();
@@ -266,6 +198,12 @@ class UserController extends AbstractController
         }
     }
 
+    /**
+     * savePicture
+     * @param  string $pictureFile
+     *
+     * @return void
+     */
     private function savePicture($pictureFile)
     {
         $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);

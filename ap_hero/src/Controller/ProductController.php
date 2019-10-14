@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\CartItem;
@@ -22,7 +31,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="product_index", methods={"GET"})
+     * @param  App\Repository\ProductRepository $productRepository
+     *
+     * @return Response
      */
     public function index(ProductRepository $productRepository): Response
     {
@@ -32,7 +45,11 @@ class ProductController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="product_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -70,7 +87,11 @@ class ProductController extends AbstractController
     }
 
     /**
+     * show
      * @Route("/{id}", name="product_show", methods={"GET"})
+     * @param  App\Entity\Product $product
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Product $product): Response
     {
@@ -80,7 +101,12 @@ class ProductController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Product $product
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Product $product): Response
     {
@@ -113,7 +139,12 @@ class ProductController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="product_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Product $product
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Product $product): Response
     {
@@ -126,6 +157,12 @@ class ProductController extends AbstractController
         return $this->redirectToRoute('product_index');
     }
 
+    /**
+     * savePicture
+     * @param string $pictureFile
+     *
+     * @return void
+     */
     private function savePicture($pictureFile)
     {
         $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -144,6 +181,12 @@ class ProductController extends AbstractController
         return $newFilename;
     }
 
+    /**
+     * hydrateNutritionals
+     * @param  App\Form\ProductType $form
+     *
+     * @return void
+     */
     private function hydrateNutritionals($form)
     {
         $nutritionals = new Nutritionals();
@@ -167,6 +210,14 @@ class ProductController extends AbstractController
         return null;
     }
 
+    /**
+     * addVariants
+     *
+     * @param  App\Entity\Product $product
+     * @param  Doctrine\ORM\EntityManagerInterface  $entityManager
+     *
+     * @return void
+     */
     private function addVariants($product, $entityManager)
     {
         foreach($product->getVariants() as $variant) {

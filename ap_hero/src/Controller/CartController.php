@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -18,7 +27,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CartController extends AbstractController
 {
     /**
+     * add
      * @Route("/add", name="cart_item_add", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function add(Request $request, CartService $cartService): Response
     {
@@ -34,7 +49,12 @@ class CartController extends AbstractController
     }
 
     /**
+     * getCurrentCart
      * @Route("/current", name="get_cart", methods={"GET"})
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function getCurrentCart(CartService $cartService)
     {
@@ -56,7 +76,13 @@ class CartController extends AbstractController
 
 
     /**
+     * getBadgeCurrentCart
      * @Route("/badge", name="get_badge_cart", methods={"GET"})
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function getBadgeCurrentCart( CartService $cartService, Request $request )
     {
@@ -82,7 +108,15 @@ class CartController extends AbstractController
     }
 
     /**
+     * validate
      * @Route("/validation", name="cart_validate", methods={"GET","POST"})
+     *
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     * @param  App\Service\Metadata\MetadataService $metadataService
+     * @param  Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function validate(Request $request, CartService $cartService, MetadataService $metadataService, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -117,7 +151,14 @@ class CartController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="cart_item_edit", methods={"GET","POST"})
+     *
+     * @param  int $id
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit($id, Request $request, CartService $cartService) : Response
     {
@@ -129,7 +170,13 @@ class CartController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="cart_item_delete", methods={"DELETE"})
+     *
+     * @param  int $id
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete($id, CartService $cartService): Response
     {
@@ -150,7 +197,12 @@ class CartController extends AbstractController
     }
 
     /**
+     * disconnect
      * @Route("/disconnect", name="disconnect")
+     *
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return redirection
      */
     public function disconnect(CartService $cartService)
     {
