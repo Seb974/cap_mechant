@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Tva;
@@ -16,7 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  * Will throw a normal AccessDeniedException:
  *
  * @IsGranted("ROLE_ADMIN", message="No access! Get out!")
- * 
+ *
  * @Route("/tva")
  */
 class TvaController extends AbstractController

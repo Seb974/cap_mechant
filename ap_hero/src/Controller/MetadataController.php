@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Metadata;

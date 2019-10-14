@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Orders;
@@ -13,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/order")
  */
 class OrderController extends AbstractController
-{ 
+{
     /**
      * getOrdersToPrepare
      * @Route("/preparations", name="get_order", methods={"GET"})
@@ -26,7 +35,7 @@ class OrderController extends AbstractController
         $greaterRole = (in_array('ROLE_ADMIN', $user->getRoles())) ? 'ROLE_ADMIN' : 'ROLE_SUPPLIER';
         if ($greaterRole === 'ROLE_ADMIN') {
             $orders = $orderRepository->findBy(['orderStatus' => 'ON_PREPARE']);
-        } 
+        }
         else {
             if ( $user->getSupplier() ) {
                 $orders = $orderRepository->findBy(['orderStatus' => 'ON_PREPARE', 'supplier' => $user->getSupplier()]);

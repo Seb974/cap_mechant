@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\Stock;
@@ -16,7 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @IsGranted("ROLE_SUPPLIER", message="No access! Get out!")
- * 
+ *
  * @Route("/stock")
  */
 class StockController extends AbstractController

@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\CartItem;
@@ -25,7 +34,7 @@ class ProductController extends AbstractController
      * index
      * @Route("/", name="product_index", methods={"GET"})
      * @param  App\Repository\ProductRepository $productRepository
-     * 
+     *
      * @return Response
      */
     public function index(ProductRepository $productRepository): Response

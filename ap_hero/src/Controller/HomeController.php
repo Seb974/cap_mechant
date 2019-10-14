@@ -1,4 +1,14 @@
 <?php
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 
 namespace App\Controller;
 
@@ -11,7 +21,9 @@ use App\Repository\ProductRepository;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 
-
+/**
+ * This controller is about homepage
+ */
 class HomeController extends AbstractController
 {
     /**

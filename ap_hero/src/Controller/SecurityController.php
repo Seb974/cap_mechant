@@ -1,5 +1,14 @@
 <?php
-
+	/**
+     * HomePage Controller
+     *
+     * This controller manage all about Home page
+     *
+     * @package      Some Package
+     * @subpackage   Some Subpackage
+     * @category     Home Page
+     * @author       War Machines
+     */
 namespace App\Controller;
 
 use App\Entity\User;
@@ -38,7 +47,7 @@ class SecurityController extends AbstractController
         // }
 
         $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername(); 
+        $lastUsername = $authenticationUtils->getLastUsername();
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -98,7 +107,7 @@ class SecurityController extends AbstractController
     /**
      * logout
      * @Route("/logout", name="logout")
-     * 
+     *
      * @return void
      */
     public function logout()
@@ -170,7 +179,7 @@ class SecurityController extends AbstractController
     /**
      * show
      * @Route("/self", name="user_self_show", methods={"GET"})
-     * 
+     *
      * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(): Response
