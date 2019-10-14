@@ -34,7 +34,7 @@ class ApiController extends AbstractController
      * @param Symfony\Component\HttpFoundation\Request $request
      * @param KnpU\OAuth2ClientBundle\Client\ClientRegistry $clientRegistry
      *
-     * @return Response
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function callback( Request $request, ClientRegistry $clientRegistry ): Response
     {
@@ -59,7 +59,7 @@ class ApiController extends AbstractController
 	 * @param  string $imprimante
 	 * @param  string $message
 	 *
-	 * @return void
+	 * @return json
 	 */
 	public function Print_point( $imprimante, $message ) {
 		// id customer Printer Point
