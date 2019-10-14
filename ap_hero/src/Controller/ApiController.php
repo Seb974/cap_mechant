@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends AbstractController
 {
     /**
+     * index
      * @Route("/api", name="api")
+     *
+     * @return void
      */
     public function index()
     {
@@ -25,7 +28,13 @@ class ApiController extends AbstractController
 	}
 
 	/**
+     * callback
      * @Route("/api/callback", name="api_callback")
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param KnpU\OAuth2ClientBundle\Client\ClientRegistry $clientRegistry
+     *
+     * @return Response
      */
     public function callback( Request $request, ClientRegistry $clientRegistry ): Response
     {
@@ -44,6 +53,14 @@ class ApiController extends AbstractController
         ]);
 	}
 
+	/**
+	 * Print_point
+	 *
+	 * @param  string $imprimante
+	 * @param  string $message
+	 *
+	 * @return void
+	 */
 	public function Print_point( $imprimante, $message ) {
 		// id customer Printer Point
 		$sid   = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
