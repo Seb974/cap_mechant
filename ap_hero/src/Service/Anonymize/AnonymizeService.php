@@ -13,12 +13,25 @@ class AnonymizeService
     protected $entityManager;
     protected $passwordEncoder;
 
+    /**
+     * __construct
+     * @param  Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param  Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
+     *
+     * @return void
+     */
     public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * anonymize
+     * @param  App\Entity\User $user
+     *
+     * @return void
+     */
     public function anonymize(User $user)
     {
         $dateTime = new \DateTime();

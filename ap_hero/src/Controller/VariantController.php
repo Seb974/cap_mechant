@@ -16,7 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class VariantController extends AbstractController
 {
     /**
+     * index
      * @Route("/", name="variant_index", methods={"GET"})
+     * @param  App\Repository\VariantRepository $variantRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function index(VariantRepository $variantRepository): Response
     {
@@ -26,7 +30,11 @@ class VariantController extends AbstractController
     }
 
     /**
+     * new
      * @Route("/new", name="variant_new", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request): Response
     {
@@ -49,7 +57,11 @@ class VariantController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="variant_show", methods={"GET"})
+     * show
+     *@Route("/{id}", name="variant_show", methods={"GET"})
+     * @param  App\Entity\Variant $variant
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function show(Variant $variant): Response
     {
@@ -59,7 +71,12 @@ class VariantController extends AbstractController
     }
 
     /**
+     * edit
      * @Route("/{id}/edit", name="variant_edit", methods={"GET","POST"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Variant $variant
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Request $request, Variant $variant): Response
     {
@@ -79,7 +96,12 @@ class VariantController extends AbstractController
     }
 
     /**
+     * delete
      * @Route("/{id}", name="variant_delete", methods={"DELETE"})
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Entity\Variant $variant
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request, Variant $variant): Response
     {

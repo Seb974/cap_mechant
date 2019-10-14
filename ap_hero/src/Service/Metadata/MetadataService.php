@@ -10,10 +10,23 @@ class MetadataService
 {
     protected $entityManager;
 
+    /**
+     * __construct
+     * @param  Doctrine\ORM\EntityManagerInterface $entityManager
+     *
+     * @return void
+     */
     public function __construct(EntityManagerInterface $entityManager) {
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * createMetadata
+     * @param  App\Form\MetadataType $form
+     * @param  App\Entity\User $user
+     *
+     * @return void
+     */
     public function createMetadata($form, User $user)
     {
         $phone = strval($form->get('phone_number')->getData());
@@ -56,6 +69,13 @@ class MetadataService
         }
     }
 
+    /**
+     * updateMetadata
+     * @param  App\Form\MetadataType $form
+     * @param  App\Entity\User $user
+     *
+     * @return void
+     */
     public function updateMetadata($form, User $user)
     {
         $phone = strval($form->get('phone_number')->getData());
@@ -101,6 +121,14 @@ class MetadataService
         }
     }
     
+    /**
+     * hydrateNewMetadata
+     * @param  string $field corresponding to the value of a metadata
+     * @param  string $type corresponding to the name of the metadata registered into the "field" attribute
+     * @param  App\Entity\User $user
+     *
+     * @return void
+     */
     private function hydrateNewMetadata(String $field, String $type, User $user)
     {
         $metadata = new Metadata();

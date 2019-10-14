@@ -20,7 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaiementController extends AbstractController
 {
     /**
+	 * checkout
      * @Route("/checkout/{id}", name="checkout")
+	 * @param  integer $id corresponding to the id of the current user
+     * @param  App\Service\Cart\CartService $cartService
+     * @param  Doctrine\ORM\EntityManagerInterface $em
+	 * 
+	 * @return void
      */
     public function checkout($id, CartService $cartService, EntityManagerInterface $em )
     {
@@ -131,8 +137,17 @@ class PaiementController extends AbstractController
 	}
 
 	/**
+	 * payement_success
      * @Route("/payment/success/{id}", name="payment_success")
+	 * @param  integer $id corresponding to the id of the current user
+	 * @param  Symfony\Component\HttpFoundation\Request $request
+	 * @param  App\Service\Cart\CartService $cartService
+	 * @param  App\Service\Anonymize\AnonymizeService $anonymizeService
+	 * @param  Doctrine\ORM\EntityManagerInterface $em
+	 * 
+	 * @return Symfony\Component\HttpFoundation\Response
      */
+
 	public function payement_success($id, Request $request, CartService $cartService, AnonymizeService $anonymizeService, EntityManagerInterface $em ): Response {
 
 		$uniq_id = $request->query->get('id');
@@ -154,7 +169,12 @@ class PaiementController extends AbstractController
 	}
 
 	/**
+	 * payement_fail
      * @Route("/payment/fail", name="payment_fail")
+	 * @param  Symfony\Component\HttpFoundation\Request $request
+	 * @param  Doctrine\ORM\EntityManagerInterface $em
+	 * 
+	 * @return Symfony\Component\HttpFoundation\Response
      */
 	public function payement_fail( Request $request, EntityManagerInterface $em ): Response {
 		$uniq_id = $request->query->get('id');
@@ -169,7 +189,11 @@ class PaiementController extends AbstractController
 	}
 
 	/**
+	 * payement_notif
      * @Route("/payment/notif", name="payment_notif")
+	 * @param  Symfony\Component\HttpFoundation\Request $request
+	 * 
+	 * @return Symfony\Component\HttpFoundation\Response
      */
 	public function payement_notif( Request $request ): Response {
 		return $this->render('paiement/notif.html.twig', [
