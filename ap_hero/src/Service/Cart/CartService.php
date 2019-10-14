@@ -19,6 +19,15 @@ class CartService
     protected $cartItemRepository;
     protected $variantRepository;
 
+    /**
+     * __construct
+     * @param  Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     * @param  Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param  App\Repository\CartItemRepository $cartItemRepository
+     * @param  App\Repository\VariantRepository $variantRepository
+     *
+     * @return void
+     */
     public function __construct(SessionInterface $session, EntityManagerInterface $entityManager, CartItemRepository $cartItemRepository, VariantRepository $variantRepository) {
         $this->session = $session;
         $this->cartItemRepository = $cartItemRepository;
@@ -26,6 +35,13 @@ class CartService
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * add
+     * @param  int $id corresponding to the Id of the variant (product) added to the cart by the user
+     * @param  float $quantity corresponding to the quantity of the linked variant (product) added to cart
+     *
+     * @return void
+     */
     public function add(int $id, float $quantity)
     {
         $cart = $this->session->get('cart', []);
@@ -37,6 +53,12 @@ class CartService
         $this->session->set('cart', $cart);
     }
 
+    /**
+     * remove
+     * @param  int $id corresponding to the Id of the variant (product) in the cart to remove
+     *
+     * @return void
+     */
     public function remove(int $id)
     {
         $cart = $this->session->get('cart', []);
@@ -46,6 +68,13 @@ class CartService
         $this->session->set('cart', $cart);
     }
 
+    /**
+     * update
+     * @param  int $id corresponding to the Id of the variant (product) in the cart to update
+     * @param  float $newQty corresponding to the new quantity of the variant (product)
+     *
+     * @return void
+     */
     public function update(int $id, float $newQty)
     {
         $cart = $this->session->get('cart', []);
@@ -55,6 +84,11 @@ class CartService
         $this->session->set('cart', $cart);
     }
 
+    /**
+     * getCart
+
+     * @return array corresponding to the list of variant (product) in cart with the quantities associated
+     */
     public function getCart(): array
     {
         $cart = $this->session->get('cart', []);
@@ -69,6 +103,12 @@ class CartService
         return $cartWithData;
     }
 
+    /**
+     * generateCartSession
+     * @param  App\Entity\Cart $cartEntity
+     *
+     * @return void
+     */
     public function generateCartSession(Cart $cartEntity)
     {
         $cart = [];
@@ -80,6 +120,12 @@ class CartService
         $this->session->set('cart', $cart);
     }
 
+    /**
+     * generateCartEntity
+     * @param  App\Entity\User $user
+     *
+     * @return App\Entity\Cart
+     */
     public function generateCartEntity(User $user) : ?Cart
     {
         $cart = $this->session->get('cart', []);
@@ -101,6 +147,12 @@ class CartService
         return $cartEntity;
     }
 
+    /**
+     * updateCartEntity
+     * @param  App\Entity\Cart $cartEntity
+     *
+     * @return App\Entity\Cart
+     */
     public function updateCartEntity(Cart $cartEntity) : ?Cart
     {
         $cart = $this->session->get('cart', []);
@@ -119,6 +171,15 @@ class CartService
         return $cartEntity;
     }
 
+    /**
+     * convertCartToOrders
+     * @param  App\Entity\Cart $cartEntity
+     * @param  string $internalId given by the payplug API 
+     * @param  string $paymentId given by the payplug API
+     * @param  string $paymentType - giving the payment method choosen (payplug is the only one possible actually)
+     *
+     * @return void
+     */
     public function convertCartToOrders( Cart $cartEntity, string $internalId, string $paymentId, string $paymentType ) {
 
         foreach ($cartEntity->getCartItems() as $cartItem) {
@@ -142,6 +203,12 @@ class CartService
 		$this->entityManager->flush();
     }
 
+    /**
+     * decreaseStock
+     * @param  App\Entity\Cart $cart
+     *
+     * @return void
+     */
     public function decreaseStock(Cart $cart) {
         foreach ($cart->getCartItems() as $cartItem) {
             $stock = $cartItem->getProduct()->getStock();
@@ -152,6 +219,12 @@ class CartService
         }
     }
     
+    /**
+     * initCart
+     * @param  App\Entity\Cart $cartEntity
+     *
+     * @return void
+     */
     public function initCart(Cart $cartEntity) {
         $this->clearCartItems($cartEntity);
         $cartEntity->setTotalToPay(0);
@@ -161,6 +234,12 @@ class CartService
         $this->session->set('cart', []);
     }
 
+    /**
+     * clearCartItems
+     * @param  App\Entity\Cart $cartEntity
+     *
+     * @return Cart
+     */
     private function clearCartItems(Cart $cartEntity) : ?Cart
     {
         foreach($cartEntity->getCartItems() as $cartItem) {
@@ -171,6 +250,12 @@ class CartService
         return $cartEntity;
     }
 
+    /**
+     * getTotalToPay
+     * @param  App\Entity\Cart $cart
+     *
+     * @return float
+     */
     private function getTotalToPay(Cart $cart)
     {
         $totalToPay = 0;
@@ -180,6 +265,12 @@ class CartService
         return $totalToPay;
     }
 
+    /**
+     * getTotalTax
+     * @param  App\Entity\Cart $cart
+     *
+     * @return float
+     */
     private function getTotalTax(Cart $cart)
     {
         $totalTax = 0;
