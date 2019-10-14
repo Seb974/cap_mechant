@@ -10,13 +10,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Response;
 
 class DelivererController extends AbstractController
 {
     /**
+     * index
      * @Route("/deliverer", name="deliverer")
+     *
+     * @param  App\Repository\OrderRepository $orderRepository
+     * @param  App\Repository\UserRepository $userRepository
+     *
+     * @return Symfony\Component\HttpFoundation\Response
      */
-    public function index(OrderRepository $orderRepository, UserRepository $userRepository)
+    public function index(OrderRepository $orderRepository, UserRepository $userRepository): Response
     {
 		$del_order = $orderRepository->findAll();
 		dump($del_order);
@@ -27,7 +34,12 @@ class DelivererController extends AbstractController
 	}
 
     /**
+     * cronUpdate
      * @Route("/deliverer/cron", name="deliverer_cron")
+     *
+     * @param  Doctrine\ORM\EntityManagerInterface $em
+     *
+     * @return redirection
      */
     public function cronUpdate( EntityManagerInterface $em )
     {
