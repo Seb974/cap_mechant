@@ -4320,6 +4320,20 @@ input[type="file"] {
   cursor: pointer;
 }
 
+.card-body {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: flex-end; */
+  align-items: baseline;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
 .owl-carousel .card-video {
   margin-bottom: 0;
 }

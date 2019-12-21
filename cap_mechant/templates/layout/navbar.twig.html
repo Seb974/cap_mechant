@@ -44,12 +44,45 @@
                                     </a>
                                 </li>
                             </li>
-                            <!-- {# {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }} #}-->
-                            {# <li>
+                            <li class="dropdown dropdown-notification">
+                                <a href="#" data-toggle="dropdown">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span class="badge badge-cart" id="count"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <h5 class="dropdown-header mb-0">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Panier</h5>
+                                    <div class="dropdown-block">
+                                        <ul class="dropdown-list" id="cartList">
+                                            <!-- {# {% for item in cart %}
+                                                <li class="d-flex flex-row ml-auto">
+                                                    <a href="#" class="d-flex flex-row ml-auto">
+                                                        x{{ item.quantity }} {{ item.product.product.name }} {{ item.product.name }} | {{ item.product.price }}€
+                                                    </a>
+                                                    <form method="post" action="{{ path( 'cart_item_delete', { 'id': item.product.id } ) }}">
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button class="btn btn-link"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                </li>
+                                            {% endfor %} #} --> 
+                                        </ul>
+                                        <div class="d-flex border-bottom mb-2 px-3 py-2">Total:
+                                            <span class="ml-auto font-weight-bold text-success" id="itemCount">0 article</span>
+                                        </div>
+                                        <div class="d-flex px-3">
+                                            <!--{# <a class="btn btn-outline btn-sm" href="{{ path('get_cart') }}">Editer quantité</a> #}-->
+                                            <a class="btn btn-success btn-sm ml-auto" href="#" id="validate">Valider</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            {# <!-- <li>
                                 <a data-toggle="search">
                                     <i class="fas fa-search"></i>
                                 </a>
-                            </li> #}
+                            </li> --> #}
                         </ul>
                     {% else %}
                         <ul>
@@ -61,7 +94,6 @@
                                     <i class="fas fa-home"></i>
                                 </a>
                             </li>
-                            <!--{# {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }} #}-->
                             {# <li>
                                 <a data-toggle="search">
                                     <i class="fas fa-search"></i>

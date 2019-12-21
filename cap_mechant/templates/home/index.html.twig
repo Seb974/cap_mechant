@@ -18,26 +18,24 @@
             <div class="container">
                     {% for article in articles %}
                 <div class="row">
-
-                        <div class="col-12">
-                            {# <div class="card mb-3"> #}
-                            <div class="card">
-                                {# <img src="..." class="card-img-top" alt="..."> #}
-                                <div class="card-body">
-                                    <h5 class="card-title"><a href="{{ path('article_show', { id: article.id }) }}"><strong>{{ article.category.name }}</strong> - {{ article.name }}</a></h5>
-                                    <p class="card-text">
-                                        <form>
-                                            <i class="fas fa-dolly"></i>
-                                            <input id="{{ article.id }}" type="number" value="1"/>
-                                            <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
-                                                <i class="fas fa-shopping-cart"></i>Ajouter au panier
-                                            </button>
-                                        </form>
-                                    </p>
-                                    {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
-                                </div>
+                    <div class="card col-12">
+                        {# <img src="..." class="card-img-top" alt="..."> #}
+                        <div class="card-body">
+                            <div class="card-title col-4" >
+                                <h5><a href="{{ path('article_show', { id: article.id }) }}"><strong>{{ article.category.name }}</strong> - {{ article.name }}</a></h5>
                             </div>
+                            <div class="card-text col-8">
+                                <form>
+                                    {# <i class="fas fa-shopping-cart"></i> #}
+                                    <input id="{{ article.id }}" type="number" value="1"/>
+                                    <button type="submit" class="btn btn-primary btn-sm" style="width:140px">
+                                        <i class="fas fa-shopping-cart"></i> Ajouter
+                                    </button>
+                                </form>
+                            </div>
+                            {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
                         </div>
+                    </div>
                 </div>
                     {% endfor %}
             </div>
