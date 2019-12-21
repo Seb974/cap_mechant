@@ -57,4 +57,36 @@ class HomeController extends AbstractController
 			'cart'            => $cart_count
         ]);
     }
+
+     /**
+     * Page d'accueil du site donnant une vue globale de tous les produits et leur variantes.
+     * @Route("/complete", name="index_complete")
+     *
+     * @param  App\Repository\ProductRepository $productRepository
+     * @param  Symfony\Component\HttpFoundation\Request $request
+     * @param  App\Service\Cart\CartService $cartService
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     */
+    public function extern_index( ProductRepository $productRepository, Request $request , CartService $cartService): Response
+    {
+        $user = $this->getUser();
+        if ($user) {
+            if ($user->getCart() && empty($cartService->getCart())) {
+                $cartService->generateCartSession($user->getCart());
+            }
+        }
+
+		$cart_items = $request->getSession()->get('cart', []);
+		$cart_count = 0;
+		foreach ( $cart_items as $id => $qty) {
+			$cart_count += $qty;
+		}
+
+        return $this->render('home/index.html.twig', [
+			'controller_name' => 'HomeController',
+			'products'        => $productRepository->findAll(),
+			'cart'            => $cart_count
+        ]);
+    }
 }

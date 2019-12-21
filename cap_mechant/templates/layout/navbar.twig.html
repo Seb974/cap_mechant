@@ -1,0 +1,84 @@
+<header id="header">
+    <div class="container">
+        <div class="navbar-backdrop">
+            <div class="navbar">
+                <a href="{{ path('home') }}" class="logo"> Cap Méchant
+                    <!-- <img src="{{ asset('uploads/logos/clikEat.png') }}" alt="Clik Eat Logo" height="50px"> -->
+                </a>
+                <div class="toright">
+                    <nav class="nav">
+                        {% if app.user %}
+                            <ul>
+                                <li class="dropdown">
+                                    <a href="{{ path('app_login') }}" data-toggle="dropdown">
+                                        <img src="" alt="">
+                                        <span>{{ app.user.codeClient }}
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </a>
+                                   <div class="dropdown-menu dropdown-menu-right">
+                                       {# <!-- < <a class="dropdown-item" href="{{ path('user_self_show') }}">
+                                            <i class="fas fa-user"></i>Mon profil
+                                        </a> --> #}
+                                        <!-- <div class="dropdown-divider"></div> -->
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <a class="dropdown-item" href="{{ path('user_index') }}">
+                                                <i class="fas fa-users"></i>Users</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('article_index') }}">
+                                                <i class="fas fa-utensils"></i>Articles</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ path('category_index') }}">
+                                                <i class="fas fa-columns"></i>Catégories</a>
+                                            <div class="dropdown-divider"></div>
+                                        {% endif %}
+
+                                        <a class="dropdown-item" href="{{ path('app_logout') }}">
+                                            <i class="fas fa-sign-out-alt"></i>Se déconnecter
+                                        </a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="{{ path('home') }}">
+                                        <i class="fas fa-home"></i>
+                                    </a>
+                                </li>
+                            </li>
+                            <!-- {# {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }} #}-->
+                            {# <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li> #}
+                        </ul>
+                    {% else %}
+                        <ul>
+                            <li>
+                                <a href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('home') }}">
+                                    <i class="fas fa-home"></i>
+                                </a>
+                            </li>
+                            <!--{# {{ render( controller('App\\Controller\\CartController::getBadgeCurrentCart') ) }} #}-->
+                            {# <li>
+                                <a data-toggle="search">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </li> #}
+                        </ul>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+        <div class="navbar-search">
+            <div class="container">
+                <form method="post">
+                    <input type="text" class="form-control" placeholder="Rechercher...">
+                    <i class="fas fa-times close"></i>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
